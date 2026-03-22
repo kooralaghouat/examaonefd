@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Media | نظام كشف المكررات الاحترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #4361ee; --bg: #f4f7fe; --danger: #ef233c; --warning: #ff9f1c; --white: #ffffff; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; direction: rtl; }
+
+        /* Sidebar */
+        .sidebar { width: 260px; height: 100vh; background: var(--white); position: fixed; right: 0; top: 0; padding: 20px; box-shadow: -2px 0 15px rgba(0,0,0,0.05); z-index: 1000; }
+        .main { margin-right: 260px; padding: 30px; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 40px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
+
+        .nav-btn { display: block; width: 100%; padding: 14px; border: none; background: none; text-align: right; font-family: 'Cairo'; font-weight: 600; cursor: pointer; color: #8d99ae; border-radius: 12px; margin-bottom: 10px; }
+        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3); }
+
+        /* Stats Section */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-align: center; border-bottom: 5px solid var(--primary); }
+        .stat-card span { display: block; font-size: 32px; font-weight: 800; color: var(--primary); }
+        .stat-card h3 { margin: 10px 0 0; font-size: 15px; color: #8d99ae; }
+
+        /* Tables & Duplicate UI */
+        .card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8f9fa; padding: 18px; text-align: right; color: #adb5bd; font-size: 14px; text-transform: uppercase; }
+        td { padding: 15px 18px; border-bottom: 1px solid #f1f3f5; font-size: 14px; }
+        
+        .btn { padding: 8px 16px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Cairo'; font-size: 12px; font-weight: 700; margin-left: 5px; }
+        .btn-edit { background: #eef2ff; color: var(--primary); }
+        .btn-del { background: #fff1f2; color: var(--danger); }
+        .btn-add { background: var(--primary); color: white; height: 50px; font-size: 14px; }
+
+        /* Duplicate Group Styling */
+        .dup-group-banner { background: #fff9db; color: #856404; font-weight: 800; padding: 12px 20px; font-size: 15px; border-right: 6px solid var(--warning); display: flex; justify-content: space-between; align-items: center; }
+        .dup-count-badge { background: var(--danger); color: white; padding: 2px 10px; border-radius: 20px; font-size: 11px; }
+        
+        .search-box { width: 100%; padding: 15px; border: 2px solid #edf2f4; border-radius: 15px; outline: none; font-family: 'Cairo'; flex: 1; font-size: 15px; }
+        .search-box:focus { border-color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">SUPER MEDIA</div>
+        <button class="nav-btn active" onclick="switchTab('all', this)">📚 بنك الأسئلة الكامل</button>
+        <button class="nav-btn" onclick="switchTab('dup', this)">⚠️ المكررات الذكية (<span id="badgeDup">0</span>)</button>
+        <button class="nav-btn" onclick="switchTab('cfg', this)">🔗 إدارة الروابط (Config)</button>
+    </div>
+
+    <div class="main">
+        <div class="stats-grid">
+            <div class="stat-card"><h3>إجمالي الأسئلة</h3><span id="statTotal">0</span></div>
+            <div class="stat-card" style="border-color: var(--warning)"><h3>المكررات المكتشفة</h3><span id="statDup">0</span></div>
+            <div class="stat-card" style="border-color: #ced4da"><h3>روابط النشطة</h3><span id="statCfg">0</span></div>
+        </div>
+
+        <div id="all-tab" class="tab-section">
+            <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
+                <input type="text" class="search-box" placeholder="ابحث في الأسئلة أو الأجوبة..." onkeyup="searchData(this.value)">
+                <button class="btn btn-add" onclick="addNewQ()">+ إضافة سؤال جديد</button>
+            </div>
+            <div class="card">
+                <table>
+                    <thead><tr><th style="width: 40%;">السؤال</th><th style="width: 40%;">الإجابة</th><th>الإجراءات</th></tr></thead>
+                    <tbody id="allBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="dup-tab" class="tab-section" style="display:none;">
+            <div class="card" id="dupContainer">
+                <table id="dupTable">
+                    <thead><tr><th>معرف السؤال (ID)</th><th>النص والجواب</th><th>الإجراء</th></tr></thead>
+                    <tbody id="dupBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="cfg-tab" class="tab-section" style="display:none;">
+            <div style="margin-bottom: 20px; text-align: left;">
+                <button class="btn btn-add" onclick="addNewCfg()">+ إضافة رابط Config</button>
+            </div>
+            <div class="card">
+                <table>
+                    <thead><tr><th>المفتاح (Key)</th><th>الرابط المختصر (Link)</th><th>الإجراءات</th></tr></thead>
+                    <tbody id="cfgBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getDatabase, ref, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+    const firebaseConfig = { databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/" };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    onValue(ref(db, '/'), (snapshot) => {
+        const root = snapshot.val() || {};
+        renderDashboard(root.questions || {});
+        renderConfigs(root.config ? root.config.data : {});
+    });
+
+    function renderDashboard(data) {
+        const allBody = document.getElementById('allBody');
+        const dupBody = document.getElementById('dupBody');
+        allBody.innerHTML = ""; dupBody.innerHTML = "";
+        
+        let groups = {};
+        const keys = Object.keys(data);
+
+        // تجميع وتجهيز البيانات
+        keys.forEach(id => {
+            let q = (data[id].q || "").trim();
+            let a = (data[id].a || "").trim();
+            if(!groups[q]) groups[q] = [];
+            groups[q].push({id, q, a});
+        });
+
+        const sortedTitles = Object.keys(groups).sort();
+        let totalDups = 0;
+
+        sortedTitles.forEach(title => {
+            // عرض في الجدول الرئيسي
+            groups[title].forEach(item => {
+                allBody.innerHTML += `<tr>
+                    <td style="color:var(--primary); font-weight:700">${item.q}</td>
+                    <td>${item.a}</td>
+                    <td>
+                        <button class="btn btn-edit" onclick="editEntry('questions/${item.id}', '${item.q}', '${item.a}')">تعديل</button>
+                        <button class="btn btn-del" onclick="deleteItem('questions/${item.id}')">حذف</button>
+                    </td>
+                </tr>`;
+            });
+
+            // نظام المكررات الاحترافي
+            if(groups[title].length > 1) {
+                totalDups += (groups[title].length - 1);
+                dupBody.innerHTML += `<tr><td colspan="3" class="dup-group-banner">
+                    <span>📍 مكرر: ${title}</span>
+                    <span class="dup-count-badge">يوجد ${groups[title].length} نسخ</span>
+                </td></tr>`;
+                
+                groups[title].forEach(item => {
+                    dupBody.innerHTML += `<tr>
+                        <td style="font-size:12px; color:#adb5bd">ID: ${item.id}</td>
+                        <td>${item.a}</td>
+                        <td>
+                            <button class="btn btn-del" onclick="deleteItem('questions/${item.id}')">حذف النسخة</button>
+                        </td>
+                    </tr>`;
+                });
+            }
+        });
+
+        document.getElementById('statTotal').innerText = keys.length;
+        document.getElementById('statDup').innerText = totalDups;
+        document.getElementById('badgeDup').innerText = totalDups;
+    }
+
+    function renderConfigs(data) {
+        const body = document.getElementById('cfgBody');
+        body.innerHTML = "";
+        let count = 0;
+        if(data) Object.keys(data).forEach(id => {
+            count++;
+            let k = data[id].k || ""; let l = data[id].l || "";
+            body.innerHTML += `<tr>
+                <td><code>${k}</code></td>
+                <td><small style="color:#8d99ae">${l}</small></td>
+                <td>
+                    <button class="btn btn-edit" onclick="editConfig('${id}', '${k}', '${l}')">تعديل</button>
+                    <button class="btn btn-del" onclick="deleteItem('config/data/${id}')">حذف</button>
+                </td>
+            </tr>`;
+        });
+        document.getElementById('statCfg').innerText = count;
+    }
+
+    // العمليات الذكية
+    window.editEntry = (path, oldQ, oldA) => {
+        const nQ = prompt("عدل نص السؤال:", oldQ);
+        const nA = prompt("عدل نص الإجابة:", oldA);
+        if(nQ && nA) update(ref(db, path), { q: nQ, a: nA });
+    };
+
+    window.editConfig = (id, oldK, oldL) => {
+        const nK = prompt("تعديل المفتاح (Key):", oldK);
+        const nL = prompt("تعديل الرابط (Link):", oldL);
+        if(nK && nL) update(ref(db, `config/data/${id}`), { k: nK, l: nL });
+    };
+
+    window.addNewQ = () => {
+        const id = prompt("أدخل رقم ID السؤال (مثلاً 100):");
+        const q = prompt("نص السؤال:");
+        const a = prompt("نص الجواب:");
+        if(id && q && a) set(ref(db, `questions/${id}`), {q, a});
+    };
+
+    window.addNewCfg = () => {
+        const k = prompt("المفتاح (Key):");
+        const l = prompt("الرابط (Link):");
+        if(k && l) set(ref(db, 'config/data/' + Date.now()), {k, l});
+    };
+
+    window.deleteItem = (path) => { if(confirm("هل تريد حذف هذا العنصر نهائياً؟")) remove(ref(db, path)); };
+
+    window.switchTab = (tab, btn) => {
+        document.querySelectorAll('.tab-section').forEach(s => s.style.display = 'none');
+        document.getElementById(tab + '-tab').style.display = 'block';
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    };
+
+    window.searchData = (query) => {
+        const rows = document.querySelectorAll('#allBody tr');
+        rows.forEach(r => r.style.display = r.innerText.toLowerCase().includes(query.toLowerCase()) ? "" : "none");
+    };
+</script>
+</body>
+</html>
