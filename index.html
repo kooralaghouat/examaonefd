@@ -394,7 +394,7 @@
 
     window.bulkDelete = (ids) => {
         if(confirm(`حذف ${ids.length} نسخة مكررة؟`)) {
-            const updates = {};
+            <!-- const updates = {}; -->
             ids.forEach(id => updates[`questions/${id}`] = null);
             update(ref(db), updates);
         }
