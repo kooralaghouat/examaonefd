@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Media | نظام الإدارة المتكامل</title>
+    <title>Super Media | نظام الإدارة المطور</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #4361ee; --bg: #f4f7fe; --danger: #ef233c; --warning: #ff9f1c; --white: #ffffff; --success: #2ec4b6; --gray: #8d99ae; }
+        :root { --primary: #4361ee; --bg: #f4f7fe; --danger: #ef233c; --warning: #ff9f1c; --white: #ffffff; --success: #2ec4b6; --gray: #8d99ae; --purple: #7209b7; }
         * { box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; direction: rtl; overflow-x: hidden; }
 
@@ -15,105 +15,114 @@
         .main { margin-right: 260px; padding: 30px; min-height: 100vh; }
         .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 40px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
 
-        .nav-btn { display: block; width: 100%; padding: 14px; border: none; background: none; text-align: right; font-family: 'Cairo'; font-weight: 600; cursor: pointer; color: var(--gray); border-radius: 12px; margin-bottom: 10px; transition: 0.3s; }
+        .nav-btn { display: block; width: 100%; padding: 12px; border: none; background: none; text-align: right; font-family: 'Cairo'; font-weight: 600; cursor: pointer; color: var(--gray); border-radius: 12px; margin-bottom: 8px; transition: 0.3s; font-size: 14px; }
+        .nav-btn:hover { background: #f8f9fa; }
         .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3); }
 
-        /* Dashboard Stats */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: var(--white); padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-align: center; border-bottom: 4px solid var(--primary); }
-        .stat-card span { display: block; font-size: 28px; font-weight: 800; color: var(--primary); }
-        .stat-card h3 { margin: 10px 0 0; font-size: 14px; color: var(--gray); }
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: var(--white); padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-align: center; border-bottom: 4px solid var(--primary); }
+        .stat-card span { display: block; font-size: 24px; font-weight: 800; color: var(--primary); }
+        .stat-card h3 { margin: 5px 0 0; font-size: 12px; color: var(--gray); }
 
-        /* Tables & Cards */
+        /* Table UI */
         .card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8f9fa; padding: 15px; text-align: right; color: #adb5bd; font-size: 13px; border-bottom: 1px solid #eee; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f1f3f5; font-size: 14px; vertical-align: middle; line-height: 1.6; }
+        th { background: #f8f9fa; padding: 15px; text-align: right; color: #444; font-size: 13px; border-bottom: 1px solid #eee; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f1f3f5; font-size: 14px; vertical-align: middle; }
         
         .btn { padding: 8px 16px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Cairo'; font-size: 12px; font-weight: 700; transition: 0.2s; }
         .btn-edit { background: #eef2ff; color: var(--primary); }
         .btn-del { background: #fff1f2; color: var(--danger); }
         .btn-save { background: var(--success); color: white; }
         .btn-add { background: var(--primary); color: white; height: 45px; }
-        .load-more { width: 100%; padding: 15px; background: #eee; border: none; cursor: pointer; font-family: 'Cairo'; font-weight: bold; color: #555; }
 
-        .action-bar { background: #fff; padding: 15px 25px; border-radius: 15px; margin-bottom: 20px; display: none; align-items: center; border: 2px solid var(--danger); gap: 15px; }
+        .action-bar { background: #fff; padding: 15px 25px; border-radius: 15px; margin-bottom: 20px; display: none; align-items: center; border: 2px solid var(--danger); gap: 15px; position: sticky; top: 10px; z-index: 100; }
         .inline-input { width: 100%; padding: 10px; border: 2px solid #edf2f4; border-radius: 8px; font-family: 'Cairo'; }
-        .dup-group-header { background: #fff9db; color: #856404; font-weight: bold; padding: 12px; border-right: 5px solid var(--warning); font-size: 14px; }
-        .badge { background: var(--danger); color: white; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
         
-        /* Loader */
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: #ddd; z-index: 2000; display: none; }
-        #loader div { height: 100%; background: var(--primary); width: 0; transition: 0.3s; }
+        .dup-group-header { background: #fff9db; color: #856404; font-weight: bold; padding: 10px; border-right: 5px solid var(--warning); font-size: 13px; }
+        .badge { background: var(--gray); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; }
+        
+        .load-more { width: 100%; padding: 15px; background: #eee; border: none; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
+        
+        /* Highlight differences */
+        .diff-text { color: var(--danger); font-weight: bold; text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <div id="loader"><div></div></div>
-
     <div class="sidebar">
         <div class="logo">SUPER MEDIA</div>
         <button class="nav-btn active" onclick="switchTab('all', this)">📚 بنك الأسئلة</button>
-        <button class="nav-btn" onclick="switchTab('exact', this)">🔥 مكرر متطابق</button>
-        <button class="nav-btn" onclick="switchTab('dup', this)">⚠️ مكرر ذكي</button>
-        <button class="nav-btn" onclick="switchTab('cfg', this)">🔗 الروابط</button>
+        <button class="nav-btn" onclick="switchTab('exact', this)">✅ مكرر متطابق (100%)</button>
+        <button class="nav-btn" onclick="switchTab('fuzzy', this)">✨ مكرر تشكيل/تنسيق</button>
+        <button class="nav-btn" onclick="switchTab('smart', this)">🧠 مكرر ذكي (إجابات مختلفة)</button>
+        <button class="nav-btn" onclick="switchTab('cfg', this)">🔗 إدارة الروابط</button>
     </div>
 
     <div class="main">
         <div class="stats-grid">
             <div class="stat-card"><h3>إجمالي الأسئلة</h3><span id="statTotal">0</span></div>
-            <div class="stat-card" style="border-color: var(--success)"><h3>مكررات متطابقة</h3><span id="statExact">0</span></div>
-            <div class="stat-card" style="border-color: var(--warning)"><h3>مكررات ذكية</h3><span id="statDup">0</span></div>
-            <div class="stat-card" style="border-color: #ced4da"><h3>الروابط</h3><span id="statCfg">0</span></div>
+            <div class="stat-card" style="border-color: var(--success)"><h3>متطابق تماماً</h3><span id="statExact">0</span></div>
+            <div class="stat-card" style="border-color: var(--purple)"><h3>مكرر تشكيل</h3><span id="statFuzzy">0</span></div>
+            <div class="stat-card" style="border-color: var(--warning)"><h3>مكرر ذكي</h3><span id="statSmart">0</span></div>
         </div>
 
-        <!-- بنك الأسئلة -->
+        <!-- Action Bar for Multi-Delete -->
+        <div class="action-bar" id="globalActionBar">
+            <div style="flex-grow: 1;">
+                <strong style="color:var(--danger)">وضع الحذف المتعدد نشط</strong>
+                <p style="margin:0; font-size:12px">تم تحديد <span id="selectedCount">0</span> عنصر</p>
+            </div>
+            <button class="btn btn-del" style="background:var(--danger); color:white; padding:10px 25px" onclick="deleteSelected()">🗑️ حذف العناصر المحددة نهائياً</button>
+            <button class="btn" style="background:#eee" onclick="deselectAll()">إلغاء</button>
+        </div>
+
+        <!-- Tab Sections -->
         <div id="all-tab" class="tab-section">
             <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                 <input type="text" id="searchInput" class="inline-input" style="flex:1" placeholder="بحث سريع في الأسئلة...">
                 <button class="btn btn-add" onclick="addNewQ()">+ إضافة سؤال</button>
             </div>
-            <div class="action-bar" id="actionBarAll">
-                <button class="btn btn-del" style="background:var(--danger); color:white" onclick="deleteSelected('all')">🗑️ حذف المحددة (<span id="countAll">0</span>)</button>
-            </div>
             <div class="card">
                 <table>
-                    <thead><tr><th style="width:40px"><input type="checkbox" id="masterCheckAll"></th><th>السؤال</th><th>الإجابة</th><th>الإجراء</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'all-check')"></th>
+                            <th>السؤال</th><th>الإجابة</th><th>الإجراء</th>
+                        </tr>
+                    </thead>
                     <tbody id="allBody"></tbody>
                 </table>
-                <button id="loadMoreBtn" class="load-more" onclick="loadMore()">عرض المزيد (تحميل بيانات إضافية)...</button>
+                <button id="loadMoreBtn" class="load-more" onclick="loadMore()">عرض المزيد...</button>
             </div>
         </div>
 
-        <!-- مكرر متطابق -->
         <div id="exact-tab" class="tab-section" style="display:none;">
-            <div class="action-bar" style="display: flex; border-color: var(--success);">
-                <div style="flex-grow: 1;"><h4>تنظيف المكررات المتطابقة</h4><p style="font-size:12px;color:#777">حذف تلقائي للنسخ المتطابقة 100%</p></div>
-                <button class="btn" style="background: var(--success); color:white;" onclick="cleanExactDuplicates()">🚀 تنظيف آلي فوري</button>
-            </div>
+            <div class="card"><table id="exactTable"><thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'exact-check')"></th><th>النص المكرر</th><th>عدد النسخ</th><th>الإجراء</th></tr></thead><tbody id="exactBody"></tbody></table></div>
+        </div>
+
+        <div id="fuzzy-tab" class="tab-section" style="display:none;">
             <div class="card">
+                <div style="padding:15px; background:#eef2ff; font-size:13px; color:var(--primary)">
+                    💡 هذه الأسئلة متطابقة في المعنى لكن تختلف في (التشكيل، الهمزات، أو المسافات).
+                </div>
                 <table>
-                    <thead><tr><th>السؤال والجواب المكرر</th><th>عدد النسخ</th><th>الإجراء المتوقع</th></tr></thead>
-                    <tbody id="exactBody"></tbody>
+                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'fuzzy-check')"></th><th>السؤال الأصلي</th><th>الإجابة</th><th>الإجراء</th></tr></thead>
+                    <tbody id="fuzzyBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- مكرر ذكي -->
-        <div id="dup-tab" class="tab-section" style="display:none;">
-            <div class="action-bar" id="actionBarDup">
-                <button class="btn btn-del" style="background:var(--danger); color:white" onclick="deleteSelected('dup')">🗑️ حذف المحددة (<span id="countDup">0</span>)</button>
-                <button class="btn" style="background:#eee" onclick="selectSmartDupsAuto()">تحديد الزوائد آلياً</button>
-            </div>
+        <div id="smart-tab" class="tab-section" style="display:none;">
             <div class="card">
                 <table>
-                    <thead><tr><th style="width:40px"></th><th>ID</th><th>نص الإجابة</th><th>الإجراء</th></tr></thead>
-                    <tbody id="dupBody"></tbody>
+                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'smart-check')"></th><th>ID</th><th>نص الإجابة (محتوى مختلف)</th><th>الإجراء</th></tr></thead>
+                    <tbody id="smartBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- إدارة الروابط -->
         <div id="cfg-tab" class="tab-section" style="display:none;">
             <div style="display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 20px; border-radius: 15px; border: 1px solid #eee;">
                 <input type="text" id="newCfgKey" class="inline-input" placeholder="المفتاح (Key)">
@@ -142,238 +151,271 @@
     let activeTab = 'all';
     let displayLimit = 50;
 
-    // تنظيف النص للتحقق من المكررات
-    const cleanText = (t) => t ? t.toString().replace(/\s+/g, ' ').trim() : "";
+    // --- دالة التنظيف الذكية (Normalization) ---
+    const normalize = (txt) => {
+        if (!txt) return "";
+        return txt.toString()
+            .replace(/[\u064B-\u065F]/g, "") // إزالة التشكيل
+            .replace(/[أإآ]/g, "ا")           // توحيد الألفات
+            .replace(/ة/g, "ه")              // توحيد التاء المربوطة
+            .replace(/ى/g, "ي")              // توحيد الياء
+            .replace(/\s+/g, " ")            // إزالة المسافات الزائدة
+            .trim();
+    };
 
-    // المستمع الرئيسي للبيانات
     onValue(ref(db, '/'), (snapshot) => {
         const data = snapshot.val() || {};
         dbData = data.questions || {};
         configData = data.config ? (data.config.data || {}) : {};
         renderCurrentTab();
-        updateStats();
+        calculateDuplicates();
     });
 
-    function updateStats() {
-        document.getElementById('statTotal').innerText = Object.keys(dbData).length;
-        document.getElementById('statCfg').innerText = Object.keys(configData).length;
+    function calculateDuplicates() {
+        const keys = Object.keys(dbData);
+        let exactCount = 0;
+        let fuzzyCount = 0;
+        let smartCount = 0;
+
+        let groupsNorm = {}; // للمكرر بالتشكيل والذكي
+        let groupsExact = {}; // للمتطابق تماماً
+
+        keys.forEach(id => {
+            const q = dbData[id].q;
+            const a = dbData[id].a;
+            const normQ = normalize(q);
+            const normA = normalize(a);
+            const exactKey = q + "|||" + a;
+            const normKey = normQ + "|||" + normA;
+
+            // حساب المتطابق 100%
+            groupsExact[exactKey] = (groupsExact[exactKey] || 0) + 1;
+            
+            // حساب المكرر تشكيل
+            if(!groupsNorm[normKey]) groupsNorm[normKey] = [];
+            groupsNorm[normKey].push(id);
+        });
+
+        Object.values(groupsExact).forEach(v => { if(v > 1) exactCount += (v-1); });
+        
+        // حساب المكرر الذكي (نفس السؤال بنص مختلف)
+        let qGroups = {};
+        keys.forEach(id => {
+            let nQ = normalize(dbData[id].q);
+            if(!qGroups[nQ]) qGroups[nQ] = new Set();
+            qGroups[nQ].add(normalize(dbData[id].a));
+        });
+        Object.values(qGroups).forEach(set => { if(set.size > 1) smartCount++; });
+
+        document.getElementById('statTotal').innerText = keys.length;
+        document.getElementById('statExact').innerText = exactCount;
+        document.getElementById('statSmart').innerText = smartCount;
     }
 
-    function renderCurrentTab() {
-        if (activeTab === 'all') renderAll();
-        else if (activeTab === 'exact') renderExact();
-        else if (activeTab === 'dup') renderSmart();
-        else if (activeTab === 'cfg') renderConfigs();
-    }
+    window.renderCurrentTab = () => {
+        const bodyMap = { all: renderAll, exact: renderExact, fuzzy: renderFuzzy, smart: renderSmart, cfg: renderConfigs };
+        if(bodyMap[activeTab]) bodyMap[activeTab]();
+        updateSelectedUI();
+    };
 
-    // عرض بنك الأسئلة (سريع)
     function renderAll() {
         const body = document.getElementById('allBody');
-        const keys = Object.keys(dbData);
         const search = document.getElementById('searchInput').value.toLowerCase();
-        
-        let filteredKeys = keys;
-        if (search) {
-            filteredKeys = keys.filter(id => 
-                dbData[id].q.toLowerCase().includes(search) || 
-                dbData[id].a.toLowerCase().includes(search)
-            );
-        }
+        const keys = Object.keys(dbData).filter(id => 
+            dbData[id].q.toLowerCase().includes(search) || dbData[id].a.toLowerCase().includes(search)
+        );
 
-        const showKeys = filteredKeys.slice(0, displayLimit);
-        let html = "";
-        
-        showKeys.forEach(id => {
-            html += `<tr>
-                <td><input type="checkbox" class="all-check" value="${id}" onchange="updateCounts('all')"></td>
+        body.innerHTML = keys.slice(0, displayLimit).map(id => `
+            <tr>
+                <td><input type="checkbox" class="all-check item-cb" value="${id}" onchange="updateSelectedUI()"></td>
                 <td style="font-weight:700; color:var(--primary)">${dbData[id].q}</td>
                 <td>${dbData[id].a}</td>
                 <td><button class="btn btn-del" onclick="window.deleteItem('questions/${id}')">حذف</button></td>
-            </tr>`;
-        });
-
-        body.innerHTML = html;
-        document.getElementById('loadMoreBtn').style.display = filteredKeys.length > displayLimit ? 'block' : 'none';
+            </tr>
+        `).join('');
+        document.getElementById('loadMoreBtn').style.display = keys.length > displayLimit ? 'block' : 'none';
     }
 
-    // عرض المكررات المتطابقة
     function renderExact() {
         const body = document.getElementById('exactBody');
         let groups = {};
         Object.keys(dbData).forEach(id => {
-            let key = cleanText(dbData[id].q) + "|||" + cleanText(dbData[id].a);
+            let key = dbData[id].q + "|||" + dbData[id].a;
             if(!groups[key]) groups[key] = [];
             groups[key].push(id);
         });
 
-        let html = ""; let count = 0;
+        body.innerHTML = Object.keys(groups).filter(k => groups[k].length > 1).map(k => {
+            const ids = groups[k].slice(1); // كل النسخ ما عدا الأولى
+            return `<tr>
+                <td><input type="checkbox" class="exact-check item-cb" data-ids="${ids.join(',')}" onchange="updateSelectedUI()"></td>
+                <td>${k.split("|||")[0]}<br><small>${k.split("|||")[1]}</small></td>
+                <td><span class="badge">${groups[k].length} نسخة</span></td>
+                <td><button class="btn btn-del" onclick="window.bulkDelete(['${ids.join("','")}'])">تنظيف النسخ</button></td>
+            </tr>`;
+        }).join('');
+    }
+
+    function renderFuzzy() {
+        const body = document.getElementById('fuzzyBody');
+        let groups = {};
+        Object.keys(dbData).forEach(id => {
+            let key = normalize(dbData[id].q) + "|||" + normalize(dbData[id].a);
+            if(!groups[key]) groups[key] = [];
+            groups[key].push(id);
+        });
+
+        let html = "";
+        let count = 0;
         Object.keys(groups).forEach(key => {
             if(groups[key].length > 1) {
-                count += (groups[key].length - 1);
-                let p = key.split("|||");
-                html += `<tr><td><b>${p[0]}</b><br><small>${p[1]}</small></td>
-                        <td><span class="badge">${groups[key].length} نسخة</span></td>
-                        <td style="color:var(--success)">سيتم حذف ${groups[key].length - 1} نسخة</td></tr>`;
+                // نتحقق إذا كانوا أصلاً متطابقين حرفياً 100% (نتجاهلهم لأنهم في تبويب "متطابق")
+                let subGroups = {};
+                groups[key].forEach(id => {
+                    let raw = dbData[id].q + dbData[id].a;
+                    if(!subGroups[raw]) subGroups[raw] = [];
+                    subGroups[raw].push(id);
+                });
+                
+                if(Object.keys(subGroups).length > 1) { // يوجد اختلاف في التشكيل/الرسم
+                    count++;
+                    html += `<tr class="dup-group-header"><td colspan="4">مجموعة تشكيل: ${key.split("|||")[0]}</td></tr>`;
+                    groups[key].forEach(id => {
+                        html += `<tr>
+                            <td><input type="checkbox" class="fuzzy-check item-cb" value="${id}" onchange="updateSelectedUI()"></td>
+                            <td>${dbData[id].q}</td>
+                            <td>${dbData[id].a}</td>
+                            <td><button class="btn btn-del" onclick="window.deleteItem('questions/${id}')">حذف</button></td>
+                        </tr>`;
+                    });
+                }
             }
         });
         body.innerHTML = html;
-        document.getElementById('statExact').innerText = count;
+        document.getElementById('statFuzzy').innerText = count;
     }
 
-    // عرض المكرر الذكي
     function renderSmart() {
-        const body = document.getElementById('dupBody');
+        const body = document.getElementById('smartBody');
         let groups = {};
         Object.keys(dbData).forEach(id => {
-            let q = cleanText(dbData[id].q);
+            let q = normalize(dbData[id].q);
             if(!groups[q]) groups[q] = [];
-            groups[q].push({id, a: dbData[id].a});
+            groups[q].push(id);
         });
 
-        let html = ""; let count = 0;
+        let html = "";
         Object.keys(groups).forEach(q => {
-            if(groups[q].length > 1) {
-                count += (groups[q].length - 1);
-                html += `<tr><td colspan="4" class="dup-group-header">📍 السؤال: ${q}</td></tr>`;
-                groups[q].forEach(item => {
+            let ans = new Set(groups[q].map(id => normalize(dbData[id].a)));
+            if(ans.size > 1) {
+                html += `<tr><td colspan="4" class="dup-group-header">❓ السؤال: ${q}</td></tr>`;
+                groups[q].forEach(id => {
                     html += `<tr>
-                        <td><input type="checkbox" class="dup-check" value="${item.id}" onchange="updateCounts('dup')"></td>
-                        <td style="font-size:11px; color:#999">${item.id}</td>
-                        <td>${item.a}</td>
-                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
+                        <td><input type="checkbox" class="smart-check item-cb" value="${id}" onchange="updateSelectedUI()"></td>
+                        <td>${id}</td>
+                        <td>${dbData[id].a}</td>
+                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${id}')">حذف</button></td>
                     </tr>`;
                 });
             }
         });
         body.innerHTML = html;
-        document.getElementById('statDup').innerText = count;
     }
 
     function renderConfigs() {
         const body = document.getElementById('cfgBody');
-        let html = "";
-        Object.keys(configData).forEach(id => {
-            html += `<tr id="row-${id}">
+        body.innerHTML = Object.keys(configData).map(id => `
+            <tr id="row-${id}">
                 <td><code>${configData[id].k}</code></td>
-                <td style="color:#777; font-size:12px;">${configData[id].l}</td>
+                <td>${configData[id].l}</td>
                 <td>
                     <button class="btn btn-edit" onclick="window.enterEditMode('${id}', '${configData[id].k}', '${configData[id].l}')">تعديل</button>
                     <button class="btn btn-del" onclick="window.deleteItem('config/data/${id}')">حذف</button>
-                </td></tr>`;
-        });
-        body.innerHTML = html;
+                </td>
+            </tr>
+        `).join('');
     }
 
-    // البحث مع تأخير (Debounce) لزيادة السرعة
-    let searchTimer;
-    document.getElementById('searchInput').onkeyup = function() {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => {
-            displayLimit = 50; 
-            renderAll();
-        }, 400);
-    };
-
-    window.loadMore = () => {
-        displayLimit += 100;
-        renderAll();
-    };
-
+    // --- Actions ---
     window.switchTab = (tab, btn) => {
         activeTab = tab;
         document.querySelectorAll('.tab-section').forEach(s => s.style.display = 'none');
         document.getElementById(tab + '-tab').style.display = 'block';
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        displayLimit = 50;
+        deselectAll();
         renderCurrentTab();
     };
 
-    window.deleteItem = (path) => {
-        if(confirm("هل أنت متأكد من الحذف النهائي؟")) remove(ref(db, path));
-    };
-
-    window.updateCounts = (type) => {
-        const sel = document.querySelectorAll(`.${type}-check:checked`).length;
-        document.getElementById(type === 'all' ? 'actionBarAll' : 'actionBarDup').style.display = sel > 0 ? 'flex' : 'none';
-        document.getElementById(type === 'all' ? 'countAll' : 'countDup').innerText = sel;
-    };
-
-    window.deleteSelected = (type) => {
-        const ids = Array.from(document.querySelectorAll(`.${type}-check:checked`)).map(cb => cb.value);
-        if(confirm(`حذف ${ids.length} عناصر؟`)) {
-            const upds = {}; 
-            ids.forEach(id => upds[`questions/${id}`] = null);
-            update(ref(db), upds);
+    window.updateSelectedUI = () => {
+        let selectedIds = [];
+        document.querySelectorAll('.item-cb:checked').forEach(cb => {
+            if(cb.dataset.ids) selectedIds.push(...cb.dataset.ids.split(','));
+            else selectedIds.push(cb.value);
+        });
+        
+        const bar = document.getElementById('globalActionBar');
+        if(selectedIds.length > 0) {
+            bar.style.display = 'flex';
+            document.getElementById('selectedCount').innerText = selectedIds.length;
+        } else {
+            bar.style.display = 'none';
         }
     };
 
-    window.cleanExactDuplicates = () => {
-        let groups = {};
-        Object.keys(dbData).forEach(id => {
-            let key = cleanText(dbData[id].q) + "|||" + cleanText(dbData[id].a);
-            if(!groups[key]) groups[key] = [];
-            groups[key].push(id);
-        });
-        let upds = {}; let c = 0;
-        Object.keys(groups).forEach(k => {
-            if(groups[k].length > 1) {
-                for(let i=1; i<groups[k].length; i++) { upds[`questions/${groups[k][i]}`] = null; c++; }
-            }
-        });
-        if(c > 0 && confirm(`سيتم حذف ${c} مكرر متطابق. استمرار؟`)) update(ref(db), upds);
+    window.toggleAll = (master, className) => {
+        document.querySelectorAll('.' + className).forEach(cb => cb.checked = master.checked);
+        updateSelectedUI();
     };
 
-    window.handleAddNewCfg = () => {
-        const k = document.getElementById('newCfgKey').value;
-        const l = document.getElementById('newCfgLink').value;
-        if(k && l) set(ref(db, `config/data/${Date.now()}`), {k, l});
+    window.deselectAll = () => {
+        document.querySelectorAll('.item-cb').forEach(cb => cb.checked = false);
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        updateSelectedUI();
+    };
+
+    window.deleteSelected = () => {
+        let selectedIds = [];
+        document.querySelectorAll('.item-cb:checked').forEach(cb => {
+            if(cb.dataset.ids) selectedIds.push(...cb.dataset.ids.split(','));
+            else selectedIds.push(cb.value);
+        });
+
+        if(selectedIds.length > 0 && confirm(`هل أنت متأكد من حذف ${selectedIds.length} عنصر نهائياً؟`)) {
+            const updates = {};
+            selectedIds.forEach(id => updates[`questions/${id}`] = null);
+            update(ref(db), updates).then(() => deselectAll());
+        }
+    };
+
+    window.deleteItem = (path) => {
+        if(confirm("حذف نهائي؟")) remove(ref(db, path));
+    };
+
+    window.bulkDelete = (ids) => {
+        if(confirm(`حذف ${ids.length} نسخة مكررة؟`)) {
+            const updates = {};
+            ids.forEach(id => updates[`questions/${id}`] = null);
+            update(ref(db), updates);
+        }
     };
 
     window.addNewQ = () => {
-        const id = prompt("رقم السؤال (ID):");
-        const q = prompt("نص السؤال:");
+        const id = prompt("رقم السؤال:");
+        const q = prompt("النص:");
         const a = prompt("الإجابة:");
         if(id && q && a) set(ref(db, `questions/${id}`), {q, a});
     };
 
-    window.enterEditMode = (id, k, l) => {
-        const row = document.getElementById(`row-${id}`);
-        row.innerHTML = `
-            <td><input type="text" id="ek-${id}" class="inline-input" value="${k}"></td>
-            <td><input type="text" id="el-${id}" class="inline-input" value="${l}"></td>
-            <td><button class="btn btn-save" onclick="window.saveEdit('${id}')">حفظ</button></td>
-        `;
+    window.loadMore = () => { displayLimit += 100; renderAll(); };
+
+    // البحث
+    let searchTimer;
+    document.getElementById('searchInput').onkeyup = () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(renderAll, 300);
     };
 
-    window.saveEdit = (id) => {
-        const k = document.getElementById(`ek-${id}`).value;
-        const l = document.getElementById(`el-${id}`).value;
-        if(k && l) update(ref(db, `config/data/${id}`), {k, l});
-    };
-
-    document.getElementById('masterCheckAll').onclick = function() {
-        const cbs = document.querySelectorAll('.all-check');
-        cbs.forEach(c => c.checked = this.checked);
-        window.updateCounts('all');
-    };
-
-    window.selectSmartDupsAuto = () => {
-        const body = document.getElementById('dupBody');
-        const rows = body.querySelectorAll('tr');
-        let isFirst = false;
-        rows.forEach(r => {
-            if(r.querySelector('.dup-group-header')) isFirst = true;
-            else {
-                const cb = r.querySelector('input');
-                if(cb) {
-                    cb.checked = !isFirst;
-                    isFirst = false;
-                }
-            }
-        });
-        window.updateCounts('dup');
-    };
 </script>
 </body>
 </html>
