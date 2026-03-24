@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Media | نظام الإدارة المطور الاحترافي</title>
+    <title>Super Media | نظام الإدارة المطور</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #4361ee; --bg: #f4f7fe; --danger: #ef233c; --warning: #ff9f1c; --white: #ffffff; --success: #2ec4b6; --gray: #8d99ae; --purple: #7209b7; }
         * { box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; direction: rtl; overflow-x: hidden; }
 
-        /* Loading Overlay */
+        /* شاشة التحميل */
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .spinner { border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Sidebar */
+        /* القائمة الجانبية */
         .sidebar { width: 260px; height: 100vh; background: var(--white); position: fixed; right: 0; top: 0; padding: 20px; box-shadow: -2px 0 15px rgba(0,0,0,0.05); z-index: 1000; overflow-y: auto; }
         .main { margin-right: 260px; padding: 30px; min-height: 100vh; }
         .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
@@ -24,13 +24,13 @@
         .nav-btn:hover { background: #f8f9fa; color: var(--primary); }
         .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3); }
 
-        /* Stats */
+        /* الإحصائيات */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .stat-card { background: var(--white); padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-align: center; border-bottom: 4px solid var(--primary); }
         .stat-card span { display: block; font-size: 24px; font-weight: 800; color: var(--primary); }
         .stat-card h3 { margin: 5px 0 0; font-size: 12px; color: var(--gray); }
 
-        /* Table UI */
+        /* الجداول */
         .card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8f9fa; padding: 15px; text-align: right; color: #444; font-size: 13px; border-bottom: 1px solid #eee; }
@@ -51,9 +51,6 @@
         
         .load-more { width: 100%; padding: 15px; background: #f8f9fa; color: var(--primary); border: none; cursor: pointer; font-family: 'Cairo'; font-weight: bold; border-top: 1px solid #eee; transition: 0.3s; }
         .load-more:hover { background: #eef2ff; }
-        
-        /* Highlight differences */
-        .highlight { color: var(--danger); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -61,8 +58,8 @@
     <!-- شاشة التحميل -->
     <div id="loader">
         <div class="spinner"></div>
-        <h2 style="color: var(--primary); font-family: 'Cairo';">جاري جلب ومعالجة البيانات...</h2>
-        <p style="color: var(--gray);">الرجاء الانتظار، قد يستغرق الأمر ثواني حسب حجم البيانات.</p>
+        <h2 style="color: var(--primary); font-family: 'Cairo';">جاري جلب البيانات من القاعدة...</h2>
+        <p style="color: var(--gray);">الرجاء الانتظار قليلاً.</p>
     </div>
 
     <div class="sidebar">
@@ -130,7 +127,7 @@
         <div id="fuzzy-tab" class="tab-section" style="display:none;">
             <div class="card">
                 <div style="padding:15px; background:#eef2ff; font-size:13px; color:var(--primary); border-bottom: 1px solid #eee;">
-                    💡 <b>مكرر التشكيل والتنسيق:</b> أسئلة وإجابات متطابقة في الحروف الأساسية ولكن تختلف في (التشكيل، الهمزات، أو المسافات الزائدة).
+                    💡 <b>مكرر التشكيل والتنسيق:</b> أسئلة متطابقة ولكن تختلف في التشكيل أو المسافات.
                 </div>
                 <table>
                     <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'fuzzy-check')"></th><th>السؤال</th><th>الإجابة</th><th>الإجراء</th></tr></thead>
@@ -142,7 +139,7 @@
         <div id="smart-tab" class="tab-section" style="display:none;">
             <div class="card">
                 <div style="padding:15px; background:#fff9db; font-size:13px; color:#856404; border-bottom: 1px solid #eee;">
-                    💡 <b>المكرر الذكي:</b> نفس السؤال مكرر بالضبط، ولكن الإجابات مختلفة. (يجب مراجعتها وتحديد الإجابة الصحيحة).
+                    💡 <b>المكرر الذكي:</b> نفس السؤال مكرر بالضبط، ولكن الإجابات مختلفة.
                 </div>
                 <table>
                     <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'smart-check')"></th><th>رقم ID</th><th>الإجابة المختلفة</th><th>الإجراء</th></tr></thead>
@@ -154,7 +151,7 @@
         <div id="swapped-tab" class="tab-section" style="display:none;">
             <div class="card">
                 <div style="padding:15px; background:#ffe3e3; font-size:13px; color:var(--danger); border-bottom: 1px solid #eee;">
-                    💡 <b>المكرر المعكوس:</b> تم اكتشاف أن السؤال في أحد العناصر هو نفس الإجابة في عنصر آخر والعكس صحيح.
+                    💡 <b>المكرر المعكوس:</b> السؤال في عنصر هو إجابة في عنصر آخر.
                 </div>
                 <table>
                     <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'swapped-check')"></th><th>رقم ID</th><th>النص الأول</th><th>النص الثاني</th><th>الإجراء</th></tr></thead>
@@ -177,11 +174,11 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getDatabase, ref, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
-    // ✅ إعدادات Firebase الخاصة بك مع إضافة رابط قاعدة البيانات اللحظية
+    // 🔴 لقد وضعت لك رابط قاعدة البيانات الذي كان يعمل في النسخة القديمة الخاصة بك 🔴
     const firebaseConfig = {
         apiKey: "AIzaSyDD3q7W8k3Qb2X0FroDH5ntgp9qpSjgpnY",
         authDomain: "casnos-ecf2f.firebaseapp.com",
-        databaseURL: "https://casnos-ecf2f-default-rtdb.firebaseio.com", // ضروري جداً لتعمل
+        databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/",
         projectId: "casnos-ecf2f",
         storageBucket: "casnos-ecf2f.firebasestorage.app",
         messagingSenderId: "192090097663",
@@ -192,120 +189,84 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // متغيرات لتخزين البيانات المعالجة (لتسريع الموقع)
     let processedData =[]; 
     let configData = {};
-    
-    // متغيرات المجموعات بعد المعالجة
-    let groupsExact = {};
-    let groupsFuzzy = {};
-    let groupsSmart = {};
-    let groupsSwapped = {};
-
+    let groupsExact = {}, groupsFuzzy = {}, groupsSmart = {}, groupsSwapped = {};
     let activeTab = 'all';
     let displayLimit = 50;
-    let searchQuery = '';
 
-    // دالة التنظيف (تعالج الفروقات البسيطة)
     const normalize = (txt) => {
         if (!txt) return "";
-        return txt.toString()
-            .replace(/[\u064B-\u065F\u0651\u0652]/g, "") // إزالة كل التشكيل والشدة والسكون
-            .replace(/[أإآ]/g, "ا")           // توحيد الألفات
-            .replace(/ة/g, "ه")              // توحيد التاء المربوطة
-            .replace(/ى/g, "ي")              // توحيد الياء
-            .replace(/[^\w\s\u0600-\u06FF]/gi, "") // إزالة الرموز الخاصة وعلامات الترقيم
-            .replace(/\s+/g, " ")            // إزالة المسافات الزائدة
-            .trim();
+        return txt.toString().replace(/[\u064B-\u065F\u0651\u0652]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/[^\w\s\u0600-\u06FF]/gi, "").replace(/\s+/g, " ").trim();
     };
 
-    // جلب البيانات من Firebase
+    // جلب البيانات مع اكتشاف الأخطاء
     onValue(ref(db, '/'), (snapshot) => {
-        document.getElementById('loader').style.display = 'flex'; // إظهار شاشة التحميل
+        document.getElementById('loader').style.display = 'flex';
         
-        // استخدام setTimeout لإعطاء المتصفح فرصة لإظهار واجهة التحميل قبل تجميد الشاشة بالمعالجة
         setTimeout(() => {
-            const data = snapshot.val() || {};
+            const data = snapshot.val();
+            
+            // إذا كانت قاعدة البيانات فارغة تماماً
+            if (!data) {
+                document.getElementById('loader').style.display = 'none';
+                return;
+            }
+
             const rawQuestions = data.questions || {};
             configData = data.config ? (data.config.data || {}) : {};
             
-            // 1. معالجة البيانات مسبقاً (Pre-processing) لحل مشكلة البطء
             processData(rawQuestions);
-            
-            // 2. تحديث الواجهة
             renderCurrentTab();
             
-            document.getElementById('loader').style.display = 'none'; // إخفاء التحميل
+            document.getElementById('loader').style.display = 'none';
         }, 100);
+    }, (error) => {
+        // رسالة تنبيه تظهر لك إذا كان هناك خطأ في الاتصال
+        alert("❌ لا يمكن قراءة البيانات من فايربيس!\n\nيجب عليك الدخول إلى حساب Firebase الخاص بك -> Realtime Database -> Rules\nوتغيير الكلمة من false إلى true لكي يعمل الموقع.");
+        document.getElementById('loader').style.display = 'none';
     });
 
-    // الدالة المسؤولة عن تحليل وتصنيف البيانات لمرة واحدة فقط
     function processData(rawQuestions) {
         processedData =[];
-        groupsExact = {};
-        groupsFuzzy = {};
-        groupsSmart = {};
-        groupsSwapped = {};
-        
-        let exactCount = 0;
-        let fuzzyCount = 0;
-        let smartCount = 0;
-        let swappedCount = 0;
+        groupsExact = {}; groupsFuzzy = {}; groupsSmart = {}; groupsSwapped = {};
+        let exactCount = 0, fuzzyCount = 0, smartCount = 0, swappedCount = 0;
 
-        const keys = Object.keys(rawQuestions);
-        
-        // الخطوة الأولى: بناء المصفوفة المعالجة
-        keys.forEach(id => {
+        Object.keys(rawQuestions).forEach(id => {
             const item = rawQuestions[id];
             const nQ = normalize(item.q);
             const nA = normalize(item.a);
             
             const processedItem = {
-                id: id,
-                rawQ: item.q,
-                rawA: item.a,
-                nQ: nQ,
-                nA: nA,
+                id: id, rawQ: item.q, rawA: item.a, nQ: nQ, nA: nA,
                 exactKey: item.q + "|||" + item.a,
                 fuzzyKey: nQ + "|||" + nA,
-                // بصمة للمكرر المعكوس (ترتيب أبجدي لتجاهل من هو السؤال ومن الإجابة)
                 swappedKey: [nQ, nA].sort().join("|||")
             };
             processedData.push(processedItem);
         });
 
-        // الخطوة الثانية: تجميع البيانات بناءً على المفاتيح
         processedData.forEach(item => {
-            // 1. متطابق 100%
             if(!groupsExact[item.exactKey]) groupsExact[item.exactKey] = [];
             groupsExact[item.exactKey].push(item);
 
-            // 2. مكرر تشكيل
             if(!groupsFuzzy[item.fuzzyKey]) groupsFuzzy[item.fuzzyKey] = [];
             groupsFuzzy[item.fuzzyKey].push(item);
 
-            // 3. مكرر ذكي (نفس السؤال - إجابة مختلفة)
             if(!groupsSmart[item.nQ]) groupsSmart[item.nQ] = new Set();
-            groupsSmart[item.nQ].add(item.nA); // نحتفظ بالإجابات المعالجة لنعرف إن كانت مختلفة حقاً
+            groupsSmart[item.nQ].add(item.nA);
 
-            // 4. مكرر معكوس (س/ج مبدلين)
             if(!groupsSwapped[item.swappedKey]) groupsSwapped[item.swappedKey] = [];
             groupsSwapped[item.swappedKey].push(item);
         });
 
-        // حساب الإحصائيات الصحيحة
         Object.values(groupsExact).forEach(arr => { if(arr.length > 1) exactCount += (arr.length - 1); });
-        
         Object.values(groupsFuzzy).forEach(arr => {
-            // للتأكد أنه مكرر تشكيل وليس متطابق 100%
             const exactSubKeys = new Set(arr.map(i => i.exactKey));
             if(arr.length > 1 && exactSubKeys.size > 1) fuzzyCount++;
         });
-
         Object.values(groupsSmart).forEach(set => { if(set.size > 1) smartCount++; });
-
         Object.values(groupsSwapped).forEach(arr => {
-            // نتأكد أنهم يحملون نفس البصمة لكن الأسئلة متعاكسة فعلاً
             const uniqueQs = new Set(arr.map(i => i.nQ));
             if(arr.length > 1 && uniqueQs.size > 1) swappedCount++;
         });
@@ -317,7 +278,6 @@
         document.getElementById('statSwapped').innerText = swappedCount;
     }
 
-    // --- دوال العرض السريعة (تعتمد على البيانات المعالجة مسبقاً) ---
     window.renderCurrentTab = () => {
         const bodyMap = { all: renderAll, exact: renderExact, fuzzy: renderFuzzy, smart: renderSmart, swapped: renderSwapped, cfg: renderConfigs };
         if(bodyMap[activeTab]) bodyMap[activeTab]();
@@ -327,18 +287,10 @@
     function renderAll() {
         const body = document.getElementById('allBody');
         const search = document.getElementById('searchInput').value.toLowerCase();
-        
         let filtered = processedData;
-        if (search) {
-            filtered = processedData.filter(item => 
-                item.rawQ.toLowerCase().includes(search) || item.rawA.toLowerCase().includes(search) || item.id.includes(search)
-            );
-        }
-
-        const itemsToShow = filtered.slice(0, displayLimit);
+        if (search) filtered = processedData.filter(item => item.rawQ.toLowerCase().includes(search) || item.rawA.toLowerCase().includes(search) || item.id.includes(search));
         
-        // استخدام map لإنشاء الـ HTML دفعة واحدة أسرع بكثير من الحلقات العادية
-        body.innerHTML = itemsToShow.map(item => `
+        body.innerHTML = filtered.slice(0, displayLimit).map(item => `
             <tr>
                 <td><input type="checkbox" class="all-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
                 <td><span class="badge" style="background:var(--primary)">${item.id}</span></td>
@@ -347,23 +299,19 @@
                 <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
             </tr>
         `).join('');
-        
         document.getElementById('loadMoreBtn').style.display = filtered.length > displayLimit ? 'block' : 'none';
     }
 
     function renderExact() {
         const body = document.getElementById('exactBody');
         let html = "";
-        
         Object.keys(groupsExact).forEach(key => {
             const arr = groupsExact[key];
             if(arr.length > 1) {
-                const keepItem = arr[0];
-                const dupIds = arr.slice(1).map(i => i.id); // المعرفات المراد حذفها
-                
+                const dupIds = arr.slice(1).map(i => i.id);
                 html += `<tr>
                     <td><input type="checkbox" class="exact-check item-cb" data-ids="${dupIds.join(',')}" onchange="updateSelectedUI()"></td>
-                    <td><b>س:</b> ${keepItem.rawQ}<br><span style="color:var(--gray)"><b>ج:</b> ${keepItem.rawA}</span></td>
+                    <td><b>س:</b> ${arr[0].rawQ}<br><span style="color:var(--gray)"><b>ج:</b> ${arr[0].rawA}</span></td>
                     <td><span class="badge" style="background:var(--danger)">${dupIds.length} نسخة مكررة</span></td>
                     <td><button class="btn btn-del" onclick="window.bulkDelete(['${dupIds.join("','")}'])">تنظيف النسخ</button></td>
                 </tr>`;
@@ -375,11 +323,9 @@
     function renderFuzzy() {
         const body = document.getElementById('fuzzyBody');
         let html = "";
-        
         Object.keys(groupsFuzzy).forEach(key => {
             const arr = groupsFuzzy[key];
             const exactSubKeys = new Set(arr.map(i => i.exactKey));
-            
             if(arr.length > 1 && exactSubKeys.size > 1) {
                 html += `<tr class="dup-group-header"><td colspan="4">مجموعة تشكيل: ${arr[0].nQ}</td></tr>`;
                 arr.forEach(item => {
@@ -398,18 +344,15 @@
     function renderSmart() {
         const body = document.getElementById('smartBody');
         let html = "";
-        
-        // تجميع حسب السؤال المُنظف (nQ) لكن باستعراض العناصر الأصلية
         let localSmartGroups = {};
         processedData.forEach(item => {
-            if(!localSmartGroups[item.nQ]) localSmartGroups[item.nQ] = [];
+            if(!localSmartGroups[item.nQ]) localSmartGroups[item.nQ] =[];
             localSmartGroups[item.nQ].push(item);
         });
 
         Object.keys(localSmartGroups).forEach(nQ => {
             const arr = localSmartGroups[nQ];
             const uniqueAns = new Set(arr.map(i => i.nA));
-            
             if(uniqueAns.size > 1) {
                 html += `<tr><td colspan="4" class="dup-group-header">❓ السؤال الموحد: ${arr[0].rawQ}</td></tr>`;
                 arr.forEach(item => {
@@ -428,13 +371,11 @@
     function renderSwapped() {
         const body = document.getElementById('swappedBody');
         let html = "";
-
         Object.keys(groupsSwapped).forEach(key => {
             const arr = groupsSwapped[key];
             const uniqueQs = new Set(arr.map(i => i.nQ));
-            
             if(arr.length > 1 && uniqueQs.size > 1) {
-                html += `<tr class="dup-group-header" style="background:#ffe3e3; border-right-color:var(--danger)"><td colspan="5">🔄 مجموعة متعاكسة (تأكد أيهما السؤال وأيهما الإجابة)</td></tr>`;
+                html += `<tr class="dup-group-header" style="background:#ffe3e3; border-right-color:var(--danger)"><td colspan="5">🔄 مجموعة متعاكسة (سؤال وضع كإجابة)</td></tr>`;
                 arr.forEach(item => {
                     html += `<tr>
                         <td><input type="checkbox" class="swapped-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
@@ -460,7 +401,6 @@
         `).join('');
     }
 
-    // --- وظائف التفاعل والأزرار ---
     window.switchTab = (tab, btn) => {
         activeTab = tab;
         document.querySelectorAll('.tab-section').forEach(s => s.style.display = 'none');
@@ -477,7 +417,6 @@
             if(cb.dataset.ids) selectedCount += cb.dataset.ids.split(',').length;
             else selectedCount += 1;
         });
-        
         const bar = document.getElementById('globalActionBar');
         if(selectedCount > 0) {
             bar.style.display = 'flex';
@@ -497,7 +436,6 @@
         updateSelectedUI();
     };
 
-    // الحذف المتعدد (بضغطة واحدة)
     window.deleteSelected = () => {
         let selectedIds =[];
         document.querySelectorAll('.item-cb:checked').forEach(cb => {
@@ -505,35 +443,27 @@
             else selectedIds.push(cb.value);
         });
 
-        if(selectedIds.length > 0 && confirm(`تحذير خطير ⚠️\nهل أنت متأكد من حذف ${selectedIds.length} عنصر نهائياً من قاعدة البيانات؟`)) {
+        if(selectedIds.length > 0 && confirm(`تحذير! هل أنت متأكد من حذف ${selectedIds.length} عنصر؟`)) {
             document.getElementById('loader').style.display = 'flex';
             const updates = {};
-            selectedIds.forEach(id => updates[`questions/${id}`] = null); // null تعني حذف في Firebase
-            
-            update(ref(db), updates).then(() => {
-                deselectAll();
-            }).catch(err => {
-                alert("حدث خطأ أثناء الحذف: " + err);
-                document.getElementById('loader').style.display = 'none';
-            });
+            selectedIds.forEach(id => updates[`questions/${id}`] = null);
+            update(ref(db), updates).then(() => deselectAll());
         }
     };
 
-    // حذف عنصر واحد
     window.deleteItem = (path) => {
         if(confirm("هل أنت متأكد من حذف هذا العنصر؟")) {
             document.getElementById('loader').style.display = 'flex';
-            remove(ref(db, path)).catch(err => alert("خطأ: " + err));
+            remove(ref(db, path));
         }
     };
 
-    // تنظيف النسخ المتطابقة (من تبويب المتطابق)
     window.bulkDelete = (idsArray) => {
-        if(confirm(`سيتم حذف ${idsArray.length} نسخة مكررة والإبقاء على نسخة واحدة أصلية. تأكيد؟`)) {
+        if(confirm(`سيتم حذف ${idsArray.length} نسخة مكررة والإبقاء على واحدة. تأكيد؟`)) {
             document.getElementById('loader').style.display = 'flex';
-            const updates = {}; // ❌ هذا السطر كان مكتوباً كتعليق HTML في كودك القديم وهو سبب المشكلة
+            const updates = {};
             idsArray.forEach(id => updates[`questions/${id}`] = null);
-            update(ref(db), updates).catch(err => alert("خطأ: " + err));
+            update(ref(db), updates);
         }
     };
 
@@ -543,26 +473,18 @@
         const q = prompt("أدخل نص السؤال:");
         if(!q) return;
         const a = prompt("أدخل الإجابة:");
-        
         if(id && q && a) {
             document.getElementById('loader').style.display = 'flex';
-            set(ref(db, `questions/${id}`), {q, a}).catch(err => alert("خطأ: " + err));
+            set(ref(db, `questions/${id}`), {q, a});
         }
     };
 
-    window.loadMore = () => { 
-        displayLimit += 100; 
-        renderAll(); 
-    };
+    window.loadMore = () => { displayLimit += 100; renderAll(); };
 
-    // مؤقت للبحث لتفادي التهنيج عند الكتابة السريعة
     let searchTimer;
     document.getElementById('searchInput').onkeyup = () => {
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => {
-            displayLimit = 50; // إعادة الضبط عند البحث الجديد
-            renderAll();
-        }, 400); // ينتظر 400 جزء من الثانية بعد التوقف عن الكتابة
+        searchTimer = setTimeout(() => { displayLimit = 50; renderAll(); }, 400);
     };
 
 </script>
