@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Media | نظام الإدارة المطور</title>
+    <title>Super Media | نظام الإدارة المطور الاحترافي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #4361ee; --bg: #f4f7fe; --danger: #ef233c; --warning: #ff9f1c; --white: #ffffff; --success: #2ec4b6; --gray: #8d99ae; --purple: #7209b7; }
         * { box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; direction: rtl; overflow-x: hidden; }
 
+        /* Loading Overlay */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner { border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         /* Sidebar */
-        .sidebar { width: 260px; height: 100vh; background: var(--white); position: fixed; right: 0; top: 0; padding: 20px; box-shadow: -2px 0 15px rgba(0,0,0,0.05); z-index: 1000; }
+        .sidebar { width: 260px; height: 100vh; background: var(--white); position: fixed; right: 0; top: 0; padding: 20px; box-shadow: -2px 0 15px rgba(0,0,0,0.05); z-index: 1000; overflow-y: auto; }
         .main { margin-right: 260px; padding: 30px; min-height: 100vh; }
-        .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 40px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
 
         .nav-btn { display: block; width: 100%; padding: 12px; border: none; background: none; text-align: right; font-family: 'Cairo'; font-weight: 600; cursor: pointer; color: var(--gray); border-radius: 12px; margin-bottom: 8px; transition: 0.3s; font-size: 14px; }
-        .nav-btn:hover { background: #f8f9fa; }
+        .nav-btn:hover { background: #f8f9fa; color: var(--primary); }
         .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3); }
 
         /* Stats */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .stat-card { background: var(--white); padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-align: center; border-bottom: 4px solid var(--primary); }
         .stat-card span { display: block; font-size: 24px; font-weight: 800; color: var(--primary); }
         .stat-card h3 { margin: 5px 0 0; font-size: 12px; color: var(--gray); }
@@ -29,34 +34,45 @@
         .card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8f9fa; padding: 15px; text-align: right; color: #444; font-size: 13px; border-bottom: 1px solid #eee; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f1f3f5; font-size: 14px; vertical-align: middle; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f1f3f5; font-size: 14px; vertical-align: middle; line-height: 1.6; }
         
-        .btn { padding: 8px 16px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Cairo'; font-size: 12px; font-weight: 700; transition: 0.2s; }
+        .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-family: 'Cairo'; font-size: 12px; font-weight: 700; transition: 0.2s; }
         .btn-edit { background: #eef2ff; color: var(--primary); }
         .btn-del { background: #fff1f2; color: var(--danger); }
         .btn-save { background: var(--success); color: white; }
         .btn-add { background: var(--primary); color: white; height: 45px; }
 
-        .action-bar { background: #fff; padding: 15px 25px; border-radius: 15px; margin-bottom: 20px; display: none; align-items: center; border: 2px solid var(--danger); gap: 15px; position: sticky; top: 10px; z-index: 100; }
-        .inline-input { width: 100%; padding: 10px; border: 2px solid #edf2f4; border-radius: 8px; font-family: 'Cairo'; }
+        .action-bar { background: #fff; padding: 15px 25px; border-radius: 15px; margin-bottom: 20px; display: none; align-items: center; border: 2px solid var(--danger); gap: 15px; position: sticky; top: 10px; z-index: 100; box-shadow: 0 10px 20px rgba(239, 35, 60, 0.1); }
+        .inline-input { width: 100%; padding: 10px; border: 2px solid #edf2f4; border-radius: 8px; font-family: 'Cairo'; outline: none; }
+        .inline-input:focus { border-color: var(--primary); }
         
-        .dup-group-header { background: #fff9db; color: #856404; font-weight: bold; padding: 10px; border-right: 5px solid var(--warning); font-size: 13px; }
-        .badge { background: var(--gray); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; }
+        .dup-group-header { background: #fff9db; color: #856404; font-weight: bold; padding: 12px; border-right: 5px solid var(--warning); font-size: 14px; }
+        .badge { background: var(--gray); color: white; padding: 3px 10px; border-radius: 10px; font-size: 11px; }
         
-        .load-more { width: 100%; padding: 15px; background: #eee; border: none; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
+        .load-more { width: 100%; padding: 15px; background: #f8f9fa; color: var(--primary); border: none; cursor: pointer; font-family: 'Cairo'; font-weight: bold; border-top: 1px solid #eee; transition: 0.3s; }
+        .load-more:hover { background: #eef2ff; }
         
         /* Highlight differences */
-        .diff-text { color: var(--danger); font-weight: bold; text-decoration: underline; }
+        .highlight { color: var(--danger); font-weight: bold; }
     </style>
 </head>
 <body>
+
+    <!-- شاشة التحميل -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <h2 style="color: var(--primary); font-family: 'Cairo';">جاري جلب ومعالجة البيانات...</h2>
+        <p style="color: var(--gray);">الرجاء الانتظار، قد يستغرق الأمر ثواني حسب حجم البيانات.</p>
+    </div>
 
     <div class="sidebar">
         <div class="logo">SUPER MEDIA</div>
         <button class="nav-btn active" onclick="switchTab('all', this)">📚 بنك الأسئلة</button>
         <button class="nav-btn" onclick="switchTab('exact', this)">✅ مكرر متطابق (100%)</button>
         <button class="nav-btn" onclick="switchTab('fuzzy', this)">✨ مكرر تشكيل/تنسيق</button>
-        <button class="nav-btn" onclick="switchTab('smart', this)">🧠 مكرر ذكي (إجابات مختلفة)</button>
+        <button class="nav-btn" onclick="switchTab('smart', this)">🧠 مكرر ذكي (إجابة مختلفة)</button>
+        <button class="nav-btn" onclick="switchTab('swapped', this)">🔄 مكرر معكوس (س/ج)</button>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
         <button class="nav-btn" onclick="switchTab('cfg', this)">🔗 إدارة الروابط</button>
     </div>
 
@@ -66,49 +82,58 @@
             <div class="stat-card" style="border-color: var(--success)"><h3>متطابق تماماً</h3><span id="statExact">0</span></div>
             <div class="stat-card" style="border-color: var(--purple)"><h3>مكرر تشكيل</h3><span id="statFuzzy">0</span></div>
             <div class="stat-card" style="border-color: var(--warning)"><h3>مكرر ذكي</h3><span id="statSmart">0</span></div>
+            <div class="stat-card" style="border-color: var(--danger)"><h3>مكرر معكوس</h3><span id="statSwapped">0</span></div>
         </div>
 
-        <!-- Action Bar for Multi-Delete -->
+        <!-- شريط الحذف المتعدد -->
         <div class="action-bar" id="globalActionBar">
             <div style="flex-grow: 1;">
                 <strong style="color:var(--danger)">وضع الحذف المتعدد نشط</strong>
                 <p style="margin:0; font-size:12px">تم تحديد <span id="selectedCount">0</span> عنصر</p>
             </div>
             <button class="btn btn-del" style="background:var(--danger); color:white; padding:10px 25px" onclick="deleteSelected()">🗑️ حذف العناصر المحددة نهائياً</button>
-            <button class="btn" style="background:#eee" onclick="deselectAll()">إلغاء</button>
+            <button class="btn" style="background:#eee" onclick="deselectAll()">إلغاء التحديد</button>
         </div>
 
-        <!-- Tab Sections -->
+        <!-- التبويبات -->
         <div id="all-tab" class="tab-section">
             <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="text" id="searchInput" class="inline-input" style="flex:1" placeholder="بحث سريع في الأسئلة...">
-                <button class="btn btn-add" onclick="addNewQ()">+ إضافة سؤال</button>
+                <input type="text" id="searchInput" class="inline-input" style="flex:1" placeholder="بحث سريع في الأسئلة والإجابات...">
+                <button class="btn btn-add" onclick="addNewQ()">+ إضافة سؤال جديد</button>
             </div>
             <div class="card">
                 <table>
                     <thead>
                         <tr>
                             <th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'all-check')"></th>
-                            <th>السؤال</th><th>الإجابة</th><th>الإجراء</th>
+                            <th style="width:10%">الرقم (ID)</th>
+                            <th style="width:40%">السؤال</th>
+                            <th style="width:40%">الإجابة</th>
+                            <th style="width:10%">الإجراء</th>
                         </tr>
                     </thead>
                     <tbody id="allBody"></tbody>
                 </table>
-                <button id="loadMoreBtn" class="load-more" onclick="loadMore()">عرض المزيد...</button>
+                <button id="loadMoreBtn" class="load-more" onclick="loadMore()">عرض المزيد من الأسئلة ↓</button>
             </div>
         </div>
 
         <div id="exact-tab" class="tab-section" style="display:none;">
-            <div class="card"><table id="exactTable"><thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'exact-check')"></th><th>النص المكرر</th><th>عدد النسخ</th><th>الإجراء</th></tr></thead><tbody id="exactBody"></tbody></table></div>
+            <div class="card">
+                <table>
+                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'exact-check')"></th><th>النص المكرر تماماً</th><th>عدد النسخ الإضافية</th><th>الإجراء</th></tr></thead>
+                    <tbody id="exactBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <div id="fuzzy-tab" class="tab-section" style="display:none;">
             <div class="card">
-                <div style="padding:15px; background:#eef2ff; font-size:13px; color:var(--primary)">
-                    💡 هذه الأسئلة متطابقة في المعنى لكن تختلف في (التشكيل، الهمزات، أو المسافات).
+                <div style="padding:15px; background:#eef2ff; font-size:13px; color:var(--primary); border-bottom: 1px solid #eee;">
+                    💡 <b>مكرر التشكيل والتنسيق:</b> أسئلة وإجابات متطابقة في الحروف الأساسية ولكن تختلف في (التشكيل، الهمزات، أو المسافات الزائدة).
                 </div>
                 <table>
-                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'fuzzy-check')"></th><th>السؤال الأصلي</th><th>الإجابة</th><th>الإجراء</th></tr></thead>
+                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'fuzzy-check')"></th><th>السؤال</th><th>الإجابة</th><th>الإجراء</th></tr></thead>
                     <tbody id="fuzzyBody"></tbody>
                 </table>
             </div>
@@ -116,19 +141,29 @@
 
         <div id="smart-tab" class="tab-section" style="display:none;">
             <div class="card">
+                <div style="padding:15px; background:#fff9db; font-size:13px; color:#856404; border-bottom: 1px solid #eee;">
+                    💡 <b>المكرر الذكي:</b> نفس السؤال مكرر بالضبط، ولكن الإجابات مختلفة. (يجب مراجعتها وتحديد الإجابة الصحيحة).
+                </div>
                 <table>
-                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'smart-check')"></th><th>ID</th><th>نص الإجابة (محتوى مختلف)</th><th>الإجراء</th></tr></thead>
+                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'smart-check')"></th><th>رقم ID</th><th>الإجابة المختلفة</th><th>الإجراء</th></tr></thead>
                     <tbody id="smartBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <div id="cfg-tab" class="tab-section" style="display:none;">
-            <div style="display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 20px; border-radius: 15px; border: 1px solid #eee;">
-                <input type="text" id="newCfgKey" class="inline-input" placeholder="المفتاح (Key)">
-                <input type="text" id="newCfgLink" class="inline-input" placeholder="الرابط (Link)">
-                <button class="btn btn-add" onclick="handleAddNewCfg()">+ إضافة رابط</button>
+        <div id="swapped-tab" class="tab-section" style="display:none;">
+            <div class="card">
+                <div style="padding:15px; background:#ffe3e3; font-size:13px; color:var(--danger); border-bottom: 1px solid #eee;">
+                    💡 <b>المكرر المعكوس:</b> تم اكتشاف أن السؤال في أحد العناصر هو نفس الإجابة في عنصر آخر والعكس صحيح.
+                </div>
+                <table>
+                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'swapped-check')"></th><th>رقم ID</th><th>النص الأول</th><th>النص الثاني</th><th>الإجراء</th></tr></thead>
+                    <tbody id="swappedBody"></tbody>
+                </table>
             </div>
+        </div>
+
+        <div id="cfg-tab" class="tab-section" style="display:none;">
             <div class="card">
                 <table>
                     <thead><tr><th>المفتاح (Key)</th><th>الرابط (Link)</th><th>الإجراء</th></tr></thead>
@@ -142,78 +177,149 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getDatabase, ref, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
-    const firebaseConfig = { databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/" };
+    // ✅ إعدادات Firebase الخاصة بك مع إضافة رابط قاعدة البيانات اللحظية
+    const firebaseConfig = {
+        apiKey: "AIzaSyDD3q7W8k3Qb2X0FroDH5ntgp9qpSjgpnY",
+        authDomain: "casnos-ecf2f.firebaseapp.com",
+        databaseURL: "https://casnos-ecf2f-default-rtdb.firebaseio.com", // ضروري جداً لتعمل
+        projectId: "casnos-ecf2f",
+        storageBucket: "casnos-ecf2f.firebasestorage.app",
+        messagingSenderId: "192090097663",
+        appId: "1:192090097663:web:e3ec4c5114d3d341b849ca",
+        measurementId: "G-LEFQHPFVRP"
+    };
+
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let dbData = {};
+    // متغيرات لتخزين البيانات المعالجة (لتسريع الموقع)
+    let processedData =[]; 
     let configData = {};
+    
+    // متغيرات المجموعات بعد المعالجة
+    let groupsExact = {};
+    let groupsFuzzy = {};
+    let groupsSmart = {};
+    let groupsSwapped = {};
+
     let activeTab = 'all';
     let displayLimit = 50;
+    let searchQuery = '';
 
-    // --- دالة التنظيف الذكية (Normalization) ---
+    // دالة التنظيف (تعالج الفروقات البسيطة)
     const normalize = (txt) => {
         if (!txt) return "";
         return txt.toString()
-            .replace(/[\u064B-\u065F]/g, "") // إزالة التشكيل
+            .replace(/[\u064B-\u065F\u0651\u0652]/g, "") // إزالة كل التشكيل والشدة والسكون
             .replace(/[أإآ]/g, "ا")           // توحيد الألفات
             .replace(/ة/g, "ه")              // توحيد التاء المربوطة
             .replace(/ى/g, "ي")              // توحيد الياء
+            .replace(/[^\w\s\u0600-\u06FF]/gi, "") // إزالة الرموز الخاصة وعلامات الترقيم
             .replace(/\s+/g, " ")            // إزالة المسافات الزائدة
             .trim();
     };
 
+    // جلب البيانات من Firebase
     onValue(ref(db, '/'), (snapshot) => {
-        const data = snapshot.val() || {};
-        dbData = data.questions || {};
-        configData = data.config ? (data.config.data || {}) : {};
-        renderCurrentTab();
-        calculateDuplicates();
+        document.getElementById('loader').style.display = 'flex'; // إظهار شاشة التحميل
+        
+        // استخدام setTimeout لإعطاء المتصفح فرصة لإظهار واجهة التحميل قبل تجميد الشاشة بالمعالجة
+        setTimeout(() => {
+            const data = snapshot.val() || {};
+            const rawQuestions = data.questions || {};
+            configData = data.config ? (data.config.data || {}) : {};
+            
+            // 1. معالجة البيانات مسبقاً (Pre-processing) لحل مشكلة البطء
+            processData(rawQuestions);
+            
+            // 2. تحديث الواجهة
+            renderCurrentTab();
+            
+            document.getElementById('loader').style.display = 'none'; // إخفاء التحميل
+        }, 100);
     });
 
-    function calculateDuplicates() {
-        const keys = Object.keys(dbData);
+    // الدالة المسؤولة عن تحليل وتصنيف البيانات لمرة واحدة فقط
+    function processData(rawQuestions) {
+        processedData =[];
+        groupsExact = {};
+        groupsFuzzy = {};
+        groupsSmart = {};
+        groupsSwapped = {};
+        
         let exactCount = 0;
         let fuzzyCount = 0;
         let smartCount = 0;
+        let swappedCount = 0;
 
-        let groupsNorm = {}; // للمكرر بالتشكيل والذكي
-        let groupsExact = {}; // للمتطابق تماماً
-
-        keys.forEach(id => {
-            const q = dbData[id].q;
-            const a = dbData[id].a;
-            const normQ = normalize(q);
-            const normA = normalize(a);
-            const exactKey = q + "|||" + a;
-            const normKey = normQ + "|||" + normA;
-
-            // حساب المتطابق 100%
-            groupsExact[exactKey] = (groupsExact[exactKey] || 0) + 1;
-            
-            // حساب المكرر تشكيل
-            if(!groupsNorm[normKey]) groupsNorm[normKey] = [];
-            groupsNorm[normKey].push(id);
-        });
-
-        Object.values(groupsExact).forEach(v => { if(v > 1) exactCount += (v-1); });
+        const keys = Object.keys(rawQuestions);
         
-        // حساب المكرر الذكي (نفس السؤال بنص مختلف)
-        let qGroups = {};
+        // الخطوة الأولى: بناء المصفوفة المعالجة
         keys.forEach(id => {
-            let nQ = normalize(dbData[id].q);
-            if(!qGroups[nQ]) qGroups[nQ] = new Set();
-            qGroups[nQ].add(normalize(dbData[id].a));
+            const item = rawQuestions[id];
+            const nQ = normalize(item.q);
+            const nA = normalize(item.a);
+            
+            const processedItem = {
+                id: id,
+                rawQ: item.q,
+                rawA: item.a,
+                nQ: nQ,
+                nA: nA,
+                exactKey: item.q + "|||" + item.a,
+                fuzzyKey: nQ + "|||" + nA,
+                // بصمة للمكرر المعكوس (ترتيب أبجدي لتجاهل من هو السؤال ومن الإجابة)
+                swappedKey: [nQ, nA].sort().join("|||")
+            };
+            processedData.push(processedItem);
         });
-        Object.values(qGroups).forEach(set => { if(set.size > 1) smartCount++; });
 
-        document.getElementById('statTotal').innerText = keys.length;
+        // الخطوة الثانية: تجميع البيانات بناءً على المفاتيح
+        processedData.forEach(item => {
+            // 1. متطابق 100%
+            if(!groupsExact[item.exactKey]) groupsExact[item.exactKey] = [];
+            groupsExact[item.exactKey].push(item);
+
+            // 2. مكرر تشكيل
+            if(!groupsFuzzy[item.fuzzyKey]) groupsFuzzy[item.fuzzyKey] = [];
+            groupsFuzzy[item.fuzzyKey].push(item);
+
+            // 3. مكرر ذكي (نفس السؤال - إجابة مختلفة)
+            if(!groupsSmart[item.nQ]) groupsSmart[item.nQ] = new Set();
+            groupsSmart[item.nQ].add(item.nA); // نحتفظ بالإجابات المعالجة لنعرف إن كانت مختلفة حقاً
+
+            // 4. مكرر معكوس (س/ج مبدلين)
+            if(!groupsSwapped[item.swappedKey]) groupsSwapped[item.swappedKey] = [];
+            groupsSwapped[item.swappedKey].push(item);
+        });
+
+        // حساب الإحصائيات الصحيحة
+        Object.values(groupsExact).forEach(arr => { if(arr.length > 1) exactCount += (arr.length - 1); });
+        
+        Object.values(groupsFuzzy).forEach(arr => {
+            // للتأكد أنه مكرر تشكيل وليس متطابق 100%
+            const exactSubKeys = new Set(arr.map(i => i.exactKey));
+            if(arr.length > 1 && exactSubKeys.size > 1) fuzzyCount++;
+        });
+
+        Object.values(groupsSmart).forEach(set => { if(set.size > 1) smartCount++; });
+
+        Object.values(groupsSwapped).forEach(arr => {
+            // نتأكد أنهم يحملون نفس البصمة لكن الأسئلة متعاكسة فعلاً
+            const uniqueQs = new Set(arr.map(i => i.nQ));
+            if(arr.length > 1 && uniqueQs.size > 1) swappedCount++;
+        });
+
+        document.getElementById('statTotal').innerText = processedData.length;
         document.getElementById('statExact').innerText = exactCount;
+        document.getElementById('statFuzzy').innerText = fuzzyCount;
         document.getElementById('statSmart').innerText = smartCount;
+        document.getElementById('statSwapped').innerText = swappedCount;
     }
 
+    // --- دوال العرض السريعة (تعتمد على البيانات المعالجة مسبقاً) ---
     window.renderCurrentTab = () => {
-        const bodyMap = { all: renderAll, exact: renderExact, fuzzy: renderFuzzy, smart: renderSmart, cfg: renderConfigs };
+        const bodyMap = { all: renderAll, exact: renderExact, fuzzy: renderFuzzy, smart: renderSmart, swapped: renderSwapped, cfg: renderConfigs };
         if(bodyMap[activeTab]) bodyMap[activeTab]();
         updateSelectedUI();
     };
@@ -221,100 +327,121 @@
     function renderAll() {
         const body = document.getElementById('allBody');
         const search = document.getElementById('searchInput').value.toLowerCase();
-        const keys = Object.keys(dbData).filter(id => 
-            dbData[id].q.toLowerCase().includes(search) || dbData[id].a.toLowerCase().includes(search)
-        );
+        
+        let filtered = processedData;
+        if (search) {
+            filtered = processedData.filter(item => 
+                item.rawQ.toLowerCase().includes(search) || item.rawA.toLowerCase().includes(search) || item.id.includes(search)
+            );
+        }
 
-        body.innerHTML = keys.slice(0, displayLimit).map(id => `
+        const itemsToShow = filtered.slice(0, displayLimit);
+        
+        // استخدام map لإنشاء الـ HTML دفعة واحدة أسرع بكثير من الحلقات العادية
+        body.innerHTML = itemsToShow.map(item => `
             <tr>
-                <td><input type="checkbox" class="all-check item-cb" value="${id}" onchange="updateSelectedUI()"></td>
-                <td style="font-weight:700; color:var(--primary)">${dbData[id].q}</td>
-                <td>${dbData[id].a}</td>
-                <td><button class="btn btn-del" onclick="window.deleteItem('questions/${id}')">حذف</button></td>
+                <td><input type="checkbox" class="all-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
+                <td><span class="badge" style="background:var(--primary)">${item.id}</span></td>
+                <td style="font-weight:700; color:#333">${item.rawQ}</td>
+                <td>${item.rawA}</td>
+                <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
             </tr>
         `).join('');
-        document.getElementById('loadMoreBtn').style.display = keys.length > displayLimit ? 'block' : 'none';
+        
+        document.getElementById('loadMoreBtn').style.display = filtered.length > displayLimit ? 'block' : 'none';
     }
 
     function renderExact() {
         const body = document.getElementById('exactBody');
-        let groups = {};
-        Object.keys(dbData).forEach(id => {
-            let key = dbData[id].q + "|||" + dbData[id].a;
-            if(!groups[key]) groups[key] = [];
-            groups[key].push(id);
+        let html = "";
+        
+        Object.keys(groupsExact).forEach(key => {
+            const arr = groupsExact[key];
+            if(arr.length > 1) {
+                const keepItem = arr[0];
+                const dupIds = arr.slice(1).map(i => i.id); // المعرفات المراد حذفها
+                
+                html += `<tr>
+                    <td><input type="checkbox" class="exact-check item-cb" data-ids="${dupIds.join(',')}" onchange="updateSelectedUI()"></td>
+                    <td><b>س:</b> ${keepItem.rawQ}<br><span style="color:var(--gray)"><b>ج:</b> ${keepItem.rawA}</span></td>
+                    <td><span class="badge" style="background:var(--danger)">${dupIds.length} نسخة مكررة</span></td>
+                    <td><button class="btn btn-del" onclick="window.bulkDelete(['${dupIds.join("','")}'])">تنظيف النسخ</button></td>
+                </tr>`;
+            }
         });
-
-        body.innerHTML = Object.keys(groups).filter(k => groups[k].length > 1).map(k => {
-            const ids = groups[k].slice(1); // كل النسخ ما عدا الأولى
-            return `<tr>
-                <td><input type="checkbox" class="exact-check item-cb" data-ids="${ids.join(',')}" onchange="updateSelectedUI()"></td>
-                <td>${k.split("|||")[0]}<br><small>${k.split("|||")[1]}</small></td>
-                <td><span class="badge">${groups[k].length} نسخة</span></td>
-                <td><button class="btn btn-del" onclick="window.bulkDelete(['${ids.join("','")}'])">تنظيف النسخ</button></td>
-            </tr>`;
-        }).join('');
+        body.innerHTML = html;
     }
 
     function renderFuzzy() {
         const body = document.getElementById('fuzzyBody');
-        let groups = {};
-        Object.keys(dbData).forEach(id => {
-            let key = normalize(dbData[id].q) + "|||" + normalize(dbData[id].a);
-            if(!groups[key]) groups[key] = [];
-            groups[key].push(id);
-        });
-
         let html = "";
-        let count = 0;
-        Object.keys(groups).forEach(key => {
-            if(groups[key].length > 1) {
-                // نتحقق إذا كانوا أصلاً متطابقين حرفياً 100% (نتجاهلهم لأنهم في تبويب "متطابق")
-                let subGroups = {};
-                groups[key].forEach(id => {
-                    let raw = dbData[id].q + dbData[id].a;
-                    if(!subGroups[raw]) subGroups[raw] = [];
-                    subGroups[raw].push(id);
+        
+        Object.keys(groupsFuzzy).forEach(key => {
+            const arr = groupsFuzzy[key];
+            const exactSubKeys = new Set(arr.map(i => i.exactKey));
+            
+            if(arr.length > 1 && exactSubKeys.size > 1) {
+                html += `<tr class="dup-group-header"><td colspan="4">مجموعة تشكيل: ${arr[0].nQ}</td></tr>`;
+                arr.forEach(item => {
+                    html += `<tr>
+                        <td><input type="checkbox" class="fuzzy-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
+                        <td style="font-weight:700">${item.rawQ}</td>
+                        <td>${item.rawA}</td>
+                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
+                    </tr>`;
                 });
-                
-                if(Object.keys(subGroups).length > 1) { // يوجد اختلاف في التشكيل/الرسم
-                    count++;
-                    html += `<tr class="dup-group-header"><td colspan="4">مجموعة تشكيل: ${key.split("|||")[0]}</td></tr>`;
-                    groups[key].forEach(id => {
-                        html += `<tr>
-                            <td><input type="checkbox" class="fuzzy-check item-cb" value="${id}" onchange="updateSelectedUI()"></td>
-                            <td>${dbData[id].q}</td>
-                            <td>${dbData[id].a}</td>
-                            <td><button class="btn btn-del" onclick="window.deleteItem('questions/${id}')">حذف</button></td>
-                        </tr>`;
-                    });
-                }
             }
         });
         body.innerHTML = html;
-        document.getElementById('statFuzzy').innerText = count;
     }
 
     function renderSmart() {
         const body = document.getElementById('smartBody');
-        let groups = {};
-        Object.keys(dbData).forEach(id => {
-            let q = normalize(dbData[id].q);
-            if(!groups[q]) groups[q] = [];
-            groups[q].push(id);
+        let html = "";
+        
+        // تجميع حسب السؤال المُنظف (nQ) لكن باستعراض العناصر الأصلية
+        let localSmartGroups = {};
+        processedData.forEach(item => {
+            if(!localSmartGroups[item.nQ]) localSmartGroups[item.nQ] = [];
+            localSmartGroups[item.nQ].push(item);
         });
 
-        let html = "";
-        Object.keys(groups).forEach(q => {
-            let ans = new Set(groups[q].map(id => normalize(dbData[id].a)));
-            if(ans.size > 1) {
-                html += `<tr><td colspan="4" class="dup-group-header">❓ السؤال: ${q}</td></tr>`;
-                groups[q].forEach(id => {
+        Object.keys(localSmartGroups).forEach(nQ => {
+            const arr = localSmartGroups[nQ];
+            const uniqueAns = new Set(arr.map(i => i.nA));
+            
+            if(uniqueAns.size > 1) {
+                html += `<tr><td colspan="4" class="dup-group-header">❓ السؤال الموحد: ${arr[0].rawQ}</td></tr>`;
+                arr.forEach(item => {
                     html += `<tr>
-                        <td><input type="checkbox" class="smart-check item-cb" value="${id}" onchange="updateSelectedUI()"></td>
-                        <td>${id}</td>
-                        <td>${dbData[id].a}</td>
-                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${id}')">حذف</button></td>
+                        <td><input type="checkbox" class="smart-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
+                        <td><span class="badge">${item.id}</span></td>
+                        <td>${item.rawA}</td>
+                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
+                    </tr>`;
+                });
+            }
+        });
+        body.innerHTML = html;
+    }
+
+    function renderSwapped() {
+        const body = document.getElementById('swappedBody');
+        let html = "";
+
+        Object.keys(groupsSwapped).forEach(key => {
+            const arr = groupsSwapped[key];
+            const uniqueQs = new Set(arr.map(i => i.nQ));
+            
+            if(arr.length > 1 && uniqueQs.size > 1) {
+                html += `<tr class="dup-group-header" style="background:#ffe3e3; border-right-color:var(--danger)"><td colspan="5">🔄 مجموعة متعاكسة (تأكد أيهما السؤال وأيهما الإجابة)</td></tr>`;
+                arr.forEach(item => {
+                    html += `<tr>
+                        <td><input type="checkbox" class="swapped-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
+                        <td><span class="badge">${item.id}</span></td>
+                        <td><b>نص 1:</b> ${item.rawQ}</td>
+                        <td><b>نص 2:</b> ${item.rawA}</td>
+                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
                     </tr>`;
                 });
             }
@@ -325,18 +452,15 @@
     function renderConfigs() {
         const body = document.getElementById('cfgBody');
         body.innerHTML = Object.keys(configData).map(id => `
-            <tr id="row-${id}">
-                <td><code>${configData[id].k}</code></td>
-                <td>${configData[id].l}</td>
-                <td>
-                    <button class="btn btn-edit" onclick="window.enterEditMode('${id}', '${configData[id].k}', '${configData[id].l}')">تعديل</button>
-                    <button class="btn btn-del" onclick="window.deleteItem('config/data/${id}')">حذف</button>
-                </td>
+            <tr>
+                <td><code style="background:#eee; padding:5px; border-radius:5px">${configData[id].k}</code></td>
+                <td><a href="${configData[id].l}" target="_blank" style="color:var(--primary)">${configData[id].l}</a></td>
+                <td><button class="btn btn-del" onclick="window.deleteItem('config/data/${id}')">حذف الرابط</button></td>
             </tr>
         `).join('');
     }
 
-    // --- Actions ---
+    // --- وظائف التفاعل والأزرار ---
     window.switchTab = (tab, btn) => {
         activeTab = tab;
         document.querySelectorAll('.tab-section').forEach(s => s.style.display = 'none');
@@ -348,16 +472,16 @@
     };
 
     window.updateSelectedUI = () => {
-        let selectedIds = [];
+        let selectedCount = 0;
         document.querySelectorAll('.item-cb:checked').forEach(cb => {
-            if(cb.dataset.ids) selectedIds.push(...cb.dataset.ids.split(','));
-            else selectedIds.push(cb.value);
+            if(cb.dataset.ids) selectedCount += cb.dataset.ids.split(',').length;
+            else selectedCount += 1;
         });
         
         const bar = document.getElementById('globalActionBar');
-        if(selectedIds.length > 0) {
+        if(selectedCount > 0) {
             bar.style.display = 'flex';
-            document.getElementById('selectedCount').innerText = selectedIds.length;
+            document.getElementById('selectedCount').innerText = selectedCount;
         } else {
             bar.style.display = 'none';
         }
@@ -369,51 +493,76 @@
     };
 
     window.deselectAll = () => {
-        document.querySelectorAll('.item-cb').forEach(cb => cb.checked = false);
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.item-cb, input[type="checkbox"]').forEach(cb => cb.checked = false);
         updateSelectedUI();
     };
 
+    // الحذف المتعدد (بضغطة واحدة)
     window.deleteSelected = () => {
-        let selectedIds = [];
+        let selectedIds =[];
         document.querySelectorAll('.item-cb:checked').forEach(cb => {
             if(cb.dataset.ids) selectedIds.push(...cb.dataset.ids.split(','));
             else selectedIds.push(cb.value);
         });
 
-        if(selectedIds.length > 0 && confirm(`هل أنت متأكد من حذف ${selectedIds.length} عنصر نهائياً؟`)) {
+        if(selectedIds.length > 0 && confirm(`تحذير خطير ⚠️\nهل أنت متأكد من حذف ${selectedIds.length} عنصر نهائياً من قاعدة البيانات؟`)) {
+            document.getElementById('loader').style.display = 'flex';
             const updates = {};
-            selectedIds.forEach(id => updates[`questions/${id}`] = null);
-            update(ref(db), updates).then(() => deselectAll());
+            selectedIds.forEach(id => updates[`questions/${id}`] = null); // null تعني حذف في Firebase
+            
+            update(ref(db), updates).then(() => {
+                deselectAll();
+            }).catch(err => {
+                alert("حدث خطأ أثناء الحذف: " + err);
+                document.getElementById('loader').style.display = 'none';
+            });
         }
     };
 
+    // حذف عنصر واحد
     window.deleteItem = (path) => {
-        if(confirm("حذف نهائي؟")) remove(ref(db, path));
+        if(confirm("هل أنت متأكد من حذف هذا العنصر؟")) {
+            document.getElementById('loader').style.display = 'flex';
+            remove(ref(db, path)).catch(err => alert("خطأ: " + err));
+        }
     };
 
-    window.bulkDelete = (ids) => {
-        if(confirm(`حذف ${ids.length} نسخة مكررة؟`)) {
-            <!-- const updates = {}; -->
-            ids.forEach(id => updates[`questions/${id}`] = null);
-            update(ref(db), updates);
+    // تنظيف النسخ المتطابقة (من تبويب المتطابق)
+    window.bulkDelete = (idsArray) => {
+        if(confirm(`سيتم حذف ${idsArray.length} نسخة مكررة والإبقاء على نسخة واحدة أصلية. تأكيد؟`)) {
+            document.getElementById('loader').style.display = 'flex';
+            const updates = {}; // ❌ هذا السطر كان مكتوباً كتعليق HTML في كودك القديم وهو سبب المشكلة
+            idsArray.forEach(id => updates[`questions/${id}`] = null);
+            update(ref(db), updates).catch(err => alert("خطأ: " + err));
         }
     };
 
     window.addNewQ = () => {
-        const id = prompt("رقم السؤال:");
-        const q = prompt("النص:");
-        const a = prompt("الإجابة:");
-        if(id && q && a) set(ref(db, `questions/${id}`), {q, a});
+        const id = prompt("أدخل رقم/معرف السؤال (ID):");
+        if(!id) return;
+        const q = prompt("أدخل نص السؤال:");
+        if(!q) return;
+        const a = prompt("أدخل الإجابة:");
+        
+        if(id && q && a) {
+            document.getElementById('loader').style.display = 'flex';
+            set(ref(db, `questions/${id}`), {q, a}).catch(err => alert("خطأ: " + err));
+        }
     };
 
-    window.loadMore = () => { displayLimit += 100; renderAll(); };
+    window.loadMore = () => { 
+        displayLimit += 100; 
+        renderAll(); 
+    };
 
-    // البحث
+    // مؤقت للبحث لتفادي التهنيج عند الكتابة السريعة
     let searchTimer;
     document.getElementById('searchInput').onkeyup = () => {
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(renderAll, 300);
+        searchTimer = setTimeout(() => {
+            displayLimit = 50; // إعادة الضبط عند البحث الجديد
+            renderAll();
+        }, 400); // ينتظر 400 جزء من الثانية بعد التوقف عن الكتابة
     };
 
 </script>
