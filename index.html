@@ -3,389 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Media | نظام الإدارة المطور</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Super Media | نظام الإدارة والفرز الذكي V4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #4361ee; --bg: #f4f7fe; --danger: #ef233c; --warning: #ff9f1c; --white: #ffffff; --success: #2ec4b6; --gray: #8d99ae; --purple: #7209b7; }
+        :root { --primary: #4361ee; --bg: #f4f7fe; --danger: #ef233c; --warning: #ff9f1c; --white: #ffffff; --success: #2ec4b6; --gray: #8d99ae; --purple: #7209b7; --pink: #d43f8d; --cyan: #00b4d8; }
         * { box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; direction: rtl; overflow-x: hidden; }
 
         /* شاشة التحميل */
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--white); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .spinner { border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* القائمة الجانبية */
-        .sidebar { width: 260px; height: 100vh; background: var(--white); position: fixed; right: 0; top: 0; padding: 20px; box-shadow: -2px 0 15px rgba(0,0,0,0.05); z-index: 1000; overflow-y: auto; }
-        .main { margin-right: 260px; padding: 30px; min-height: 100vh; }
-        .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
+        /* التصميم */
+        .sidebar { width: 280px; height: 100vh; background: var(--white); position: fixed; right: 0; top: 0; padding: 20px; box-shadow: -2px 0 15px rgba(0,0,0,0.05); z-index: 1000; overflow-y: auto; }
+        .main { margin-right: 280px; padding: 15px; min-height: 100vh; padding-bottom: 120px; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
 
-        .nav-btn { display: block; width: 100%; padding: 12px; border: none; background: none; text-align: right; font-family: 'Cairo'; font-weight: 600; cursor: pointer; color: var(--gray); border-radius: 12px; margin-bottom: 8px; transition: 0.3s; font-size: 14px; }
+        .nav-btn { display: block; width: 100%; padding: 10px; border: none; background: none; text-align: right; font-family: 'Cairo'; font-weight: 600; cursor: pointer; color: var(--gray); border-radius: 10px; margin-bottom: 3px; transition: 0.3s; font-size: 12px; }
         .nav-btn:hover { background: #f8f9fa; color: var(--primary); }
-        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3); }
+        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(67, 97, 238, 0.2); }
 
-        /* الإحصائيات */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: var(--white); padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-align: center; border-bottom: 4px solid var(--primary); }
-        .stat-card span { display: block; font-size: 24px; font-weight: 800; color: var(--primary); }
-        .stat-card h3 { margin: 5px 0 0; font-size: 12px; color: var(--gray); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 15px; }
+        .stat-card { background: var(--white); padding: 10px; border-radius: 12px; text-align: center; border-bottom: 3px solid var(--primary); }
+        .stat-card span { display: block; font-size: 18px; font-weight: 800; color: var(--primary); }
+        .stat-card h3 { margin: 3px 0 0; font-size: 10px; color: var(--gray); }
 
-        /* الجداول */
-        .card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-top: 20px; }
+        .card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); margin-top: 10px; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8f9fa; padding: 15px; text-align: right; color: #444; font-size: 13px; border-bottom: 1px solid #eee; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f1f3f5; font-size: 14px; vertical-align: middle; line-height: 1.6; }
+        th { background: #f8f9fa; padding: 10px; text-align: right; color: #444; font-size: 11px; border-bottom: 1px solid #eee; }
+        td { padding: 10px; border-bottom: 1px solid #f1f3f5; font-size: 12px; vertical-align: middle; }
         
-        .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-family: 'Cairo'; font-size: 12px; font-weight: 700; transition: 0.2s; }
-        .btn-edit { background: #eef2ff; color: var(--primary); }
+        /* شريط الحذف المتعدد السفلي */
+        .action-bar { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; padding: 12px 25px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .btn { padding: 6px 12px; border-radius: 8px; border: none; cursor: pointer; font-family: 'Cairo'; font-weight: bold; font-size: 11px; transition: 0.2s; }
         .btn-del { background: #fff1f2; color: var(--danger); }
-        .btn-save { background: var(--success); color: white; }
-        .btn-add { background: var(--primary); color: white; height: 45px; }
-
-        .action-bar { background: #fff; padding: 15px 25px; border-radius: 15px; margin-bottom: 20px; display: none; align-items: center; border: 2px solid var(--danger); gap: 15px; position: sticky; top: 10px; z-index: 100; box-shadow: 0 10px 20px rgba(239, 35, 60, 0.1); }
-        .inline-input { width: 100%; padding: 10px; border: 2px solid #edf2f4; border-radius: 8px; font-family: 'Cairo'; outline: none; }
-        .inline-input:focus { border-color: var(--primary); }
+        .btn-edit { background: #eef2ff; color: var(--primary); margin-left: 5px; }
         
-        .dup-group-header { background: #fff9db; color: #856404; font-weight: bold; padding: 12px; border-right: 5px solid var(--warning); font-size: 14px; }
-        .badge { background: var(--gray); color: white; padding: 3px 10px; border-radius: 10px; font-size: 11px; }
-        
-        .load-more { width: 100%; padding: 15px; background: #f8f9fa; color: var(--primary); border: none; cursor: pointer; font-family: 'Cairo'; font-weight: bold; border-top: 1px solid #eee; transition: 0.3s; }
-        .load-more:hover { background: #eef2ff; }
+        .time-label { display: block; font-size: 10px; color: #999; margin-top: 5px; font-weight: 600; }
+        .dup-header { background: #fff5f5; color: var(--danger); font-weight: bold; border-right: 5px solid var(--danger); }
     </style>
 </head>
 <body>
 
-    <!-- شاشة التحميل -->
-    <div id="loader">
-        <div class="spinner"></div>
-        <h2 style="color: var(--primary); font-family: 'Cairo';">جاري جلب البيانات من القاعدة...</h2>
-        <p style="color: var(--gray);">الرجاء الانتظار قليلاً.</p>
-    </div>
+    <div id="loader"><div class="spinner"></div><h2 style="color:var(--primary)">جاري فرز البيانات...</h2></div>
 
     <div class="sidebar">
         <div class="logo">SUPER MEDIA</div>
-        <button class="nav-btn active" onclick="switchTab('all', this)">📚 بنك الأسئلة</button>
-        <button class="nav-btn" onclick="switchTab('exact', this)">✅ مكرر متطابق (100%)</button>
-        <button class="nav-btn" onclick="switchTab('fuzzy', this)">✨ مكرر تشكيل/تنسيق</button>
-        <button class="nav-btn" onclick="switchTab('smart', this)">🧠 مكرر ذكي (إجابة مختلفة)</button>
-        <button class="nav-btn" onclick="switchTab('swapped', this)">🔄 مكرر معكوس (س/ج)</button>
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
-        <button class="nav-btn" onclick="switchTab('cfg', this)">🔗 إدارة الروابط</button>
+        <button class="nav-btn active" onclick="window.switchTab('all', this)">📚 بنك الأسئلة (الكل)</button>
+        <button class="nav-btn" onclick="window.switchTab('exact', this)">✅ متطابق تماماً</button>
+        <button class="nav-btn" onclick="window.switchTab('smart', this)">✨ مكرر ذكي (إجابة مختلفة)</button>
+        <button class="nav-btn" onclick="window.switchTab('fuzzy', this)">🎨 مكرر تشكيل ورموز</button>
+        <button class="nav-btn" onclick="window.switchTab('cfg', this)">🔗 إدارة الروابط</button>
+        <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+        <button class="nav-btn" style="background:var(--success); color:white" onclick="window.addNewQ()">+ إضافة سؤال يدوي</button>
+        <button class="nav-btn" style="background:var(--primary); color:white; margin-top:5px" onclick="window.addNewLink()">+ إضافة رابط جديد</button>
+        <button class="nav-btn" style="background:#333; color:white; margin-top:10px" onclick="window.exportBackup()">💾 حفظ نسخة احتياطية (JSON)</button>
     </div>
 
     <div class="main">
         <div class="stats-grid">
             <div class="stat-card"><h3>إجمالي الأسئلة</h3><span id="statTotal">0</span></div>
-            <div class="stat-card" style="border-color: var(--success)"><h3>متطابق تماماً</h3><span id="statExact">0</span></div>
-            <div class="stat-card" style="border-color: var(--purple)"><h3>مكرر تشكيل</h3><span id="statFuzzy">0</span></div>
-            <div class="stat-card" style="border-color: var(--warning)"><h3>مكرر ذكي</h3><span id="statSmart">0</span></div>
-            <div class="stat-card" style="border-color: var(--danger)"><h3>مكرر معكوس</h3><span id="statSwapped">0</span></div>
+            <div class="stat-card" style="border-color:var(--success)"><h3>متطابق</h3><span id="statExact">0</span></div>
+            <div class="stat-card" style="border-color:var(--pink)"><h3>تعارض إجابة</h3><span id="statSmart">0</span></div>
+            <div class="stat-card" style="border-color:var(--cyan)"><h3>تشكيل</h3><span id="statFuzzy">0</span></div>
         </div>
 
-        <!-- شريط الحذف المتعدد -->
-        <div class="action-bar" id="globalActionBar">
-            <div style="flex-grow: 1;">
-                <strong style="color:var(--danger)">وضع الحذف المتعدد نشط</strong>
-                <p style="margin:0; font-size:12px">تم تحديد <span id="selectedCount">0</span> عنصر</p>
-            </div>
-            <button class="btn btn-del" style="background:var(--danger); color:white; padding:10px 25px" onclick="deleteSelected()">🗑️ حذف العناصر المحددة نهائياً</button>
-            <button class="btn" style="background:#eee" onclick="deselectAll()">إلغاء التحديد</button>
+        <div id="globalActionBar" class="action-bar">
+            <span>تم تحديد <b id="selectedCount">0</b> عناصر</span>
+            <button class="btn" style="background:var(--danger); color:white; font-size:13px" onclick="window.deleteSelected()">🗑️ حذف العناصر المختارة الآن</button>
+            <button class="btn" style="background:#444; color:white" onclick="window.deselectAll()">إلغاء</button>
         </div>
 
-        <!-- التبويبات -->
+        <!-- الأقسام -->
         <div id="all-tab" class="tab-section">
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="text" id="searchInput" class="inline-input" style="flex:1" placeholder="بحث سريع في الأسئلة والإجابات...">
-                <button class="btn btn-add" onclick="addNewQ()">+ إضافة سؤال جديد</button>
-            </div>
+            <input type="text" id="searchInput" class="nav-btn" style="background:white; border:1px solid #ddd; width:100%; text-align:right" placeholder="بحث سريع في الأسئلة أو الإجابات..." onkeyup="window.renderCurrentTab()">
             <div class="card">
                 <table>
-                    <thead>
-                        <tr>
-                            <th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'all-check')"></th>
-                            <th style="width:10%">الرقم (ID)</th>
-                            <th style="width:40%">السؤال</th>
-                            <th style="width:40%">الإجابة</th>
-                            <th style="width:10%">الإجراء</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th><input type="checkbox" onclick="window.toggleAll(this)"></th><th>المعرف ID</th><th>السؤال والتاريخ</th><th>الإجابة</th><th>الإجراء</th></tr></thead>
                     <tbody id="allBody"></tbody>
                 </table>
-                <button id="loadMoreBtn" class="load-more" onclick="loadMore()">عرض المزيد من الأسئلة ↓</button>
             </div>
+            <button class="nav-btn" style="width:100%; background:#eee; margin-top:10px" onclick="window.loadMore()">تحميل المزيد ↓</button>
         </div>
 
-        <div id="exact-tab" class="tab-section" style="display:none;">
-            <div class="card">
-                <table>
-                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'exact-check')"></th><th>النص المكرر تماماً</th><th>عدد النسخ الإضافية</th><th>الإجراء</th></tr></thead>
-                    <tbody id="exactBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="fuzzy-tab" class="tab-section" style="display:none;">
-            <div class="card">
-                <div style="padding:15px; background:#eef2ff; font-size:13px; color:var(--primary); border-bottom: 1px solid #eee;">
-                    💡 <b>مكرر التشكيل والتنسيق:</b> أسئلة متطابقة ولكن تختلف في التشكيل أو المسافات.
-                </div>
-                <table>
-                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'fuzzy-check')"></th><th>السؤال</th><th>الإجابة</th><th>الإجراء</th></tr></thead>
-                    <tbody id="fuzzyBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="smart-tab" class="tab-section" style="display:none;">
-            <div class="card">
-                <div style="padding:15px; background:#fff9db; font-size:13px; color:#856404; border-bottom: 1px solid #eee;">
-                    💡 <b>المكرر الذكي:</b> نفس السؤال مكرر بالضبط، ولكن الإجابات مختلفة.
-                </div>
-                <table>
-                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'smart-check')"></th><th>رقم ID</th><th>الإجابة المختلفة</th><th>الإجراء</th></tr></thead>
-                    <tbody id="smartBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="swapped-tab" class="tab-section" style="display:none;">
-            <div class="card">
-                <div style="padding:15px; background:#ffe3e3; font-size:13px; color:var(--danger); border-bottom: 1px solid #eee;">
-                    💡 <b>المكرر المعكوس:</b> السؤال في عنصر هو إجابة في عنصر آخر.
-                </div>
-                <table>
-                    <thead><tr><th style="width:40px"><input type="checkbox" onclick="toggleAll(this, 'swapped-check')"></th><th>رقم ID</th><th>النص الأول</th><th>النص الثاني</th><th>الإجراء</th></tr></thead>
-                    <tbody id="swappedBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="cfg-tab" class="tab-section" style="display:none;">
-            <div class="card">
-                <table>
-                    <thead><tr><th>المفتاح (Key)</th><th>الرابط (Link)</th><th>الإجراء</th></tr></thead>
-                    <tbody id="cfgBody"></tbody>
-                </table>
-            </div>
-        </div>
+        <div id="exact-tab" class="tab-section" style="display:none;"><div class="card"><table><thead><tr><th><input type="checkbox" onclick="window.toggleAll(this)"></th><th>المعرف</th><th>المحتوى المتطابق</th><th>الإجراء</th></tr></thead><tbody id="exactBody"></tbody></table></div></div>
+        <div id="smart-tab" class="tab-section" style="display:none;"><div class="card"><table><thead><tr><th><input type="checkbox" onclick="window.toggleAll(this)"></th><th>النوع</th><th>السؤال</th><th>إجابات متعارضة</th><th>الإجراء</th></tr></thead><tbody id="smartBody"></tbody></table></div></div>
+        <div id="fuzzy-tab" class="tab-section" style="display:none;"><div class="card"><table><thead><tr><th><input type="checkbox" onclick="window.toggleAll(this)"></th><th>النوع</th><th>السؤال</th><th>الإجابة</th><th>الإجراء</th></tr></thead><tbody id="fuzzyBody"></tbody></table></div></div>
+        <div id="cfg-tab" class="tab-section" style="display:none;"><div class="card"><table><thead><tr><th>المفتاح</th><th>الرابط</th><th>الإجراء</th></tr></thead><tbody id="cfgBody"></tbody></table></div></div>
     </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getDatabase, ref, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
-    // 🔴 لقد وضعت لك رابط قاعدة البيانات الذي كان يعمل في النسخة القديمة الخاصة بك 🔴
     const firebaseConfig = {
         apiKey: "AIzaSyDD3q7W8k3Qb2X0FroDH5ntgp9qpSjgpnY",
         authDomain: "casnos-ecf2f.firebaseapp.com",
         databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/",
         projectId: "casnos-ecf2f",
-        storageBucket: "casnos-ecf2f.firebasestorage.app",
-        messagingSenderId: "192090097663",
-        appId: "1:192090097663:web:e3ec4c5114d3d341b849ca",
-        measurementId: "G-LEFQHPFVRP"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let processedData =[]; 
+    let processedData = []; 
     let configData = {};
-    let groupsExact = {}, groupsFuzzy = {}, groupsSmart = {}, groupsSwapped = {};
     let activeTab = 'all';
     let displayLimit = 50;
 
-    const normalize = (txt) => {
-        if (!txt) return "";
-        return txt.toString().replace(/[\u064B-\u065F\u0651\u0652]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/[^\w\s\u0600-\u06FF]/gi, "").replace(/\s+/g, " ").trim();
+    // تنظيف النصوص
+    const normalize = (t) => {
+        if (!t) return "";
+        return t.toString().replace(/<[^>]*>/g, "").replace(/[\u064B-\u065F]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/\s+/g, " ").trim();
     };
 
-    // جلب البيانات مع اكتشاف الأخطاء
-    onValue(ref(db, '/'), (snapshot) => {
-        document.getElementById('loader').style.display = 'flex';
-        
-        setTimeout(() => {
-            const data = snapshot.val();
-            
-            // إذا كانت قاعدة البيانات فارغة تماماً
-            if (!data) {
-                document.getElementById('loader').style.display = 'none';
-                return;
-            }
+    // تنسيق التاريخ
+    const formatDate = (ts) => {
+        if (!ts) return "بيانات قديمة (قبل الحذف)";
+        return new Date(ts).toLocaleString('ar-DZ', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', hour12: true});
+    };
 
-            const rawQuestions = data.questions || {};
-            configData = data.config ? (data.config.data || {}) : {};
-            
-            processData(rawQuestions);
-            renderCurrentTab();
-            
-            document.getElementById('loader').style.display = 'none';
-        }, 100);
-    }, (error) => {
-        // رسالة تنبيه تظهر لك إذا كان هناك خطأ في الاتصال
-        alert("❌ لا يمكن قراءة البيانات من فايربيس!\n\nيجب عليك الدخول إلى حساب Firebase الخاص بك -> Realtime Database -> Rules\nوتغيير الكلمة من false إلى true لكي يعمل الموقع.");
+    onValue(ref(db, '/'), (snapshot) => {
+        const data = snapshot.val() || {};
+        const rawQs = data.questions || {};
+        configData = data.config ? (data.config.data || {}) : {};
+        
+        processedData = Object.keys(rawQs).map(id => ({
+            id, 
+            rawQ: rawQs[id].q, 
+            rawA: rawQs[id].a,
+            timestamp: rawQs[id].t || null,
+            nQ: normalize(rawQs[id].q), 
+            nA: normalize(rawQs[id].a)
+        }));
+
+        window.renderCurrentTab();
+        updateStats();
         document.getElementById('loader').style.display = 'none';
     });
 
-    function processData(rawQuestions) {
-        processedData =[];
-        groupsExact = {}; groupsFuzzy = {}; groupsSmart = {}; groupsSwapped = {};
-        let exactCount = 0, fuzzyCount = 0, smartCount = 0, swappedCount = 0;
-
-        Object.keys(rawQuestions).forEach(id => {
-            const item = rawQuestions[id];
-            const nQ = normalize(item.q);
-            const nA = normalize(item.a);
-            
-            const processedItem = {
-                id: id, rawQ: item.q, rawA: item.a, nQ: nQ, nA: nA,
-                exactKey: item.q + "|||" + item.a,
-                fuzzyKey: nQ + "|||" + nA,
-                swappedKey: [nQ, nA].sort().join("|||")
-            };
-            processedData.push(processedItem);
+    function updateStats() {
+        let exact = 0, smart = 0, fuzzy = 0;
+        const groups = {};
+        processedData.forEach(i => { if(!groups[i.nQ]) groups[i.nQ] = []; groups[i.nQ].push(i); });
+        Object.values(groups).forEach(arr => {
+            if(new Set(arr.map(i => i.rawQ + i.rawA)).size < arr.length) exact++;
+            if(new Set(arr.map(i => i.nA)).size > 1) smart++;
+            if(new Set(arr.map(i => i.nA)).size === 1 && new Set(arr.map(i => i.rawQ + i.rawA)).size > 1) fuzzy++;
         });
-
-        processedData.forEach(item => {
-            if(!groupsExact[item.exactKey]) groupsExact[item.exactKey] = [];
-            groupsExact[item.exactKey].push(item);
-
-            if(!groupsFuzzy[item.fuzzyKey]) groupsFuzzy[item.fuzzyKey] = [];
-            groupsFuzzy[item.fuzzyKey].push(item);
-
-            if(!groupsSmart[item.nQ]) groupsSmart[item.nQ] = new Set();
-            groupsSmart[item.nQ].add(item.nA);
-
-            if(!groupsSwapped[item.swappedKey]) groupsSwapped[item.swappedKey] = [];
-            groupsSwapped[item.swappedKey].push(item);
-        });
-
-        Object.values(groupsExact).forEach(arr => { if(arr.length > 1) exactCount += (arr.length - 1); });
-        Object.values(groupsFuzzy).forEach(arr => {
-            const exactSubKeys = new Set(arr.map(i => i.exactKey));
-            if(arr.length > 1 && exactSubKeys.size > 1) fuzzyCount++;
-        });
-        Object.values(groupsSmart).forEach(set => { if(set.size > 1) smartCount++; });
-        Object.values(groupsSwapped).forEach(arr => {
-            const uniqueQs = new Set(arr.map(i => i.nQ));
-            if(arr.length > 1 && uniqueQs.size > 1) swappedCount++;
-        });
-
         document.getElementById('statTotal').innerText = processedData.length;
-        document.getElementById('statExact').innerText = exactCount;
-        document.getElementById('statFuzzy').innerText = fuzzyCount;
-        document.getElementById('statSmart').innerText = smartCount;
-        document.getElementById('statSwapped').innerText = swappedCount;
+        document.getElementById('statExact').innerText = exact;
+        document.getElementById('statSmart').innerText = smart;
+        document.getElementById('statFuzzy').innerText = fuzzy;
     }
 
     window.renderCurrentTab = () => {
-        const bodyMap = { all: renderAll, exact: renderExact, fuzzy: renderFuzzy, smart: renderSmart, swapped: renderSwapped, cfg: renderConfigs };
-        if(bodyMap[activeTab]) bodyMap[activeTab]();
-        updateSelectedUI();
+        const bodyMap = { all: renderAll, exact: renderExact, smart: renderSmart, fuzzy: renderFuzzy, cfg: renderConfigs };
+        bodyMap[activeTab]();
+        window.updateSelectedUI();
     };
 
     function renderAll() {
         const body = document.getElementById('allBody');
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        let filtered = processedData;
-        if (search) filtered = processedData.filter(item => item.rawQ.toLowerCase().includes(search) || item.rawA.toLowerCase().includes(search) || item.id.includes(search));
+        const s = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = processedData.filter(i => i.rawQ.toLowerCase().includes(s) || i.rawA.toLowerCase().includes(s));
         
-        body.innerHTML = filtered.slice(0, displayLimit).map(item => `
+        body.innerHTML = filtered.slice(0, displayLimit).map(i => `
             <tr>
-                <td><input type="checkbox" class="all-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
-                <td><span class="badge" style="background:var(--primary)">${item.id}</span></td>
-                <td style="font-weight:700; color:#333">${item.rawQ}</td>
-                <td>${item.rawA}</td>
-                <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
+                <td><input type="checkbox" class="item-cb" value="${i.id}" onchange="window.updateSelectedUI()"></td>
+                <td><small style="color:#888">${i.id}</small></td>
+                <td>
+                    <b>${i.rawQ}</b>
+                    <span class="time-label">📅 أرسل في: ${formatDate(i.timestamp)}</span>
+                </td>
+                <td style="color:var(--primary); font-weight:bold">${i.rawA}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="window.editQuestion('${i.id}', '${i.rawQ}', '${i.rawA}')">تعديل</button>
+                    <button class="btn btn-del" onclick="window.deleteItem('questions/${i.id}')">حذف</button>
+                </td>
             </tr>
         `).join('');
-        document.getElementById('loadMoreBtn').style.display = filtered.length > displayLimit ? 'block' : 'none';
     }
 
     function renderExact() {
         const body = document.getElementById('exactBody');
-        let html = "";
-        Object.keys(groupsExact).forEach(key => {
-            const arr = groupsExact[key];
-            if(arr.length > 1) {
-                const dupIds = arr.slice(1).map(i => i.id);
-                html += `<tr>
-                    <td><input type="checkbox" class="exact-check item-cb" data-ids="${dupIds.join(',')}" onchange="updateSelectedUI()"></td>
-                    <td><b>س:</b> ${arr[0].rawQ}<br><span style="color:var(--gray)"><b>ج:</b> ${arr[0].rawA}</span></td>
-                    <td><span class="badge" style="background:var(--danger)">${dupIds.length} نسخة مكررة</span></td>
-                    <td><button class="btn btn-del" onclick="window.bulkDelete(['${dupIds.join("','")}'])">تنظيف النسخ</button></td>
-                </tr>`;
-            }
-        });
-        body.innerHTML = html;
-    }
-
-    function renderFuzzy() {
-        const body = document.getElementById('fuzzyBody');
-        let html = "";
-        Object.keys(groupsFuzzy).forEach(key => {
-            const arr = groupsFuzzy[key];
-            const exactSubKeys = new Set(arr.map(i => i.exactKey));
-            if(arr.length > 1 && exactSubKeys.size > 1) {
-                html += `<tr class="dup-group-header"><td colspan="4">مجموعة تشكيل: ${arr[0].nQ}</td></tr>`;
-                arr.forEach(item => {
-                    html += `<tr>
-                        <td><input type="checkbox" class="fuzzy-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
-                        <td style="font-weight:700">${item.rawQ}</td>
-                        <td>${item.rawA}</td>
-                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
-                    </tr>`;
-                });
-            }
+        let html = ""; const groups = {};
+        processedData.forEach(i => { let k = i.nQ + "|||" + i.nA; if(!groups[k]) groups[k] = []; groups[k].push(i); });
+        Object.values(groups).filter(a => a.length > 1).forEach(arr => {
+            html += `<tr class="dup-header"><td colspan="4">متطابق تماماً (${arr.length} نسخ)</td></tr>`;
+            arr.forEach(i => {
+                html += `<tr><td><input type="checkbox" class="item-cb" value="${i.id}"></td><td>${i.id}</td><td>${i.rawQ}<span class="time-label">${formatDate(i.timestamp)}</span></td><td><button class="btn btn-del" onclick="window.deleteItem('questions/${i.id}')">حذف</button></td></tr>`;
+            });
         });
         body.innerHTML = html;
     }
 
     function renderSmart() {
         const body = document.getElementById('smartBody');
-        let html = "";
-        let localSmartGroups = {};
-        processedData.forEach(item => {
-            if(!localSmartGroups[item.nQ]) localSmartGroups[item.nQ] =[];
-            localSmartGroups[item.nQ].push(item);
-        });
-
-        Object.keys(localSmartGroups).forEach(nQ => {
-            const arr = localSmartGroups[nQ];
-            const uniqueAns = new Set(arr.map(i => i.nA));
-            if(uniqueAns.size > 1) {
-                html += `<tr><td colspan="4" class="dup-group-header">❓ السؤال الموحد: ${arr[0].rawQ}</td></tr>`;
-                arr.forEach(item => {
-                    html += `<tr>
-                        <td><input type="checkbox" class="smart-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
-                        <td><span class="badge">${item.id}</span></td>
-                        <td>${item.rawA}</td>
-                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
-                    </tr>`;
-                });
-            }
+        let html = ""; const groups = {};
+        processedData.forEach(i => { if(!groups[i.nQ]) groups[i.nQ] = []; groups[i.nQ].push(i); });
+        Object.values(groups).filter(a => new Set(a.map(i => i.nA)).size > 1).forEach(arr => {
+            html += `<tr class="dup-header" style="background:#fff0f6; color:var(--pink)"><td colspan="5">⚠️ نفس السؤال - إجابات متعارضة</td></tr>`;
+            arr.forEach(i => {
+                html += `<tr><td><input type="checkbox" class="item-cb" value="${i.id}"></td><td>ذكي</td><td>${i.rawQ}<span class="time-label">${formatDate(i.timestamp)}</span></td><td style="color:red; font-weight:bold">${i.rawA}</td><td><button class="btn btn-del" onclick="window.deleteItem('questions/${i.id}')">حذف</button></td></tr>`;
+            });
         });
         body.innerHTML = html;
     }
 
-    function renderSwapped() {
-        const body = document.getElementById('swappedBody');
-        let html = "";
-        Object.keys(groupsSwapped).forEach(key => {
-            const arr = groupsSwapped[key];
-            const uniqueQs = new Set(arr.map(i => i.nQ));
-            if(arr.length > 1 && uniqueQs.size > 1) {
-                html += `<tr class="dup-group-header" style="background:#ffe3e3; border-right-color:var(--danger)"><td colspan="5">🔄 مجموعة متعاكسة (سؤال وضع كإجابة)</td></tr>`;
-                arr.forEach(item => {
-                    html += `<tr>
-                        <td><input type="checkbox" class="swapped-check item-cb" value="${item.id}" onchange="updateSelectedUI()"></td>
-                        <td><span class="badge">${item.id}</span></td>
-                        <td><b>نص 1:</b> ${item.rawQ}</td>
-                        <td><b>نص 2:</b> ${item.rawA}</td>
-                        <td><button class="btn btn-del" onclick="window.deleteItem('questions/${item.id}')">حذف</button></td>
-                    </tr>`;
-                });
-            }
+    function renderFuzzy() {
+        const body = document.getElementById('fuzzyBody');
+        let html = ""; const groups = {};
+        processedData.forEach(i => { let k = i.nQ + "|||" + i.nA; if(!groups[k]) groups[k] = []; groups[k].push(i); });
+        Object.values(groups).filter(a => a.length > 1 && new Set(a.map(i => i.rawQ + i.rawA)).size > 1).forEach(arr => {
+            html += `<tr class="dup-header" style="background:#e0f7fa; color:var(--cyan)"><td colspan="5">🎨 مكرر تشكيل أو رموز</td></tr>`;
+            arr.forEach(i => {
+                html += `<tr><td><input type="checkbox" class="item-cb" value="${i.id}"></td><td>تشكيل</td><td>${i.rawQ}<span class="time-label">${formatDate(i.timestamp)}</span></td><td>${i.rawA}</td><td><button class="btn btn-del" onclick="window.deleteItem('questions/${i.id}')">حذف</button></td></tr>`;
+            });
         });
         body.innerHTML = html;
     }
@@ -393,100 +228,70 @@
     function renderConfigs() {
         const body = document.getElementById('cfgBody');
         body.innerHTML = Object.keys(configData).map(id => `
-            <tr>
-                <td><code style="background:#eee; padding:5px; border-radius:5px">${configData[id].k}</code></td>
-                <td><a href="${configData[id].l}" target="_blank" style="color:var(--primary)">${configData[id].l}</a></td>
-                <td><button class="btn btn-del" onclick="window.deleteItem('config/data/${id}')">حذف الرابط</button></td>
-            </tr>
+            <tr><td><b>${configData[id].k}</b></td><td><a href="${configData[id].l}" target="_blank">${configData[id].l}</a></td>
+            <td><button class="btn btn-edit" onclick="window.editLink('${id}', '${configData[id].k}', '${configData[id].l}')">تعديل</button>
+            <button class="btn btn-del" onclick="window.deleteItem('config/data/${id}')">حذف</button></td></tr>
         `).join('');
     }
 
-    window.switchTab = (tab, btn) => {
-        activeTab = tab;
+    window.switchTab = (t, b) => {
+        activeTab = t;
         document.querySelectorAll('.tab-section').forEach(s => s.style.display = 'none');
-        document.getElementById(tab + '-tab').style.display = 'block';
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        deselectAll();
-        renderCurrentTab();
-    };
-
-    window.updateSelectedUI = () => {
-        let selectedCount = 0;
-        document.querySelectorAll('.item-cb:checked').forEach(cb => {
-            if(cb.dataset.ids) selectedCount += cb.dataset.ids.split(',').length;
-            else selectedCount += 1;
-        });
-        const bar = document.getElementById('globalActionBar');
-        if(selectedCount > 0) {
-            bar.style.display = 'flex';
-            document.getElementById('selectedCount').innerText = selectedCount;
-        } else {
-            bar.style.display = 'none';
+        document.getElementById(t + '-tab').style.display = 'block';
+        if(b) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
         }
-    };
-
-    window.toggleAll = (master, className) => {
-        document.querySelectorAll('.' + className).forEach(cb => cb.checked = master.checked);
-        updateSelectedUI();
-    };
-
-    window.deselectAll = () => {
-        document.querySelectorAll('.item-cb, input[type="checkbox"]').forEach(cb => cb.checked = false);
-        updateSelectedUI();
-    };
-
-    window.deleteSelected = () => {
-        let selectedIds =[];
-        document.querySelectorAll('.item-cb:checked').forEach(cb => {
-            if(cb.dataset.ids) selectedIds.push(...cb.dataset.ids.split(','));
-            else selectedIds.push(cb.value);
-        });
-
-        if(selectedIds.length > 0 && confirm(`تحذير! هل أنت متأكد من حذف ${selectedIds.length} عنصر؟`)) {
-            document.getElementById('loader').style.display = 'flex';
-            const updates = {};
-            selectedIds.forEach(id => updates[`questions/${id}`] = null);
-            update(ref(db), updates).then(() => deselectAll());
-        }
-    };
-
-    window.deleteItem = (path) => {
-        if(confirm("هل أنت متأكد من حذف هذا العنصر؟")) {
-            document.getElementById('loader').style.display = 'flex';
-            remove(ref(db, path));
-        }
-    };
-
-    window.bulkDelete = (idsArray) => {
-        if(confirm(`سيتم حذف ${idsArray.length} نسخة مكررة والإبقاء على واحدة. تأكيد؟`)) {
-            document.getElementById('loader').style.display = 'flex';
-            const updates = {};
-            idsArray.forEach(id => updates[`questions/${id}`] = null);
-            update(ref(db), updates);
-        }
+        window.renderCurrentTab();
     };
 
     window.addNewQ = () => {
-        const id = prompt("أدخل رقم/معرف السؤال (ID):");
-        if(!id) return;
-        const q = prompt("أدخل نص السؤال:");
-        if(!q) return;
-        const a = prompt("أدخل الإجابة:");
-        if(id && q && a) {
-            document.getElementById('loader').style.display = 'flex';
-            set(ref(db, `questions/${id}`), {q, a});
+        const id = prompt("ID:"), q = prompt("السؤال:"), a = prompt("الإجابة:");
+        if(id && q && a) set(ref(db, `questions/${id}`), {q, a, t: Date.now()});
+    };
+
+    window.editQuestion = (id, oldQ, oldA) => {
+        const q = prompt("تعديل السؤال:", oldQ), a = prompt("تعديل الإجابة:", oldA);
+        if(q && a) update(ref(db, `questions/${id}`), {q, a});
+    };
+
+    window.addNewLink = () => {
+        const k = prompt("المفتاح:"), l = prompt("الرابط:");
+        if(k && l) set(ref(db, `config/data/link_${Date.now()}`), {k, l});
+    };
+
+    window.editLink = (id, oldK, oldL) => {
+        const k = prompt("المفتاح الجديد:", oldK), l = prompt("الرابط الجديد:", oldL);
+        if(k && l) update(ref(db, `config/data/${id}`), {k, l});
+    };
+
+    window.deleteItem = (p) => { if(confirm("حذف؟")) remove(ref(db, p)); };
+    window.toggleAll = (m) => { document.querySelectorAll('.item-cb').forEach(c => c.checked = m.checked); window.updateSelectedUI(); };
+    window.updateSelectedUI = () => {
+        const s = document.querySelectorAll('.item-cb:checked').length;
+        document.getElementById('globalActionBar').style.display = s > 0 ? 'flex' : 'none';
+        document.getElementById('selectedCount').innerText = s;
+    };
+    window.deleteSelected = () => {
+        const ids = Array.from(document.querySelectorAll('.item-cb:checked')).map(c => c.value);
+        if(confirm(`حذف ${ids.length} عناصر؟`)) {
+            const updates = {}; ids.forEach(id => updates[`questions/${id}`] = null);
+            update(ref(db), updates).then(() => window.deselectAll());
         }
     };
+    window.deselectAll = () => { document.querySelectorAll('.item-cb').forEach(c => c.checked = false); window.updateSelectedUI(); };
+    window.loadMore = () => { displayLimit += 100; window.renderCurrentTab(); };
 
-    window.loadMore = () => { displayLimit += 100; renderAll(); };
-
-    let searchTimer;
-    document.getElementById('searchInput').onkeyup = () => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => { displayLimit = 50; renderAll(); }, 400);
+    // النسخة الاحتياطية
+    window.exportBackup = () => {
+        const backup = { questions: {}, config: { data: configData } };
+        processedData.forEach(i => { backup.questions[i.id] = { q: i.rawQ, a: i.rawA, t: i.timestamp }; });
+        const blob = new Blob([JSON.stringify(backup)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `backup_${Date.now()}.json`;
+        a.click();
     };
-
 </script>
 </body>
 </html>
