@@ -3,111 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Media V9.5 | النسخة الكاملة الشاملة</title>
+    <title>Super Media V11 | نظام التنظيم والفرز الذكي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #4361ee; --bg: #0f172a; --c: #1e293b; --d: #ef4444; --s: #10b981; --w: #f59e0b; --txt: #f8fafc; --mut: #94a3b8; }
+        :root { --p: #2563eb; --bg: #f8fafc; --c: #ffffff; --d: #e11d48; --s: #059669; --w: #d97706; --txt: #0f172a; --mut: #64748b; --border: #e2e8f0; }
         * { box-sizing: border-box; transition: 0.2s; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; color: var(--txt); display: flex; }
         
-        /* Sidebar */
-        .sidebar { width: 300px; height: 100vh; background: #020617; position: fixed; right: 0; padding: 25px; overflow-y: auto; border-left: 1px solid #1e293b; z-index: 1000; }
-        .logo { font-size: 22px; font-weight: 900; color: #38bdf8; text-align: center; margin-bottom: 25px; border-bottom: 1px solid #1e293b; padding-bottom: 15px; }
-        .nav-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 12px; cursor: pointer; color: var(--mut); margin-bottom: 5px; font-size: 14px; background: transparent; border: none; width: 100%; text-align: right; }
-        .nav-item:hover, .nav-item.active { background: var(--p); color: white; }
-        .sub-group { margin-right: 20px; border-right: 2px solid #1e293b; padding-right: 15px; margin-bottom: 15px; }
-        .sub-item { padding: 8px; font-size: 13px; color: #64748b; cursor: pointer; border-radius: 8px; }
-        .sub-item:hover, .sub-item.active { color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+        .sidebar { width: 280px; height: 100vh; background: var(--c); position: fixed; right: 0; padding: 25px; overflow-y: auto; border-left: 1px solid var(--border); z-index: 1000; }
+        .logo { font-size: 24px; font-weight: 900; color: var(--p); text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--bg); padding-bottom: 15px; }
+        .nav-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 12px; cursor: pointer; color: var(--txt); margin-bottom: 5px; font-size: 14px; background: transparent; border: none; width: 100%; text-align: right; font-weight: 600; }
+        .nav-item:hover, .nav-item.active { background: #eff6ff; color: var(--p); }
+        .sub-group { margin-right: 20px; border-right: 2px solid var(--border); padding-right: 15px; margin-bottom: 15px; }
+        .sub-item { padding: 8px; font-size: 13px; color: var(--mut); cursor: pointer; border-radius: 8px; }
+        .sub-item:hover, .sub-item.active { color: var(--p); background: #f1f5f9; }
 
-        /* Main Area */
-        .main { margin-right: 300px; width: calc(100% - 300px); padding: 40px; min-height: 100vh; }
+        .main { margin-right: 280px; width: calc(100% - 280px); padding: 30px; min-height: 100vh; }
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--c); padding: 20px; border-radius: 20px; border-right: 4px solid var(--p); }
-        .stat-card p { margin: 5px 0 0; font-size: 24px; font-weight: 900; }
+        .stat-card { background: var(--c); padding: 20px; border-radius: 15px; border-bottom: 4px solid var(--p); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .stat-card h3 { font-size: 12px; color: var(--mut); margin: 0; }
+        .stat-card p { margin: 5px 0 0; font-size: 26px; font-weight: 900; color: var(--txt); }
 
-        /* Tools Bar */
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
-        .f-btn { padding: 8px 15px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: white; cursor: pointer; font-size: 12px; }
-        .f-btn.active { background: var(--p); border-color: var(--p); }
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .f-btn { padding: 10px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--c); color: var(--txt); cursor: pointer; font-size: 13px; font-weight: bold; }
+        .f-btn.active { background: var(--p); color: white; border-color: var(--p); }
 
-        /* Table Area */
-        .content-card { background: var(--c); border-radius: 24px; border: 1px solid #334155; overflow: hidden; }
-        .toolbar { padding: 15px; border-bottom: 1px solid #334155; display: flex; gap: 10px; align-items: center; background: #1e293b; }
-        .search { flex: 1; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 12px; color: white; font-family: inherit; }
+        .content-card { background: var(--c); border-radius: 15px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid var(--border); }
+        .toolbar { padding: 15px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center; background: #f8fafc; }
+        .search { flex: 1; padding: 11px; border: 1px solid var(--border); border-radius: 10px; font-family: inherit; }
         
         table { width: 100%; border-collapse: collapse; }
-        th { background: #1e293b; padding: 15px; text-align: right; font-size: 12px; color: var(--mut); }
-        td { padding: 12px 15px; border-bottom: 1px solid #334155; font-size: 13px; color: #cbd5e1; vertical-align: middle; }
+        th { background: #f8fafc; padding: 15px; text-align: right; font-size: 12px; color: var(--mut); border-bottom: 2px solid var(--border); }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--txt); vertical-align: middle; line-height: 1.5; }
         
-        .img-thumb { width: 60px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid #334155; cursor: zoom-in; }
-        .img-thumb:hover { transform: scale(4); position: absolute; z-index: 500; border: 2px solid white; box-shadow: 0 0 20px #000; }
+        .group-header { background: #fff1f2 !important; font-weight: 800; color: var(--d); }
+        .time-label { display: block; font-size: 10px; color: #94a3b8; margin-top: 4px; font-weight: bold; }
 
-        .btn { padding: 8px 15px; border-radius: 10px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 12px; }
-        .btn-del { background: #450a0a; color: #f87171; }
-        .btn-move { background: #1e1b4b; color: #818cf8; }
-        .btn-more { width: 100%; padding: 15px; background: #1e293b; color: #38bdf8; border: none; cursor: pointer; font-weight: bold; border-top: 1px solid #334155; }
+        .btn { padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 12px; }
+        .btn-del { background: #fee2e2; color: var(--d); }
+        .btn-move { background: #dbeafe; color: var(--p); }
 
-        /* Action bar for Move/Delete */
-        .action-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #38bdf8; color: #020617; padding: 15px 40px; border-radius: 50px; display: none; align-items: center; gap: 20px; z-index: 2000; font-weight: 800; }
+        .action-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 15px 40px; border-radius: 50px; display: none; align-items: center; gap: 20px; z-index: 2000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
     </style>
 </head>
 <body>
 
-    <div id="loader" style="position:fixed; inset:0; background:#020617; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <div style="width:50px; height:50px; border:5px solid #1e293b; border-top-color:#38bdf8; border-radius:50%; animation:spin 1s linear infinite;"></div>
-        <p style="color:#38bdf8; margin-top:15px;">تحميل المحرك الشامل V9.5...</p>
+    <div id="loader" style="position:fixed; inset:0; background:white; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <div style="width:45px; height:45px; border:4px solid #f1f5f9; border-top-color:#2563eb; border-radius:50%; animation:spin 1s linear infinite;"></div>
+        <p style="color:#2563eb; margin-top:15px; font-weight:bold;">جاري تحليل البيانات...</p>
     </div>
 
     <div class="sidebar">
         <div class="logo">SUPER MEDIA</div>
         <button class="nav-item active" id="btnAll" onclick="window.loadAll()">📚 كل الأسئلة</button>
-        <span style="font-size:10px; color:#475569; margin:20px 0 10px; display:block;">المسارات الدراسية</span>
+        <span style="font-size:11px; color:var(--mut); margin:20px 0 10px; display:block; font-weight:800;">التصنيفات الدراسية</span>
         <div id="treeContainer"></div>
-        <span style="font-size:10px; color:#475569; margin:20px 0 10px; display:block;">الإعدادات</span>
+        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
         <button class="nav-item" onclick="window.switchTab('cfg')">🔗 الروابط والأكواد</button>
-        <button class="nav-item" onclick="window.exportBackup()" style="color:var(--w)">💾 نسخة احتياطية</button>
+        <button class="nav-item" onclick="window.exportBackup()">💾 نسخة احتياطية</button>
         <button class="btn" style="background:var(--s); color:white; width:100%; margin-top:15px" onclick="window.addManual()">+ إضافة سؤال يدوي</button>
     </div>
 
     <div class="main">
         <div class="stat-grid">
-            <div class="stat-card"><h3>الإجمالي</h3><p id="statTotal">0</p></div>
-            <div class="stat-card" style="border-color:var(--d)"><h3>تعارض إجابة</h3><p id="statConflict">0</p></div>
-            <div class="stat-card" style="border-color:var(--w)"><h3>مكررات</h3><p id="statDups">0</p></div>
+            <div class="stat-card"><h3>إجمالي الأسئلة</h3><p id="statTotal">0</p></div>
+            <div class="stat-card" style="border-color:var(--d)"><h3>تعارض إجابات</h3><p id="statConflict">0</p></div>
+            <div class="stat-card" style="border-color:var(--w)"><h3>مكررات تماماً</h3><p id="statDups">0</p></div>
         </div>
 
         <div class="filter-bar">
             <button class="f-btn active" onclick="window.setFilter('all', this)">كل الأسئلة</button>
-            <button class="f-btn" onclick="window.setFilter('dups', this)" style="color:var(--w)">🔍 مكرر تماماً</button>
-            <button class="f-btn" onclick="window.setFilter('conflict', this)" style="color:var(--d)">⚠️ تعارض إجابات</button>
-            <button class="f-btn" onclick="window.setFilter('fuzzy', this)" style="color:#38bdf8">🎨 مكرر تشكيل</button>
-            <button class="btn btn-del" id="btnAutoClean" style="display:none; margin-right:auto" onclick="window.autoClean()">🧹 تنظيف المكرر آلياً</button>
+            <button class="f-btn" onclick="window.setFilter('dups', this)" style="color:var(--p)">🔍 مكرر (س وج)</button>
+            <button class="f-btn" onclick="window.setFilter('conflict', this)" style="color:var(--d)">⚠️ تعارض (نفس السؤال)</button>
+            <button class="f-btn" onclick="window.setFilter('fuzzy', this)">🎨 مكرر تشكيل</button>
         </div>
 
         <div class="content-card">
             <div class="toolbar">
-                <input type="text" id="qSearch" class="search" placeholder="بحث سريع في النتائج..." onkeyup="window.searchTable()">
-                <!-- أداة نقل المسار المباشر -->
+                <input type="text" id="qSearch" class="search" placeholder="بحث سريع..." onkeyup="window.searchTable()">
                 <div id="moveArea" style="display:none; gap:10px; align-items:center;">
-                    <span style="font-size:11px; color:var(--w)">نقل إلى:</span>
-                    <select id="targetY" style="padding:8px; border-radius:8px; background:#0f172a; color:white; border:1px solid #334155;"></select>
-                    <select id="targetS" style="padding:8px; border-radius:8px; background:#0f172a; color:white; border:1px solid #334155;"></select>
-                    <button class="btn btn-move" onclick="window.processMove()">نقل الآن</button>
+                    <span style="font-size:12px; font-weight:800">نقل المحدد إلى:</span>
+                    <select id="targetY" style="padding:9px; border-radius:10px; border:1px solid var(--border); background:white;"></select>
+                    <select id="targetS" style="padding:9px; border-radius:10px; border:1px solid var(--border); background:white;"></select>
+                    <button class="btn btn-move" style="background:var(--p); color:white" onclick="window.processMove()">نقل الآن</button>
                 </div>
             </div>
             <table>
                 <thead id="tHead"></thead>
                 <tbody id="tableBody"></tbody>
             </table>
-            <button id="loadMoreBtn" class="btn-more" onclick="window.loadMore()">عرض 150 سؤال إضافي ↓</button>
+            <button id="loadMoreBtn" class="btn-more" style="width:100%; padding:15px; background:#f8fafc; border:none; cursor:pointer; color:var(--p); font-weight:bold" onclick="window.loadMore()">عرض المزيد ↓</button>
         </div>
     </div>
 
     <div id="globalActionBar" class="action-bar">
-        <span>تحديد <b id="selCount">0</b></span>
-        <button class="btn btn-move" style="background:#020617; color:#38bdf8" onclick="window.showMove()">📦 تغيير المسار</button>
-        <button class="btn btn-del" onclick="window.bulkDelete()">🗑️ حذف المحدد</button>
-        <button class="btn" style="background:#1e293b; color:white" onclick="window.deselectAll()">إلغاء</button>
+        <span>تم تحديد <b id="selCount">0</b></span>
+        <button class="btn" style="background:var(--p); color:white" onclick="window.showMove()">📦 نقل لمجلد آخر</button>
+        <button class="btn btn-del" style="background:#450a0a; color:white" onclick="window.bulkDelete()">🗑️ حذف نهائي</button>
+        <button class="btn" style="background:#334155; color:white" onclick="window.deselectAll()">إلغاء</button>
     </div>
 
 <script type="module">
@@ -122,6 +115,14 @@
     let filterType = 'all'; let curYear = null, curSub = null; let curTab = 'data';
 
     const normalize = (t) => t ? t.toString().toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[\u064B-\u065F]/g, "").replace(/[^\u0621-\u064A0-9a-z]/g, '').trim() : "";
+    
+    // تنسيق التاريخ ليظهر بشكل بشري
+    const formatTime = (ts) => {
+        if(!ts) return "---";
+        const date = new Date(ts);
+        if(isNaN(date.getTime())) return ts; // إذا كان التاريخ نصياً أصلاً
+        return date.toLocaleString('ar-DZ', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+    };
 
     onValue(ref(db, '/'), (snap) => {
         dbRaw = snap.val() || {};
@@ -142,15 +143,7 @@
         allItems.sort((a,b) => new Date(b.t) - new Date(a.t));
     }
 
-    window.setFilter = (type, btn) => {
-        filterType = type; displayLimit = 150;
-        document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('btnAutoClean').style.display = (type === 'dups') ? 'block' : 'none';
-        renderUI();
-    };
-
-    function renderUI() {
+    window.renderUI = () => {
         const body = document.getElementById('tableBody');
         const head = document.getElementById('tHead');
         const moreBtn = document.getElementById('loadMoreBtn');
@@ -159,70 +152,60 @@
         if(curYear) display = display.filter(i => i.year === curYear);
         if(curSub) display = display.filter(i => i.sub === curSub);
 
-        if(curTab === 'cfg') {
-            renderConfig(body, head, moreBtn); return;
-        }
-
-        head.innerHTML = `<tr><th width="40"><input type="checkbox" onclick="window.toggleAll(this)"></th><th>السؤال</th><th>الإجابة</th><th>المسار</th><th>الإجراء</th></tr>`;
+        head.innerHTML = `<tr><th width="40"><input type="checkbox" onclick="window.toggleAll(this)"></th><th>السؤال والمعلومات</th><th>الإجابة</th><th>المسار</th><th>الإجراء</th></tr>`;
         
-        if(filterType === 'dups') {
-            const groups = {}; display.forEach(i => { let k = i.nQ + i.nA; if(!groups[k]) groups[k] = []; groups[k].push(i); });
-            display = Object.values(groups).filter(g => g.length > 1).flat();
-        } else if(filterType === 'conflict') {
-            const groups = {}; display.forEach(i => { if(!groups[i.nQ]) groups[i.nQ] = []; groups[i.nQ].push(i); });
-            display = Object.values(groups).filter(g => new Set(g.map(x => x.nA)).size > 1).flat();
-        } else if(filterType === 'fuzzy') {
-            const groups = {}; display.forEach(i => { let k = i.nQ + i.nA; if(!groups[k]) groups[k] = []; groups[k].push(i); });
-            display = Object.values(groups).filter(g => g.length > 1 && new Set(g.map(x => x.q)).size > 1).flat();
+        if(filterType === 'conflict' || filterType === 'dups') {
+            const groups = {}; 
+            display.forEach(i => {
+                let key = (filterType === 'conflict') ? i.nQ : (i.nQ + i.nA);
+                if(!groups[key]) groups[key] = [];
+                groups[key].push(i);
+            });
+
+            let html = "";
+            Object.values(groups).filter(g => g.length > 1).forEach(g => {
+                html += `<tr class="group-header"><td colspan="5">📂 أسئلة مكررة: ${g[0].q}</td></tr>`;
+                g.forEach(i => {
+                    html += `<tr>
+                        <td><input type="checkbox" class="q-cb" value="${i.path}" data-id="${i.id}" data-q="${i.q}" data-a="${i.a}" data-t="${i.t}"></td>
+                        <td><span style="color:#64748b; font-size:11px">المعرف: ${i.id}</span><span class="time-label">📅 ${formatTime(i.t)}</span></td>
+                        <td style="color:var(--p); font-weight:bold">${i.a}</td>
+                        <td>${i.year}/${i.sub}</td>
+                        <td><button class="btn btn-del" onclick="window.del('${i.path}')">حذف</button></td>
+                    </tr>`;
+                });
+            });
+            body.innerHTML = html || "<tr><td colspan='5' align='center'>لا توجد مكررات هنا ✅</td></tr>";
+            moreBtn.style.display = 'none';
+            return;
         }
 
         const chunk = display.slice(0, displayLimit);
-        body.innerHTML = chunk.map(i => `<tr><td><input type="checkbox" class="q-cb" value="${i.path}" data-id="${i.id}" data-q="${i.q.replace(/"/g, '&quot;')}" data-a="${i.a.replace(/"/g, '&quot;')}" data-t="${i.t}"></td><td>${format(i.q)}</td><td style="color:#38bdf8; font-weight:bold">${format(i.a)}</td><td><span style="font-size:11px">${i.year}/${i.sub}</span></td><td><button class="btn btn-del" onclick="window.del('${i.path}')">حذف</button></td></tr>`).join('');
-        
+        body.innerHTML = chunk.map(i => `<tr><td><input type="checkbox" class="q-cb" value="${i.path}" data-id="${i.id}" data-q="${i.q}" data-a="${i.a}" data-t="${i.t}"></td><td>${i.q}<span class="time-label">📅 ${formatTime(i.t)}</span></td><td style="color:var(--p); font-weight:bold">${i.a}</td><td>${i.year}/${i.sub}</td><td><button class="btn btn-del" onclick="window.del('${i.path}')">حذف</button></td></tr>`).join('');
         moreBtn.style.display = (displayLimit >= display.length) ? 'none' : 'block';
         updateStats();
-    }
+    };
 
-    function renderConfig(body, head, moreBtn) {
-        moreBtn.style.display = 'none';
-        head.innerHTML = `<tr><th>المعرف</th><th>الكود</th><th>الرابط</th><th>الإجراء</th></tr>`;
-        const codes = dbRaw.codes || [];
-        body.innerHTML = Object.keys(codes).map(id => `<tr><td>${id}</td><td><input type="text" id="k_${id}" value="${codes[id].k}" class="search" style="width:100px"></td><td><input type="text" id="l_${id}" value="${codes[id].l}" class="search"></td><td><button class="btn btn-move" onclick="window.saveCfg('${id}')">حفظ</button></td></tr>`).join('');
-    }
-
-    window.saveCfg = (id) => {
-        const k = document.getElementById('k_'+id).value, l = document.getElementById('l_'+id).value;
-        update(ref(db, `codes/${id}`), {k, l}).then(() => alert("تم الحفظ"));
+    window.setFilter = (type, btn) => {
+        filterType = type; displayLimit = 150;
+        document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderUI();
     };
 
     window.processMove = async () => {
         const selected = document.querySelectorAll('.q-cb:checked');
-        const tY = document.getElementById('targetY').value; const tS = document.getElementById('targetS').value;
-        if(confirm(`نقل ${selected.length} سؤال إلى ${tY} > ${tS}؟`)) {
+        const tY = document.getElementById('targetY').value; 
+        const tS = document.getElementById('targetS').value;
+        if(confirm(`نقل ${selected.length} عنصر إلى ${tY} > ${tS}؟`)) {
             const upds = {};
             selected.forEach(cb => {
                 upds[cb.value] = null;
                 upds[`data/${tY}/${tS}/questions/${cb.dataset.id}`] = { q: cb.dataset.q, a: cb.dataset.a, ts: cb.dataset.t };
             });
-            await update(ref(db), upds); window.deselectAll(); alert("✅ تمت عملية النقل!");
+            await update(ref(db), upds); window.deselectAll(); alert("✅ تمت عملية النقل بنجاح!");
         }
     };
-
-    window.autoClean = () => {
-        const groups = {}; allItems.forEach(i => { let k = i.nQ + i.nA; if(!groups[k]) groups[k] = []; groups[k].push(i); });
-        const toDelete = Object.values(groups).filter(g => g.length > 1).map(g => g.slice(1)).flat();
-        if(confirm(`حذف ${toDelete.length} مكرر؟`)) {
-            const upds = {}; toDelete.forEach(i => upds[i.path] = null);
-            update(ref(db), upds);
-        }
-    };
-
-    function format(t) {
-        if(!t) return "---";
-        const m = t.match(/\[(Q_IMG|A_IMG|IMAGE_URL)\]:(https?:\/\/[^\s\]]+)/);
-        if(m) return `<img src="${m[2]}" class="img-thumb"> <br> <small style="color:#64748b">${t.split('[')[0]}</small>`;
-        return t;
-    }
 
     function updateStats() {
         document.getElementById('statTotal').innerText = allItems.length;
@@ -239,8 +222,9 @@
     };
 
     function initDropdowns() {
-        const years = ["1AS", "2AS", "3AS", "CEM"];
-        const subs = ["الرياضيات", "الفيزياء", "اللغة العربية", "الفلسفة", "التاريخ", "الجغرافيا", "الإنجليزية", "الفرنسية", "العلوم", "الجيولوجيا", "الإسلامية", "الإعلام_الآلي"];
+        // إضافة مجلدات إدارية جديدة
+        const years = ["1AS", "2AS", "3AS", "CEM", "مجلد_المراجعة", "مجلد_المكررات"];
+        const subs = ["الرياضيات", "الفيزياء", "اللغة العربية", "الفلسفة", "التاريخ", "الجغرافيا", "الإنجليزية", "الفرنسية", "العلوم", "الجيولوجيا", "الإسلامية", "الإعلام_الآلي", "تعارض_إجابات"];
         document.getElementById('targetY').innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
         document.getElementById('targetS').innerHTML = subs.map(s => `<option value="${s}">${s}</option>`).join('');
     }
@@ -248,14 +232,13 @@
     window.loadMore = () => { displayLimit += 150; renderUI(); };
     window.setF = (y, s = null) => { curYear = y; curSub = s; displayLimit = 150; curTab = 'data'; document.getElementById('btnAll').classList.remove('active'); renderUI(); };
     window.loadAll = () => { curYear = null; curSub = null; displayLimit = 150; curTab = 'data'; document.getElementById('btnAll').classList.add('active'); renderUI(); };
-    window.switchTab = (t) => { curTab = t; renderUI(); };
     window.searchTable = () => { const q = document.getElementById('qSearch').value.toLowerCase(); document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none'); };
     window.del = (p) => { if(confirm("حذف؟")) remove(ref(db, p)); };
     window.toggleAll = (m) => { document.querySelectorAll('.q-cb').forEach(c => c.checked = m.checked); window.updSel(); };
     window.updSel = () => { const c = document.querySelectorAll('.q-cb:checked').length; document.getElementById('globalActionBar').style.display = c > 0 ? 'flex' : 'none'; document.getElementById('selCount').innerText = c; };
     window.showMove = () => { document.getElementById('moveArea').style.display = 'flex'; };
     window.bulkDelete = () => { const paths = Array.from(document.querySelectorAll('.q-cb:checked')).map(c => c.value); if(confirm(`حذف ${paths.length}؟`)) { const upds = {}; paths.forEach(p => upds[p] = null); update(ref(db), upds).then(() => window.deselectAll()); } };
-    window.deselectAll = () => { document.querySelectorAll('.q-cb').forEach(c => c.checked = false); window.updSel(); };
+    window.deselectAll = () => { document.querySelectorAll('.q-cb').forEach(c => c.checked = false); window.updSel(); document.getElementById('moveArea').style.display = 'none'; };
     window.exportBackup = () => { const blob = new Blob([JSON.stringify(dbRaw, null, 2)], {type: "application/json"}); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `Full_Backup.json`; a.click(); };
     window.addManual = () => { const y = prompt("السنة:"), s = prompt("المادة:"), q = prompt("السؤال:"), a = prompt("الإجابة:"); if(y && s && q && a) set(ref(db, `data/${y}/${s}/questions/m_${Date.now()}`), {q, a, ts: new Date().toISOString()}); };
     document.addEventListener('change', (e) => { if(e.target.classList.contains('q-cb')) window.updSel(); });
