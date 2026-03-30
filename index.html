@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Media V12 | محرك التنظيف الذكي</title>
+    <title>Super Media V13 | نظام الفرز الذكي الفوري</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --p: #2563eb; --bg: #f8fafc; --c: #ffffff; --d: #e11d48; --s: #059669; --w: #d97706; --txt: #0f172a; --mut: #64748b; --border: #e2e8f0; }
-        * { box-sizing: border-box; transition: 0.2s; }
+        * { box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; color: var(--txt); display: flex; }
         
-        /* القائمة الجانبية */
+        /*Sidebar*/
         .sidebar { width: 280px; height: 100vh; background: var(--c); position: fixed; right: 0; padding: 25px; overflow-y: auto; border-left: 1px solid var(--border); z-index: 1000; }
         .logo { font-size: 24px; font-weight: 900; color: var(--p); text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--bg); padding-bottom: 15px; }
         .nav-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 12px; cursor: pointer; color: var(--txt); margin-bottom: 5px; font-size: 14px; background: transparent; border: none; width: 100%; text-align: right; font-weight: 600; }
@@ -19,41 +19,39 @@
         .sub-item { padding: 8px; font-size: 13px; color: var(--mut); cursor: pointer; border-radius: 8px; }
         .sub-item:hover, .sub-item.active { color: var(--p); background: #f1f5f9; }
 
-        /* المحتوى الرئيسي */
+        /*Main*/
         .main { margin-right: 280px; width: calc(100% - 280px); padding: 30px; min-height: 100vh; }
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--c); padding: 20px; border-radius: 15px; border-bottom: 4px solid var(--p); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .stat-card p { margin: 5px 0 0; font-size: 26px; font-weight: 900; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--c); padding: 15px; border-radius: 15px; border-bottom: 4px solid var(--p); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .stat-card p { margin: 5px 0 0; font-size: 24px; font-weight: 900; }
 
         .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
-        .f-btn { padding: 10px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--c); color: var(--txt); cursor: pointer; font-size: 13px; font-weight: bold; }
+        .f-btn { padding: 10px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--c); cursor: pointer; font-size: 13px; font-weight: bold; }
         .f-btn.active { background: var(--p); color: white; border-color: var(--p); }
-        
-        .btn-clean { background: var(--s); color: white; padding: 10px 20px; border-radius: 12px; border: none; cursor: pointer; font-weight: 900; margin-right: auto; }
+        .btn-clean { background: var(--s); color: white; padding: 10px 20px; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; margin-right: auto; }
 
-        .content-card { background: var(--c); border-radius: 15px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid var(--border); }
-        .toolbar { padding: 15px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center; background: #f8fafc; }
-        .search { flex: 1; padding: 11px; border: 1px solid var(--border); border-radius: 10px; font-family: inherit; }
+        .content-card { background: var(--c); border-radius: 15px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid var(--border); }
+        .toolbar { padding: 15px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; background: #f8fafc; }
+        .search { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 10px; }
         
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8fafc; padding: 15px; text-align: right; font-size: 12px; color: var(--mut); border-bottom: 2px solid var(--border); }
-        td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--txt); vertical-align: middle; }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
         
         .group-header { background: #fff1f2 !important; font-weight: 800; color: var(--d); }
-        .time-label { display: block; font-size: 10px; color: #94a3b8; margin-top: 4px; font-weight: bold; }
+        .time-label { display: block; font-size: 10px; color: #94a3b8; margin-top: 4px; }
 
-        .btn { padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 12px; }
-        .btn-del { background: #fee2e2; color: var(--d); }
-        .btn-keep { background: var(--s); color: white; padding: 5px 12px; border-radius: 6px; }
-
-        .action-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 15px 40px; border-radius: 50px; display: none; align-items: center; gap: 20px; z-index: 2000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        /* Action Bar - التفاعلية الجديدة */
+        .action-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 15px 40px; border-radius: 50px; display: none; align-items: center; gap: 20px; z-index: 2000; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .btn { padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .btn-del-main { background: var(--d); color: white; }
     </style>
 </head>
 <body>
 
     <div id="loader" style="position:fixed; inset:0; background:white; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <div style="width:45px; height:45px; border:4px solid #f1f5f9; border-top-color:#2563eb; border-radius:50%; animation:spin 1s linear infinite;"></div>
-        <p style="color:#2563eb; margin-top:15px; font-weight:bold;">جاري تشغيل V12...</p>
+        <div style="width:40px; height:40px; border:4px solid #f1f5f9; border-top-color:#2563eb; border-radius:50%; animation:spin 1s linear infinite;"></div>
+        <p style="color:#2563eb; margin-top:15px; font-weight:bold;">جاري تحميل V13 الفوري...</p>
     </div>
 
     <div class="sidebar">
@@ -61,32 +59,32 @@
         <button class="nav-item active" id="btnAll" onclick="window.loadAll()">📚 كل الأسئلة</button>
         <div id="treeContainer"></div>
         <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
-        <button class="nav-item" onclick="window.switchTab('cfg')">🔗 إدارة الروابط والأكواد</button>
+        <button class="nav-item" onclick="window.switchTab('cfg')">🔗 إدارة الروابط</button>
         <button class="nav-item" onclick="window.exportBackup()">💾 نسخة احتياطية</button>
-        <button class="btn" style="background:var(--s); color:white; width:100%; margin-top:15px" onclick="window.addManual()">+ إضافة سؤال يدوي</button>
+        <button class="btn" style="background:var(--s); color:white; width:100%; margin-top:10px" onclick="window.addManual()">+ إضافة سؤال</button>
     </div>
 
     <div class="main">
         <div class="stat-grid">
-            <div class="stat-card"><h3>إجمالي الأسئلة</h3><p id="statTotal">0</p></div>
+            <div class="stat-card"><h3>الإجمالي</h3><p id="statTotal">0</p></div>
             <div class="stat-card" style="border-color:var(--d)"><h3>تعارض إجابات</h3><p id="statConflict">0</p></div>
-            <div class="stat-card" style="border-color:var(--p)"><h3>مكررات متطابقة</h3><p id="statDups">0</p></div>
+            <div class="stat-card" style="border-color:var(--p)"><h3>مكرر (س وج)</h3><p id="statDups">0</p></div>
         </div>
 
         <div class="filter-bar">
-            <button class="f-btn active" onclick="window.setFilter('all', this)">كل الأسئلة</button>
-            <button class="f-btn" onclick="window.setFilter('dups', this)">🔍 مكرر (س وج)</button>
-            <button class="f-btn" onclick="window.setFilter('conflict', this)" style="color:var(--d)">⚠️ تعارض (نفس السؤال)</button>
-            <button class="btn-clean" id="btnAutoClean" style="display:none" onclick="window.autoCleanDups()">🧹 تنظيف المكررات آلياً</button>
+            <button class="f-btn active" onclick="window.setFilter('all', this)">الكل</button>
+            <button class="f-btn" onclick="window.setFilter('dups', this)">🔍 مكرر (تطابق تام)</button>
+            <button class="f-btn" onclick="window.setFilter('conflict', this)" style="color:var(--d)">⚠️ تعارض (إجابة مختلفة)</button>
+            <button class="btn-clean" id="autoCleanBtn" style="display:none" onclick="window.autoCleanExtras()">🧹 حذف "التكرار الثاني" آلياً</button>
         </div>
 
         <div class="content-card">
             <div class="toolbar">
                 <input type="text" id="qSearch" class="search" placeholder="بحث سريع..." onkeyup="window.searchTable()">
                 <div id="moveArea" style="display:none; gap:10px; align-items:center;">
-                    <select id="targetY" style="padding:9px; border-radius:10px; border:1px solid var(--border);"></select>
-                    <select id="targetS" style="padding:9px; border-radius:10px; border:1px solid var(--border);"></select>
-                    <button class="btn" style="background:var(--p); color:white" onclick="window.processMove()">نقل الآن</button>
+                    <select id="targetY" style="padding:8px; border-radius:8px; border:1px solid var(--border);"></select>
+                    <select id="targetS" style="padding:8px; border-radius:8px; border:1px solid var(--border);"></select>
+                    <button class="btn" style="background:var(--p); color:white" onclick="window.processMove()">تأكيد النقل</button>
                 </div>
             </div>
             <table>
@@ -96,11 +94,12 @@
         </div>
     </div>
 
+    <!-- الشريط السفلي الفوري -->
     <div id="globalActionBar" class="action-bar">
-        <span>تم تحديد <b id="selCount">0</b></span>
+        <span>تم تحديد <b id="selCount">0</b> عناصر</span>
         <button class="btn" style="background:var(--p); color:white" onclick="window.showMove()">📦 نقل المسار</button>
-        <button class="btn btn-del" style="background:#450a0a; color:white" onclick="window.bulkDelete()">🗑️ حذف المحدد</button>
-        <button class="btn" style="background:#334155; color:white" onclick="window.deselectAll()">إلغاء</button>
+        <button class="btn btn-del-main" onclick="window.bulkDelete()">🗑️ حذف المكررات المحددة</button>
+        <button class="btn" style="background:#475569; color:white" onclick="window.deselectAll()">إلغاء</button>
     </div>
 
 <script type="module">
@@ -113,7 +112,7 @@
 
     let dbRaw = {}; let allItems = []; let filterType = 'all'; let curYear = null, curSub = null; let curTab = 'data';
 
-    const normalize = (t) => t ? t.toString().toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[\u064B-\u065F]/g, "").replace(/[^\u0621-\u064A0-9a-z]/g, '').trim() : "";
+    const normalize = (t) => t ? t.toString().toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/[\u064B-\u065F]/g, "").replace(/[^\u0621-\u064A0-9a-z]/g, '').trim() : "";
 
     onValue(ref(db, '/'), (snap) => {
         dbRaw = snap.val() || {};
@@ -137,16 +136,16 @@
     window.renderUI = () => {
         const body = document.getElementById('tableBody');
         const head = document.getElementById('tHead');
-        const moreBtn = document.getElementById('loadMoreBtn');
+        const cleanBtn = document.getElementById('autoCleanBtn');
         let display = allItems;
 
         if(curYear) display = display.filter(i => i.year === curYear);
         if(curSub) display = display.filter(i => i.sub === curSub);
 
-        if(curTab === 'cfg') { renderConfig(body, head); return; }
+        if(curTab === 'cfg') { renderConfig(body, head); cleanBtn.style.display='none'; return; }
 
-        head.innerHTML = `<tr><th width="40"><input type="checkbox" onclick="window.toggleAll(this)"></th><th>السؤال والمعلومات</th><th>الإجابة</th><th>المسار</th><th>الإجراء</th></tr>`;
-        document.getElementById('btnAutoClean').style.display = (filterType === 'dups') ? 'block' : 'none';
+        head.innerHTML = `<tr><th width="40"><input type="checkbox" onclick="window.toggleAll(this)"></th><th>السؤال</th><th>الإجابة</th><th>المسار</th><th>الإجراء</th></tr>`;
+        cleanBtn.style.display = (filterType === 'dups') ? 'block' : 'none';
 
         if(filterType === 'dups' || filterType === 'conflict') {
             const groups = {}; 
@@ -157,22 +156,20 @@
 
             let html = "";
             Object.values(groups).filter(g => g.length > 1).forEach(g => {
-                html += `<tr class="group-header"><td colspan="5">📂 مجموعة مكررة: ${g[0].q}</td></tr>`;
-                g.forEach(i => {
+                html += `<tr class="group-header"><td colspan="5">🔎 مكررات لـ: ${g[0].q}</td></tr>`;
+                g.forEach((i, index) => {
                     html += `<tr>
-                        <td><input type="checkbox" class="q-cb" value="${i.path}"></td>
-                        <td>${i.id}<span class="time-label">📅 ${i.t || 'تاريخ قديم'}</span></td>
+                        <td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td>
+                        <td>${i.q} ${index > 0 ? '<b style="color:var(--d)">(تكرار ثانٍ)</b>' : '<b style="color:var(--s)">(الأصل)</b>'}</td>
                         <td style="color:var(--p); font-weight:bold">${i.a}</td>
                         <td>${i.year}/${i.sub}</td>
-                        <td>
-                            ${filterType === 'conflict' ? `<button class="btn btn-keep" onclick="window.keepOne('${i.nQ}', '${i.path}')">إعتماد هذه</button>` : `<button class="btn btn-del" onclick="window.del('${i.path}')">حذف</button>`}
-                        </td>
+                        <td><button class="btn" style="background:#fee2e2; color:var(--d)" onclick="window.del('${i.path}')">حذف</button></td>
                     </tr>`;
                 });
             });
             body.innerHTML = html;
         } else {
-            body.innerHTML = display.slice(0, 150).map(i => `<tr><td><input type="checkbox" class="q-cb" value="${i.path}"></td><td>${i.q}<span class="time-label">${i.t || ''}</span></td><td style="color:var(--p); font-weight:bold">${i.a}</td><td>${i.year}/${i.sub}</td><td><button class="btn btn-del" onclick="window.del('${i.path}')">حذف</button></td></tr>`).join('');
+            body.innerHTML = display.slice(0, 150).map(i => `<tr><td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td><td>${i.q}</td><td style="color:var(--p); font-weight:bold">${i.a}</td><td>${i.year}/${i.sub}</td><td><button class="btn" style="background:#fee2e2; color:var(--d)" onclick="window.del('${i.path}')">حذف</button></td></tr>`).join('');
         }
         updateStats();
     };
@@ -180,40 +177,51 @@
     function renderConfig(body, head) {
         head.innerHTML = `<tr><th>المعرف</th><th>الكود</th><th>الرابط</th><th>الإجراء</th></tr>`;
         const codes = dbRaw.codes || {};
-        body.innerHTML = Object.keys(codes).map(id => `
-            <tr>
-                <td>${id}</td>
-                <td><input type="text" id="k_${id}" value="${codes[id].k}" class="search" style="width:100px"></td>
-                <td><input type="text" id="l_${id}" value="${codes[id].l}" class="search"></td>
-                <td>
-                    <button class="btn" style="background:var(--s); color:white" onclick="window.saveCfg('${id}')">حفظ</button>
-                    <button class="btn btn-del" onclick="window.del('codes/${id}')">حذف</button>
-                </td>
-            </tr>
-        `).join('');
+        body.innerHTML = Object.keys(codes).map(id => `<tr><td>${id}</td><td><input type="text" id="k_${id}" value="${codes[id].k}" class="search"></td><td><input type="text" id="l_${id}" value="${codes[id].l}" class="search"></td><td><button class="btn" style="background:var(--s); color:white" onclick="window.saveCfg('${id}')">حفظ</button></td></tr>`).join('');
     }
 
-    window.autoCleanDups = async () => {
+    // 🧹 حذف "التكرار الثاني" والإبقاء على الأول آلياً
+    window.autoCleanExtras = async () => {
         const groups = {}; 
-        allItems.forEach(i => { let k = i.nQ + i.nA; if(!groups[k]) groups[k] = []; groups[k].push(i); });
-        const toDel = Object.values(groups).filter(g => g.length > 1).map(g => g.slice(1)).flat();
-        if(confirm(`سيتم حذف ${toDel.length} نسخة متطابقة تماماً. استمرار؟`)) {
-            const upds = {}; toDel.forEach(i => upds[i.path] = null);
-            await update(ref(db), upds); alert("✅ تم تنظيف المكررات تماماً!");
+        allItems.forEach(i => { let key = i.nQ + i.nA; if(!groups[key]) groups[key] = []; groups[key].push(i); });
+        
+        const toDel = [];
+        Object.values(groups).forEach(g => {
+            if(g.length > 1) {
+                // نترك g[0] ونحذف الباقي (التكرار الثاني فما فوق)
+                for(let k=1; k < g.length; k++) toDel.push(g[k].path);
+            }
+        });
+
+        if(toDel.length > 0 && confirm(`سيتم حذف ${toDel.length} نسخة إضافية (التكرار الثاني) والإبقاء على نسخة أصلية واحدة لكل سؤال. استمرار؟`)) {
+            const upds = {}; toDel.forEach(p => upds[p] = null);
+            await update(ref(db), upds); alert("✅ تم التنظيف بنجاح!");
         }
     };
 
-    window.keepOne = async (normQ, keepPath) => {
-        const toDel = allItems.filter(i => i.nQ === normQ && i.path !== keepPath);
-        if(confirm(`سيتم حذف ${toDel.length} إجابة أخرى لهذا السؤال والإبقاء على المختارة فقط. استمرار؟`)) {
-            const upds = {}; toDel.forEach(i => upds[i.path] = null);
-            await update(ref(db), upds); alert("✅ تم اعتماد الإجابة بنجاح!");
+    window.updSel = () => {
+        const checked = document.querySelectorAll('.q-cb:checked');
+        const bar = document.getElementById('globalActionBar');
+        document.getElementById('selCount').innerText = checked.length;
+        bar.style.display = checked.length > 0 ? 'flex' : 'none';
+    };
+
+    window.toggleAll = (m) => {
+        document.querySelectorAll('.q-cb').forEach(c => c.checked = m.checked);
+        window.updSel();
+    };
+
+    window.bulkDelete = async () => {
+        const paths = Array.from(document.querySelectorAll('.q-cb:checked')).map(c => c.value);
+        if(confirm(`حذف ${paths.length} عناصر؟`)) {
+            const upds = {}; paths.forEach(p => upds[p] = null);
+            await update(ref(db), upds); window.deselectAll();
         }
     };
 
     window.saveCfg = (id) => {
         const k = document.getElementById('k_'+id).value; const l = document.getElementById('l_'+id).value;
-        update(ref(db, `codes/${id}`), {k, l}).then(() => alert("تم تحديث الرابط"));
+        update(ref(db, `codes/${id}`), {k, l}).then(() => alert("تم الحفظ"));
     };
 
     window.setFilter = (type, btn) => {
@@ -247,12 +255,16 @@
     window.switchTab = (t) => { curTab = t; renderUI(); };
     window.searchTable = () => { const q = document.getElementById('qSearch').value.toLowerCase(); document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none'); };
     window.del = (p) => { if(confirm("حذف؟")) remove(ref(db, p)); };
-    window.toggleAll = (m) => { document.querySelectorAll('.q-cb').forEach(c => c.checked = m.checked); window.updSel(); };
-    window.updSel = () => { const c = document.querySelectorAll('.q-cb:checked').length; document.getElementById('globalActionBar').style.display = c > 0 ? 'flex' : 'none'; document.getElementById('selCount').innerText = c; };
     window.showMove = () => { document.getElementById('moveArea').style.display = 'flex'; };
-    window.bulkDelete = () => { const paths = Array.from(document.querySelectorAll('.q-cb:checked')).map(c => c.value); if(confirm(`حذف ${paths.length}؟`)) { const upds = {}; paths.forEach(p => upds[p] = null); update(ref(db), upds).then(() => window.deselectAll()); } };
+    window.processMove = async () => {
+        const selected = document.querySelectorAll('.q-cb:checked');
+        const tY = document.getElementById('targetY').value; const tS = document.getElementById('targetS').value;
+        const upds = {}; selected.forEach(cb => { upds[cb.value] = null; upds[`data/${tY}/${tS}/questions/${Date.now()}`] = { q: "محمول", a: "محمول" }; });
+        await update(ref(db), upds); window.deselectAll();
+    };
     window.deselectAll = () => { document.querySelectorAll('.q-cb').forEach(c => c.checked = false); window.updSel(); document.getElementById('moveArea').style.display = 'none'; };
-    window.exportBackup = () => { const blob = new Blob([JSON.stringify(dbRaw, null, 2)], {type: "application/json"}); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `Backup_V12.json`; a.click(); };
+    window.exportBackup = () => { const blob = new Blob([JSON.stringify(dbRaw, null, 2)], {type: "application/json"}); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `Backup_V13.json`; a.click(); };
+    window.addManual = () => { const y = prompt("السنة:"), s = prompt("المادة:"), q = prompt("السؤال:"), a = prompt("الإجابة:"); if(y && s && q && a) set(ref(db, `data/${y}/${s}/questions/${Date.now()}`), {q, a, ts: new Date().toISOString()}); };
 </script>
 </body>
 </html>
