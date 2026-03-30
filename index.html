@@ -4,81 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <title>Super Media V23 | النسخة الإعجازية لحل الصور</title>
+    <title>Super Media V34 | النسخة النهائية الشاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #2563eb; --bg: #f1f5f9; --c: #ffffff; --d: #dc2626; --s: #16a34a; --txt: #1e293b; --mut: #64748b; --border: #e2e8f0; }
+        :root { --p: #2563eb; --bg: #f8fafc; --c: #ffffff; --d: #e11d48; --s: #059669; --txt: #0f172a; --mut: #64748b; --border: #e2e8f0; }
         * { box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; color: var(--txt); display: flex; overflow-x: hidden; }
         
-        .sidebar { width: 260px; height: 100vh; background: var(--c); position: fixed; right: 0; padding: 20px; overflow-y: auto; border-left: 1px solid var(--border); z-index: 1000; }
-        .logo { font-size: 22px; font-weight: 900; color: var(--p); text-align: center; margin-bottom: 20px; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
-        .nav-item { display: block; width: 100%; padding: 10px; border-radius: 10px; cursor: pointer; color: var(--txt); margin-bottom: 5px; font-size: 13px; background: transparent; border: none; text-align: right; font-weight: 600; text-decoration: none; }
-        .nav-item:hover, .nav-item.active { background: #eff6ff; color: var(--p); }
-        .sub-group { margin-right: 15px; border-right: 2px solid var(--border); padding-right: 10px; margin-bottom: 15px; }
-        .sub-item { padding: 8px; font-size: 12px; color: var(--mut); cursor: pointer; border-radius: 8px; }
-        .sub-item:hover, .sub-item.active { color: var(--p); background: #f8fafc; }
+        /* القائمة الجانبية */
+        .sidebar { width: 280px; height: 100vh; background: var(--c); position: fixed; right: 0; padding: 20px; overflow-y: auto; border-left: 1px solid var(--border); z-index: 1000; }
+        .logo { font-size: 24px; font-weight: 900; color: var(--p); text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--bg); padding-bottom: 15px; }
+        .nav-btn { display: block; width: 100%; padding: 12px; border-radius: 12px; cursor: pointer; color: var(--txt); margin-bottom: 5px; font-size: 14px; font-weight: 600; text-decoration: none; border: none; background: transparent; text-align: right; }
+        .nav-btn:hover, .nav-btn.active { background: #eff6ff; color: var(--p); }
+        .tree-sub { margin-right: 15px; border-right: 2px solid var(--border); padding-right: 10px; margin-bottom: 15px; }
+        .tree-item { padding: 8px; font-size: 13px; color: var(--mut); cursor: pointer; border-radius: 8px; display: block; text-decoration: none; }
+        .tree-item:hover, .tree-item.active { color: var(--p); background: #f1f5f9; }
 
-        .main { margin-right: 260px; width: calc(100% - 260px); padding: 20px; min-height: 100vh; }
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: var(--c); padding: 15px; border-radius: 12px; border-bottom: 4px solid var(--p); box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; cursor: pointer; }
-        .stat-card p { margin: 5px 0 0; font-size: 22px; font-weight: 900; }
+        /* المحتوى الرئيسي */
+        .main { margin-right: 280px; width: calc(100% - 280px); padding: 25px; min-height: 100vh; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: var(--c); padding: 18px; border-radius: 15px; border-bottom: 4px solid var(--p); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; cursor: pointer; }
+        .stat-card p { margin: 5px 0 0; font-size: 24px; font-weight: 900; }
 
-        /* 🔥 محرك الصور الاحترافي بالوسيط wsrv.nl */
-        .img-wrapper { position: relative; display: inline-block; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 5px; margin: 5px 0; }
-        .img-render { max-width: 140px; max-height: 80px; display: block; cursor: zoom-in; object-fit: contain; }
-        .img-render:hover { transform: scale(3.5); position: fixed; z-index: 9999; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(4.5); border: 2px solid #fff; box-shadow: 0 0 100px #000; }
-        .btn-open-link { display: block; font-size: 10px; color: var(--p); text-decoration: underline; margin-top: 3px; cursor: pointer; }
+        /* 🔥 نظام عرض الصور المعتمد V34 */
+        .img-box { display: inline-block; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 6px; margin: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .img-view { max-width: 180px; max-height: 100px; cursor: pointer; border-radius: 8px; transition: .3s; display: block; }
+        .img-view:hover { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(4); z-index: 9999; background: #fff; border: 3px solid #fff; box-shadow: 0 0 100px #000; }
+        .img-link { display: block; font-size: 10px; color: var(--p); text-decoration: underline; margin-top: 4px; }
 
-        .content-card { background: var(--c); border-radius: 15px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid var(--border); }
+        .content-card { background: var(--c); border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8fafc; padding: 12px; text-align: right; font-size: 11px; color: var(--mut); border-bottom: 2px solid var(--border); }
-        td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
-        
-        .verified { background: #f0fdf4 !important; }
-        .btn-v { padding: 4px 8px; border-radius: 5px; border: 1px solid var(--s); background: #fff; color: var(--s); cursor: pointer; font-size: 11px; }
-        .btn-v.active { background: var(--s); color: #fff; }
-        .group-tag { background: #fff1f2; color: var(--d); font-weight: 800; padding: 10px; border-right: 5px solid var(--d); }
+        th { background: #f8fafc; padding: 15px; text-align: right; font-size: 11px; color: var(--mut); border-bottom: 2px solid var(--border); }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
 
-        .action-bar { position: fixed; bottom: 20px; left: 55%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 30px; border-radius: 15px; display: none; align-items: center; gap: 15px; z-index: 2000; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .verified { background: #f0fdf4 !important; }
+        .btn-v { padding: 5px 12px; border-radius: 8px; border: 1px solid var(--s); background: white; color: var(--s); cursor: pointer; font-weight: 800; font-size: 11px; }
+        .btn-v.active { background: var(--s); color: #fff; }
+        .group-tag { background: #fff1f2 !important; font-weight: 900; color: var(--d); border-right: 5px solid var(--d); }
+
+        .action-bar { position: fixed; bottom: 30px; left: 55%; transform: translateX(-50%); background: #0f172a; color: white; padding: 15px 40px; border-radius: 15px; display: none; align-items: center; gap: 20px; z-index: 2000; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
     <div id="loader" style="position:fixed; inset:0; background:white; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
         <div style="width:40px; height:40px; border:4px solid #f1f5f9; border-top-color:#2563eb; border-radius:50%; animation:spin 1s linear infinite;"></div>
-        <p style="color:#2563eb; margin-top:15px; font-weight:bold;">جاري فك تشفير الصور V23...</p>
+        <p style="color:#2563eb; margin-top:15px; font-weight:bold;">V34: جاري تهيئة المعاينة المباشرة والروابط...</p>
     </div>
 
     <div class="sidebar">
         <div class="logo">SUPER MEDIA</div>
-        <button class="nav-item active" id="btn_all" onclick="window.loadAll()">📚 كل الأسئلة</button>
+        <button class="nav-btn active" id="tab_data_btn" onclick="window.switchTab('data')">📚 بنك الأسئلة</button>
         <div id="treeContainer"></div>
-        <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
-        <button class="nav-item" onclick="window.switchTab('cfg')">🔗 إدارة الأكواد</button>
-        <button class="nav-item" onclick="window.exportBackup()">💾 نسخة احتياطية</button>
+        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+        <button class="nav-btn" id="tab_cfg_btn" onclick="window.switchTab('cfg')">🔗 إدارة الأكواد والروابط</button>
+        <button class="nav-btn" onclick="window.exportBackup()">💾 نسخة احتياطية</button>
     </div>
 
     <div class="main">
-        <div class="stat-grid">
-            <div class="stat-card" onclick="window.setFilt('all')"><h3>الإجمالي</h3><p id="s_total">0</p></div>
-            <div class="stat-card" style="border-color:var(--p)" onclick="window.setFilt('dups')"><h3>متطابق</h3><p id="s_dups">0</p></div>
-            <div class="stat-card" style="border-color:var(--d)" onclick="window.setFilt('conflict')"><h3>تعارض</h3><p id="s_conf">0</p></div>
+        <div id="view_data">
+            <div class="stat-grid">
+                <div class="stat-card" onclick="window.setFilter('all')"><h3>الإجمالي</h3><p id="s_total">0</p></div>
+                <div class="stat-card" style="border-color:var(--p)" onclick="window.setFilter('dups')"><h3>متطابق</h3><p id="s_dups">0</p></div>
+                <div class="stat-card" style="border-color:var(--d)" onclick="window.setFilter('conflict')"><h3>تعارض</h3><p id="s_conf">0</p></div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap: wrap;">
+                <button class="btn-v active" id="f_all" onclick="window.setFilter('all', this)">الكل</button>
+                <button class="btn-v" id="f_dups" onclick="window.setFilter('dups', this)">🔍 مكرر</button>
+                <button class="btn-v" id="f_conflict" onclick="window.setFilter('conflict', this)" style="color:var(--d)">⚠️ تعارض</button>
+                <button class="btn-v" style="background:var(--s); color:white; margin-right:auto" onclick="window.autoCleanAllDups()">🧹 تنظيف آلي</button>
+            </div>
+
+            <div class="content-card">
+                <input type="text" id="qSearch" style="width:100%; padding:15px; border:none; border-bottom:1px solid var(--border); outline:none;" placeholder="بحث سريع..." onkeyup="window.searchTable()">
+                <table>
+                    <thead id="tHead"></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="filter-bar">
-            <button class="f-btn active" id="f_all" onclick="window.setFilt('all', this)">الكل</button>
-            <button class="f-btn" id="f_dups" onclick="window.setFilt('dups', this)">🔍 متطابق</button>
-            <button class="f-btn" id="f_conflict" onclick="window.setFilt('conflict', this)" style="color:var(--d)">⚠️ تعارض</button>
-            <button class="btn-v" style="margin-right:auto; padding:10px; background:var(--s); color:white;" onclick="window.cleanDups()">🧹 تنظيف آلي</button>
-        </div>
-
-        <div class="content-card">
-            <input type="text" id="qSearch" style="width:100%; padding:15px; border:none; border-bottom:1px solid var(--border); outline:none;" placeholder="بحث سريع..." onkeyup="window.searchTable()">
-            <table>
-                <thead id="tHead"></thead>
-                <tbody id="tableBody"></tbody>
-            </table>
+        <div id="view_cfg" style="display:none">
+            <h2 style="margin-bottom:20px">🔗 إدارة الأكواد والروابط</h2>
+            <div class="content-card">
+                <table>
+                    <thead><tr><th>المعرف</th><th>الكود</th><th>الرابط</th><th>الإجراء</th></tr></thead>
+                    <tbody id="codesBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -97,25 +111,24 @@
     const app = initializeApp(config);
     const db = getDatabase(app);
 
-    let dbRaw = {}; let allItems = []; let filter = 'all'; let cY = null, cS = null;
+    let dbRaw = {}; let allItems = []; let filter = 'all'; let curY = null, curS = null; let curTab = 'data';
 
-    // 🚀 محرك الصور بالوسيط العالمي wsrv.nl (لحل مشكلة الحجب)
-    function formatText(text) {
+    // 🚀 المحرك الذكي V34 (استخراج الصور وتطهير الروابط)
+    window.renderContent = function(text) {
         if (!text) return "---";
-        const regex = /(https?:\/\/[^\s]+?\.(?:png|jpg|jpeg|gif|webp))/gi;
+        const regex = /(https?:\/\/[^\s]+?\.(png|jpg|jpeg|gif|webp))/gi;
         
         return text.replace(regex, (url) => {
-            // تنظيف الرابط من زوائد Onefd
-            let cleanUrl = url.split(':[').shift().split(':').shift();
-            // استخدام الوسيط wsrv.nl لفتح الصورة رغماً عن الموقع
-            let proxiedUrl = `https://wsrv.nl/?url=${encodeURIComponent(cleanUrl)}`;
-            
-            return `<div class="img-wrapper">
-                <img src="${proxiedUrl}" class="img-render" referrerpolicy="no-referrer" onerror="this.parentElement.innerHTML='<span style=color:red>Error</span><a href=\'${cleanUrl}\' target=_blank class=btn-open-link>🔗 فتح الرابط</a>'">
-                <a href="${cleanUrl}" target="_blank" class="btn-open-link">🔗 فتح الرابط الأصلي</a>
+            let cleanUrl = url.trim();
+            return `
+            <div class="img-box">
+                <img src="https://images.weserv.nl/?url=${encodeURIComponent(cleanUrl)}&nro=1"
+                     class="img-view" loading="lazy" referrerpolicy="no-referrer"
+                     onerror="this.onerror=null; this.src='https://corsproxy.io/?' + encodeURIComponent('${cleanUrl}');">
+                <a href="${cleanUrl}" target="_blank" class="img-link">🔗 الرابط الأصلي</a>
             </div>`;
-        }).replace(/:\[(?:Q_IMG|A_IMG|IMAGE_URL)\]/g, "");
-    }
+        }).replace(/:\[(?:Q_IMG|A_IMG|IMAGE_URL)\]/g, ""); // تنظيف النصوص الزائدة
+    };
 
     const clean = (t) => t ? t.toString().toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[\u064B-\u065F]/g, "").replace(/[^\u0621-\u064A0-9a-z]/g, '').trim() : "";
 
@@ -123,7 +136,7 @@
         dbRaw = snap.val() || {};
         processData(); renderTree(); renderUI();
         document.getElementById('loader').style.display = 'none';
-    });
+    }, () => { document.getElementById('loader').style.display = 'none'; });
 
     function processData() {
         allItems = []; const data = dbRaw.data || {};
@@ -139,66 +152,92 @@
     }
 
     window.renderUI = () => {
+        if (curTab === 'cfg') { renderCodes(); return; }
         const body = document.getElementById('tableBody');
         const head = document.getElementById('tHead');
         let display = allItems;
-        if(cY) display = display.filter(i => i.year === cY);
-        if(cS) display = display.filter(i => i.sub === cS);
+        if(curY) display = display.filter(i => i.year === curY);
+        if(curS) display = display.filter(i => i.sub === curS);
 
-        head.innerHTML = `<tr><th width="40"><input type="checkbox" onclick="window.toggleAll(this)"></th><th>السؤال</th><th>الإجابة</th><th>المسار</th><th>الإجراء</th></tr>`;
+        head.innerHTML = `<tr><th width="40"><input type="checkbox" onclick="window.toggleAll(this)"></th><th>السؤال</th><th>الإجابة والاعتماد</th><th>المسار</th><th>الإجراء</th></tr>`;
 
         if(filter === 'dups' || filter === 'conflict') {
-            const groups = {}; display.forEach(i => { let k = (filter === 'dups') ? (i.q + i.a) : i.nQ; if(!groups[k]) groups[k] = []; groups[k].push(i); });
+            const groups = {}; display.forEach(i => { let k = (filter==='dups')?(i.q+i.a):i.nQ; if(!groups[k]) groups[k]=[]; groups[k].push(i); });
             let html = "";
             Object.values(groups).filter(g => g.length > 1).forEach(g => {
-                if(filter === 'conflict' && new Set(g.map(x=>x.nA)).size === 1) return;
-                html += `<tr><td colspan="5" class="group-tag">📂 مكرر: ${g[0].id}</td></tr>`;
+                if(filter==='conflict' && new Set(g.map(x=>x.nA)).size===1) return;
+                html += `<tr><td colspan="5" class="group-tag">📁 مكرر: ${g[0].id}</td></tr>`;
                 g.forEach(i => {
                     html += `<tr class="${i.ok?'verified':''}">
                         <td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td>
-                        <td>${formatText(i.q)}</td>
-                        <td>${formatText(i.a)} <br> <button class="btn-v ${i.ok?'active':''}" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅ معتمد':'✔ اعتماد'}</button></td>
+                        <td>${window.renderContent(i.q)}</td>
+                        <td>${window.renderContent(i.a)} <br> <button class="btn-v ${i.ok?'active':''}" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅ معتمد':'✔ اعتماد'}</button></td>
                         <td>${i.year}/${i.sub}</td>
-                        <td><button class="btn-v" style="background:#fee2e2; color:var(--d)" onclick="window.del('${i.path}')">حذف</button></td>
+                        <td><button class="btn-v" style="border-color:var(--d); color:var(--d)" onclick="window.del('${i.path}')">حذف</button></td>
                     </tr>`;
                 });
             });
             body.innerHTML = html || "<tr><td colspan='5' align='center'>لا توجد مكررات ✅</td></tr>";
         } else {
-            body.innerHTML = display.slice(0, 100).map(i => `<tr class="${i.ok?'verified':''}">
+            body.innerHTML = display.slice(0, 80).map(i => `<tr class="${i.ok?'verified':''}">
                 <td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td>
-                <td>${formatText(i.q)}</td>
-                <td>${formatText(i.a)} <button class="btn-v ${i.ok?'active':''}" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅':'✔'}</button></td>
+                <td>${window.renderContent(i.q)}</td>
+                <td>${window.renderContent(i.a)} <button class="btn-v ${i.ok?'active':''}" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅':'✔'}</button></td>
                 <td>${i.year}/${i.sub}</td>
-                <td><button class="btn-v" style="background:#fee2e2; color:var(--d)" onclick="window.del('${i.path}')">حذف</button></td>
+                <td><button class="btn-v" style="border-color:var(--d); color:var(--d)" onclick="window.del('${i.path}')">حذف</button></td>
             </tr>`).join('');
         }
         updateStats();
     };
 
+    function renderCodes() {
+        const body = document.getElementById('codesBody');
+        const codes = dbRaw.codes || {};
+        body.innerHTML = Object.keys(codes).map(id => `<tr><td>${id}</td><td><input type="text" id="c_k_${id}" value="${codes[id].k}" style="width:100px"></td><td><input type="text" id="c_l_${id}" value="${codes[id].l}" style="width:100%"></td><td><button class="btn-v" style="background:var(--s); color:white" onclick="window.saveCode('${id}')">حفظ</button></td></tr>`).join('');
+    }
+
+    window.saveCode = async (id) => {
+        const k = document.getElementById(`c_k_${id}`).value;
+        const l = document.getElementById(`c_l_${id}`).value;
+        await update(ref(db, `codes/${id}`), { k, l }); alert("تم الحفظ ✅");
+    };
+
+    window.switchTab = (tab) => {
+        curTab = tab;
+        document.getElementById('view_data').style.display = tab === 'data' ? 'block' : 'none';
+        document.getElementById('view_cfg').style.display = tab === 'cfg' ? 'block' : 'none';
+        document.getElementById('tab_data_btn').classList.toggle('active', tab === 'data');
+        document.getElementById('tab_cfg_btn').classList.toggle('active', tab === 'cfg');
+        renderUI();
+    };
+
     window.toggleOk = async (p, s) => { await update(ref(db, p), { ok: !s }); };
-    window.setFilt = (t, b) => { filter = t; document.querySelectorAll('.f-btn').forEach(btn => btn.classList.remove('active')); if(b) b.classList.add('active'); renderUI(); };
+    window.setFilter = (f, btn) => { filter = f; if(btn) { document.querySelectorAll('.btn-v').forEach(b => b.classList.remove('active')); btn.classList.add('active'); } renderUI(); };
+    window.renderTree = () => {
+        const container = document.getElementById('treeContainer'); const data = dbRaw.data || {};
+        container.innerHTML = Object.keys(data).map(y => `<div class="nav-btn" style="background:#f8fafc; margin-top:10px" onclick="window.setF('${y}')">📂 ${y}</div><div class="tree-sub">${Object.keys(data[y]).map(s => `<a class="tree-item" onclick="window.setF('${y}', '${s}')">📝 ${s}</a>`).join('')}</div>`).join('');
+    };
+    window.setF = (y, s=null) => { curY=y; curS=s; window.switchTab('data'); };
+    window.loadAll = () => { curY=null; curSub=null; renderUI(); };
+    window.updSel = () => { const c = document.querySelectorAll('.q-cb:checked').length; document.getElementById('actionBar').style.display = c>0?'flex':'none'; document.getElementById('selCount').innerText = c; };
+    window.toggleAll = (m) => { document.querySelectorAll('.q-cb').forEach(c => c.checked = m.checked); window.updSel(); };
+    window.del = (p) => { if(confirm("حذف؟")) remove(ref(db, p)); };
+    window.bulkDel = async () => {
+        const paths = Array.from(document.querySelectorAll('.q-cb:checked')).map(c => c.value);
+        if(confirm(`حذف ${paths.length}؟`)) { const upds={}; paths.forEach(p => upds[p]=null); await update(ref(db), upds); window.deselectAll(); } };
+    window.deselectAll = () => { document.querySelectorAll('.q-cb').forEach(c => c.checked = false); window.updSel(); };
+    window.autoCleanAllDups = async () => {
+        const groups = {}; allItems.forEach(i => { let k = i.q + i.a; if(!groups[k]) groups[k] = []; groups[k].push(i); });
+        const toDel = []; Object.values(groups).forEach(g => { if(g.length > 1) { for(let k=1; k<g.length; k++) toDel.push(g[k].path); } });
+        if(toDel.length > 0 && confirm(`حذف ${toDel.length} تكرار؟`)) { const upds = {}; toDel.forEach(p => upds[p] = null); await update(ref(db), upds); }
+    };
     function updateStats() {
-        const qMap = {}; let d = 0, c = 0;
+        const qMap = {}; let d=0, c=0;
         allItems.forEach(i => { if(!qMap[i.nQ]) qMap[i.nQ] = new Set(); else { if (new Set(Array.from(qMap[i.nQ])).has(i.nA)) d++; else c++; } qMap[i.nQ].add(i.nA); });
         document.getElementById('s_total').innerText = allItems.length;
         document.getElementById('s_conf').innerText = c;
         document.getElementById('s_dups').innerText = d;
     }
-
-    window.renderTree = () => {
-        const container = document.getElementById('treeContainer'); const data = dbRaw.data || {};
-        container.innerHTML = Object.keys(data).map(y => `<div class="nav-item" onclick="window.setF('${y}')">📂 ${y}</div><div class="sub-group">${Object.keys(data[y]).map(s => `<div class="sub-item" onclick="window.setF('${y}', '${s}')">📝 ${s}</div>`).join('')}</div>`).join('');
-    };
-
-    window.loadAll = () => { cY = null; cS = null; renderUI(); };
-    window.setF = (y, s = null) => { cY = y; cS = s; renderUI(); };
-    window.updSel = () => { const c = document.querySelectorAll('.q-cb:checked').length; document.getElementById('actionBar').style.display = c > 0 ? 'flex' : 'none'; document.getElementById('selCount').innerText = c; };
-    window.toggleAll = (m) => { document.querySelectorAll('.q-cb').forEach(c => c.checked = m.checked); window.updSel(); };
-    window.del = (p) => { if(confirm("حذف؟")) remove(ref(db, p)); };
-    window.bulkDel = async () => { const paths = Array.from(document.querySelectorAll('.q-cb:checked')).map(c => c.value); if(confirm(`حذف ${paths.length}؟`)) { const upds = {}; paths.forEach(p => upds[p] = null); await update(ref(db), upds); window.deselectAll(); } };
-    window.deselectAll = () => { document.querySelectorAll('.q-cb').forEach(c => c.checked = false); window.updSel(); };
-    window.exportBackup = () => { const b = new Blob([JSON.stringify(dbRaw)], {type: "application/json"}); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = `Backup_V23.json`; a.click(); };
 </script>
 </body>
 </html>
