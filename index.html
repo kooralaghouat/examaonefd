@@ -1,366 +1,1196 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Media V42 | Final Pro Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --p: #2563eb; --bg: #f0f2f5; --c: #ffffff; --d: #e11d48; --s: #059669; --w: #f59e0b; --txt: #1e293b; --mut: #64748b; --border: #e2e8f0; }
-        * { box-sizing: border-box; }
-        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; color: var(--txt); display: flex; height: 100vh; overflow: hidden; }
-        
-        /* القائمة الجانبية */
-        .sidebar { width: 280px; background: var(--c); display: flex; flex-direction: column; border-left: 1px solid var(--border); padding: 15px; z-index: 100; }
-        .logo { font-size: 20px; font-weight: 900; color: var(--p); text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--bg); }
-        .admin-nav { margin-bottom: 15px; }
-        .nav-btn { display: block; width: 100%; padding: 12px; border-radius: 10px; cursor: pointer; color: var(--txt); margin-bottom: 5px; font-size: 14px; font-weight: 700; border: 1px solid transparent; background: transparent; text-align: right; transition: 0.2s; }
-        .nav-btn:hover, .nav-btn.active { background: #eff6ff; color: var(--p); border-color: #dbeafe; }
-        .btn-special { background: #f8fafc; border: 1px solid var(--border); margin-bottom: 8px; }
-        
-        .tree-container { flex-grow: 1; overflow-y: auto; padding-top: 10px; border-top: 2px solid var(--bg); }
-        .tree-sub { margin-right: 15px; border-right: 2px solid var(--border); padding-right: 10px; margin-bottom: 10px; }
-        .tree-item { padding: 6px; font-size: 13px; color: var(--mut); cursor: pointer; display: block; text-decoration: none; border-radius: 5px; }
-        .tree-item:hover { background: #f1f5f9; color: var(--p); }
 
-        /* المحتوى الرئيسي */
-        .main { flex-grow: 1; padding: 20px; overflow-y: auto; }
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: var(--c); padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); text-align: center; border-bottom: 4px solid var(--p); cursor: pointer; }
-        .stat-card h3 { font-size: 12px; color: var(--mut); margin: 0; }
-        .stat-card p { margin: 8px 0 0; font-size: 24px; font-weight: 900; }
+<meta charset="UTF-8">
 
-        /* 🔥 تصميم نظام حل التعارض الاحترافي 🔥 */
-        .conflict-box { background: #fff1f2; border: 2px solid #fecaca; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(225, 29, 72, 0.05); }
-        .conflict-q { background: white; padding: 15px; border-radius: 10px; font-weight: 900; font-size: 16px; color: var(--txt); border-bottom: 4px solid #fecaca; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .answer-choice { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); transition: 0.2s; }
-        .answer-choice:hover { border-color: #cbd5e1; }
-        .answer-choice.verified { background: #f0fdf4; border-color: var(--s); box-shadow: 0 0 10px rgba(5, 150, 105, 0.1); }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* إدارة الروابط الخمسة */
-        .link-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid var(--border); }
-        .link-row label { font-weight: 900; color: var(--p); width: 80px; font-size: 16px; }
-        .link-row input { flex-grow: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; }
-        .link-row input:focus { border-color: var(--p); }
+<title>Super Media V42 | Final Pro Edition (Hardened)</title>
 
-        /* عناصر عامة */
-        .content-card { background: var(--c); border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f8fafc; padding: 15px; text-align: right; font-size: 12px; color: var(--mut); border-bottom: 2px solid var(--border); }
-        td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        
-        .img-view { max-width: 90px; max-height: 60px; border-radius: 6px; cursor: pointer; transition: 0.2s; border: 1px solid var(--border); padding: 2px; }
-        .img-view:hover { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(4.5); z-index: 10000; box-shadow: 0 0 50px rgba(0,0,0,0.6); background: white; }
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 
-        .btn-v { padding: 8px 15px; border-radius: 8px; border: 1px solid var(--border); background: white; cursor: pointer; font-weight: 700; font-size: 12px; transition: 0.2s; }
-        .btn-v.active { background: var(--s); color: white; border-color: var(--s); }
-        .btn-del { background: var(--d); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
-        .btn-del:hover { opacity: 0.8; }
-        
-        #qSearch { width: 100%; padding: 18px; border: none; border-bottom: 2px solid var(--bg); outline: none; font-size: 16px; font-family: inherit; }
-        .action-bar { position: fixed; bottom: 20px; left: 55%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 25px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; }
-    </style>
+<style>
+
+:root { --p:#2563eb; --bg:#f0f2f5; --c:#ffffff; --d:#e11d48; --s:#059669; --w:#f59e0b; --txt:#1e293b; --mut:#64748b; --border:#e2e8f0; }
+
+*{ box-sizing:border-box; }
+
+body{ font-family:'Cairo',sans-serif; background:var(--bg); margin:0; color:var(--txt); display:flex; height:100vh; overflow:hidden; }
+
+.sidebar{ width:280px; background:var(--c); display:flex; flex-direction:column; border-left:1px solid var(--border); padding:15px; z-index:100; }
+
+.logo{ font-size:20px; font-weight:900; color:var(--p); text-align:center; margin-bottom:20px; padding-bottom:15px; border-bottom:2px solid var(--bg); }
+
+.admin-nav{ margin-bottom:15px; }
+
+.nav-btn{ display:block; width:100%; padding:12px; border-radius:10px; cursor:pointer; color:var(--txt); margin-bottom:5px; font-size:14px; font-weight:700; border:1px solid transparent; background:transparent; text-align:right; transition:0.2s; }
+
+.nav-btn:hover,.nav-btn.active{ background:#eff6ff; color:var(--p); border-color:#dbeafe; }
+
+.btn-special{ background:#f8fafc; border:1px solid var(--border); margin-bottom:8px; }
+
+.tree-container{ flex-grow:1; overflow-y:auto; padding-top:10px; border-top:2px solid var(--bg); }
+
+.tree-sub{ margin-right:15px; border-right:2px solid var(--border); padding-right:10px; margin-bottom:10px; }
+
+.tree-item{ padding:6px; font-size:13px; color:var(--mut); cursor:pointer; display:block; text-decoration:none; border-radius:5px; }
+
+.tree-item:hover{ background:#f1f5f9; color:var(--p); }
+
+.main{ flex-grow:1; padding:20px; overflow-y:auto; }
+
+.stat-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:15px; margin-bottom:20px; }
+
+.stat-card{ background:var(--c); padding:15px; border-radius:15px; box-shadow:0 2px 10px rgba(0,0,0,0.03); text-align:center; border-bottom:4px solid var(--p); cursor:pointer; }
+
+.stat-card h3{ font-size:12px; color:var(--mut); margin:0; }
+
+.stat-card p{ margin:8px 0 0; font-size:24px; font-weight:900; }
+
+.conflict-box{ background:#fff1f2; border:2px solid #fecaca; border-radius:15px; padding:20px; margin-bottom:20px; box-shadow:0 4px 15px rgba(225,29,72,0.05); }
+
+.conflict-q{ background:white; padding:15px; border-radius:10px; font-weight:900; font-size:16px; color:var(--txt); border-bottom:4px solid #fecaca; margin-bottom:15px; display:flex; align-items:center; gap:10px; }
+
+.answer-choice{ background:white; padding:15px; border-radius:10px; margin-bottom:10px; display:flex; align-items:flex-start; justify-content:space-between; border:1px solid var(--border); transition:0.2s; gap:12px; }
+
+.answer-choice:hover{ border-color:#cbd5e1; }
+
+.answer-choice.verified{ background:#f0fdf4; border-color:var(--s); box-shadow:0 0 10px rgba(5,150,105,0.1); }
+
+.link-row{ display:flex; align-items:center; gap:15px; margin-bottom:15px; background:#f8fafc; padding:15px; border-radius:10px; border:1px solid var(--border); }
+
+.link-row label{ font-weight:900; color:var(--p); width:80px; font-size:16px; }
+
+.link-row input{ flex-grow:1; padding:12px; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:14px; outline:none; }
+
+.link-row input:focus{ border-color:var(--p); }
+
+.content-card{ background:var(--c); border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.05); overflow:hidden; }
+
+table{ width:100%; border-collapse:collapse; }
+
+th{ background:#f8fafc; padding:15px; text-align:right; font-size:12px; color:var(--mut); border-bottom:2px solid var(--border); }
+
+td{ padding:12px 15px; border-bottom:1px solid var(--border); font-size:14px; vertical-align:top; }
+
+.img-view{ max-width:90px; max-height:60px; border-radius:6px; cursor:pointer; transition:0.2s; border:1px solid var(--border); padding:2px; background:#fff; display:inline-block; }
+
+.img-view:hover{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(4.5); z-index:10000; box-shadow:0 0 50px rgba(0,0,0,0.6); }
+
+.btn-v{ padding:8px 15px; border-radius:8px; border:1px solid var(--border); background:white; cursor:pointer; font-weight:700; font-size:12px; transition:0.2s; white-space:nowrap; }
+
+.btn-v.active{ background:var(--s); color:white; border-color:var(--s); }
+
+.btn-del{ background:var(--d); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; font-size:14px; }
+
+.btn-del:hover{ opacity:0.85; }
+
+#qSearch{ width:100%; padding:18px; border:none; border-bottom:2px solid var(--bg); outline:none; font-size:16px; font-family:inherit; }
+
+.action-bar{ position:fixed; bottom:20px; left:55%; transform:translateX(-50%); background:#0f172a; color:white; padding:12px 25px; border-radius:50px; display:none; align-items:center; gap:15px; z-index:2000; }
+
+.small-muted{ color:var(--mut); font-size:11px; margin-top:6px; }
+
+.flex-col{ display:flex; flex-direction:column; gap:8px; flex:1; min-width:0; }
+
+.safe-text{ white-space:pre-wrap; word-break:break-word; }
+
+</style>
+
 </head>
+
 <body>
 
-    <div id="loader" style="position:fixed; inset:0; background:white; z-index:10000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <div style="width:40px; height:40px; border:4px solid #f1f5f9; border-top-color:#2563eb; border-radius:50%; animation:spin 1s linear infinite;"></div>
-        <p style="color:#2563eb; margin-top:15px; font-weight:bold;">V42: جاري تهيئة النظام الذكي...</p>
-    </div>
+<div id="loader" style="position:fixed; inset:0; background:white; z-index:10000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
 
-    <div class="sidebar">
-        <div class="logo">SUPER MEDIA V42</div>
-        <div class="admin-nav">
-            <button class="nav-btn active btn-special" id="btn_data" onclick="window.switchTab('data')">📚 بنك الأسئلة</button>
-            <button class="nav-btn btn-special" id="btn_links" onclick="window.switchTab('links')" style="color:#c2410c">🔗 إدارة الروابط (01 - 05)</button>
-            <button class="nav-btn btn-special" id="btn_cfg" onclick="window.switchTab('cfg')">🔑 إدارة الأكواد</button>
-            <button class="nav-btn" onclick="window.setF(null)">🏠 عرض كل المواد</button>
-        </div>
-        <div class="tree-container" id="treeContainer"></div>
-    </div>
+<div style="width:40px; height:40px; border:4px solid #f1f5f9; border-top-color:#2563eb; border-radius:50%; animation:spin 1s linear infinite;"></div>
 
-    <div class="main">
-        <!-- واجهة بنك الأسئلة -->
-        <div id="view_data">
-            <div class="stat-grid">
-                <div class="stat-card" onclick="window.setFilter('all', document.getElementById('f_all'))"><h3>الإجمالي</h3><p id="s_total">0</p></div>
-                <div class="stat-card" style="border-color:var(--d)" onclick="window.setFilter('conflict', document.getElementById('f_conflict'))"><h3>تعارض إجابات ⚠️</h3><p id="s_conf">0</p></div>
-                <div class="stat-card" style="border-color:var(--w)" onclick="window.setFilter('sys', document.getElementById('f_sys'))"><h3>رسائل النظام</h3><p id="s_sys">0</p></div>
-            </div>
+<p style="color:#2563eb; margin-top:15px; font-weight:bold;">V42: جاري تهيئة النظام الذكي...</p>
 
-            <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                <button class="btn-v active" id="f_all" onclick="window.setFilter('all', this)">الكل (أول 50 للسرعة)</button>
-                <button class="btn-v" id="f_conflict" style="color:var(--d); border-color:var(--d)" onclick="window.setFilter('conflict', this)">⚠️ شاشة حل التعارض</button>
-                <button class="btn-v" id="f_sys" style="color:var(--w); border-color:var(--w)" onclick="window.setFilter('sys', this)">تحقق / إيقاف الفرض</button>
-                <button class="btn-v" style="background:var(--s); color:white; border:none; margin-right:auto;" onclick="window.autoCleanDups()">🧹 تنظيف المكرر التام</button>
-            </div>
+</div>
 
-            <div class="content-card">
-                <input type="text" id="qSearch" placeholder="🔍 ابحث في كامل قاعدة البيانات (سؤال، جواب، مسار)..." oninput="window.doSearch(this.value)">
-                
-                <!-- حاوية الجدول العادي -->
-                <table id="mainTable">
-                    <thead id="tHead">
-                        <tr><th width="40"><input type="checkbox" onclick="window.toggleAll(this)"></th><th>السؤال</th><th>الإجابة والاعتماد</th><th>المسار</th><th>حذف</th></tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-                
-                <!-- حاوية التعارض (تظهر فقط عند فلترة التعارض) -->
-                <div id="conflictContainer" style="display:none; padding: 20px;"></div>
-            </div>
-        </div>
+<div class="sidebar">
 
-        <!-- واجهة إدارة الروابط الخمسة (01 إلى 05) -->
-        <div id="view_links" style="display:none">
-            <h2 style="margin-bottom:10px">🔗 التحكم المركزي في روابط التحميل</h2>
-            <p style="color:var(--mut); margin-bottom:25px; font-size:14px;">ضع روابط Dropbox هنا. سيقوم النظام تلقائياً بتحويلها إلى روابط تحميل مباشر (dl=1).</p>
-            <div class="content-card" style="padding:25px;" id="linksControlsBox">
-                <!-- سيتم توليد الحقول هنا -->
-            </div>
-        </div>
+<div class="logo">SUPER MEDIA V42</div>
 
-        <!-- واجهة الأكواد -->
-        <div id="view_cfg" style="display:none">
-            <h2 style="margin-bottom:20px">🔑 إدارة الأكواد</h2>
-            <div class="content-card" id="codesContent" style="padding:10px;"></div>
-        </div>
-    </div>
+<div class="admin-nav">
 
-    <div id="actionBar" class="action-bar">
-        <span>المحدد: <b id="selCount">0</b></span>
-        <button class="btn-v" style="background:var(--d); color:white; border:none" onclick="window.bulkDel()">🗑️ حذف</button>
-        <button class="btn-v" style="background:#475569; color:white; border:none" onclick="window.deselectAll()">إلغاء</button>
-    </div>
+<button class="nav-btn active btn-special" id="btn_data" onclick="window.switchTab('data')">📚 بنك الأسئلة</button>
+
+<button class="nav-btn btn-special" id="btn_links" onclick="window.switchTab('links')" style="color:#c2410c">🔗 إدارة الروابط (01 - 05)</button>
+
+<button class="nav-btn btn-special" id="btn_cfg" onclick="window.switchTab('cfg')">🔑 إدارة الأكواد</button>
+
+<button class="nav-btn" onclick="window.setF(null)">🏠 عرض كل المواد</button>
+
+</div>
+
+<div class="tree-container" id="treeContainer"></div>
+
+</div>
+
+<div class="main">
+
+<div id="view_data">
+
+<div class="stat-grid">
+
+<div class="stat-card" onclick="window.setFilter('all', document.getElementById('f_all'))">
+
+<h3>الإجمالي</h3><p id="s_total">0</p>
+
+</div>
+
+<div class="stat-card" style="border-color:var(--d)" onclick="window.setFilter('conflict', document.getElementById('f_conflict'))">
+
+<h3>تعارض إجابات ⚠️</h3><p id="s_conf">0</p>
+
+</div>
+
+<div class="stat-card" style="border-color:var(--w)" onclick="window.setFilter('sys', document.getElementById('f_sys'))">
+
+<h3>رسائل النظام</h3><p id="s_sys">0</p>
+
+</div>
+
+</div>
+
+<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+
+<button class="btn-v active" id="f_all" onclick="window.setFilter('all', this)">الكل (أول 50 للسرعة)</button>
+
+<button class="btn-v" id="f_conflict" style="color:var(--d); border-color:var(--d)" onclick="window.setFilter('conflict', this)">⚠️ شاشة حل التعارض</button>
+
+<button class="btn-v" id="f_sys" style="color:var(--w); border-color:var(--w)" onclick="window.setFilter('sys', this)">تحقق / إيقاف الفرض</button>
+
+<button class="btn-v" style="background:var(--s); color:white; border:none; margin-right:auto;" onclick="window.autoCleanDups()">🧹 تنظيف المكرر التام</button>
+
+</div>
+
+<div class="content-card">
+
+<input type="text" id="qSearch" placeholder="🔍 ابحث في كامل قاعدة البيانات (سؤال، جواب، مسار)..." oninput="window.doSearch(this.value)">
+
+| <input type="checkbox" onclick="window.toggleAll(this)"> | السؤال | الإجابة والاعتماد | المسار | حذف |
+| --- | --- | --- | --- | --- |
+
+<div id="conflictContainer" style="display:none; padding:20px;"></div>
+
+</div>
+
+</div>
+
+<div id="view_links" style="display:none">
+
+<h2 style="margin-bottom:10px">🔗 التحكم المركزي في روابط التحميل</h2>
+
+<p style="color:var(--mut); margin-bottom:25px; font-size:14px;">ضع روابط Dropbox هنا. سيقوم النظام تلقائياً بتحويلها إلى روابط تحميل مباشر (dl=1).</p>
+
+<div class="content-card" style="padding:25px;" id="linksControlsBox"></div>
+
+</div>
+
+<div id="view_cfg" style="display:none">
+
+<h2 style="margin-bottom:20px">🔑 إدارة الأكواد</h2>
+
+<div class="content-card" id="codesContent" style="padding:10px;"></div>
+
+</div>
+
+</div>
+
+<div id="actionBar" class="action-bar">
+
+المحدد: <b id="selCount">0</b>
+
+<button class="btn-v" style="background:var(--d); color:white; border:none" onclick="window.bulkDel()">🗑️ حذف</button>
+
+<button class="btn-v" style="background:#475569; color:white; border:none" onclick="window.deselectAll()">إلغاء</button>
+
+</div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
-    const config = { databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/" };
-    const app = initializeApp(config);
-    const db = getDatabase(app);
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 
-    let dbRaw = {}; let allItems = []; let filter = 'all'; let curY = null, curS = null;
+import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
-    const clean = (t) => t ? t.toString().toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[\u064B-\u065F]/g, "").trim() : "";
+const config = { databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/" };
 
-    window.renderContent = (text) => {
-        if (!text) return "---";
-        const regex = /(https?:\/\/[^\s]+?\.(png|jpg|jpeg|gif|webp))/gi;
-        return text.replace(regex, (url) => `<img src="${url}" class="img-view" loading="lazy">`).replace(/:\[(?:Q_IMG|A_IMG|IMAGE_URL)\]/g, "");
-    };
+const app = initializeApp(config);
 
-    onValue(ref(db, '/'), (snap) => {
-        dbRaw = snap.val() || {};
-        processData(); renderTree(); renderUI(); renderLinkControls();
-        document.getElementById('loader').style.display = 'none';
-    });
+const db = getDatabase(app);
 
-    function processData() {
-        allItems = []; const data = dbRaw.data || {};
-        Object.keys(data).forEach(y => {
-            Object.keys(data[y]).forEach(s => {
-                const qs = data[y][s].questions || {};
-                Object.keys(qs).forEach(id => {
-                    const q = qs[id].q || ""; const a = qs[id].a || "";
-                    allItems.push({
-                        id, year: y, sub: s, q, a, ok: qs[id].ok||false,
-                        path: `data/${y}/${s}/questions/${id}`,
-                        isSys: q.includes("إيقاف الفرض") || a.includes("إيقاف الفرض") || a.includes("تحقق"),
-                        qKey: clean(q), aKey: clean(a), searchKey: clean(q + a + y + s)
-                    });
-                });
-            });
-        });
-    }
+// ------------ State ------------
 
-    window.renderUI = () => {
-        if(window.curTab === 'cfg') { renderCodes(); return; }
-        if(window.curTab === 'links') return;
+let dbRaw = { data: {}, downloadLinks: {}, codes: {} };
 
-        const tHead = document.getElementById('tHead');
-        const tBody = document.getElementById('tableBody');
-        const conflictBox = document.getElementById('conflictContainer');
-        const mainTable = document.getElementById('mainTable');
-        
-        let display = allItems;
-        if(curY) display = display.filter(i => i.year === curY);
-        if(curS) display = display.filter(i => i.sub === curS);
-        if(filter === 'sys') display = display.filter(i => i.isSys);
+let allItems = [];
 
-        // --- نظام حل التعارض المطور ---
-        if(filter === 'conflict') {
-            mainTable.style.display = 'none';
-            conflictBox.style.display = 'block';
-            
-            const groups = {};
-            display.forEach(i => { if(!groups[i.qKey]) groups[i.qKey] = []; groups[i.qKey].push(i); });
-            
-            let html = "";
-            Object.values(groups).filter(g => new Set(g.map(x=>x.aKey)).size > 1).forEach(g => {
-                html += `<div class="conflict-box">
-                    <div class="conflict-q">❓ السؤال: &nbsp; ${window.renderContent(g[0].q)}</div>
-                    ${g.map(i => `
-                        <div class="answer-choice ${i.ok?'verified':''}">
-                            <div style="flex:1">
-                                💡 ${window.renderContent(i.a)} 
-                                <div style="color:var(--mut); font-size:11px; margin-top:5px;">المسار: ${i.year} > ${i.sub}</div>
-                            </div>
-                            <div style="display:flex; gap:10px;">
-                                <button class="btn-v ${i.ok?'active':''}" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅ معتمد':'✔ اعتماد'}</button>
-                                <button class="btn-del" onclick="window.del('${i.path}')">🗑️</button>
-                            </div>
-                        </div>`).join('')}
-                </div>`;
-            });
-            conflictBox.innerHTML = html || `<h3 style="text-align:center; color:var(--s); margin-top:30px;">لا يوجد تعارض حالياً ✅ كل الأمور ممتازة!</h3>`;
-            updateStats();
-            return;
-        }
+let filter = "all";
 
-        // --- العرض العادي (أول 50 سئال للسرعة) ---
-        mainTable.style.display = 'table';
-        conflictBox.style.display = 'none';
+let curY = null, curS = null;
 
-        tBody.innerHTML = display.slice(0, 50).map(i => `
-            <tr class="${i.ok?'verified':''}">
-                <td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td>
-                <td>${window.renderContent(i.q)}</td>
-                <td>
-                    ${window.renderContent(i.a)}
-                    <br><button class="btn-v ${i.ok?'active':''}" style="margin-top:8px" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅ معتمد':'✔ اعتماد'}</button>
-                </td>
-                <td style="font-size:11px; color:var(--mut)">${i.year}/${i.sub}</td>
-                <td><button class="btn-del" onclick="window.del('${i.path}')">🗑️</button></td>
-            </tr>
-        `).join('');
-        updateStats();
-    };
+window.curTab = "data";
 
-    // --- محرك البحث السريع على كامل الداتا ---
-    window.doSearch = (v) => {
-        const term = clean(v);
-        if(!term) { renderUI(); return; } // إعادة الواجهة لطبيعتها إذا كان البحث فارغاً
+// ------------ Text normalize (FIXED) ------------
 
-        // إجبار الواجهة على عرض الجدول وإخفاء التعارض أثناء البحث
-        document.getElementById('mainTable').style.display = 'table';
-        document.getElementById('conflictContainer').style.display = 'none';
-        
-        // البحث في كل البيانات وعرض النتائج
-        const matched = allItems.filter(i => i.searchKey.includes(term));
-        const tBody = document.getElementById('tableBody');
-        
-        tBody.innerHTML = matched.slice(0, 100).map(i => `
-            <tr class="${i.ok?'verified':''}">
-                <td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td>
-                <td>${window.renderContent(i.q)}</td>
-                <td>${window.renderContent(i.a)}</td>
-                <td style="font-size:11px; color:var(--mut)">${i.year}/${i.sub}</td>
-                <td><button class="btn-del" onclick="window.del('${i.path}')">🗑️</button></td>
-            </tr>
-        `).join('') || `<tr><td colspan="5" style="text-align:center; padding:20px;">لا توجد نتائج تطابق بحثك ❌</td></tr>`;
-    };
+const clean = (t) => {
 
-    // --- توليد حقول إدارة الروابط (01 إلى 05) ---
-    window.renderLinkControls = () => {
-        const box = document.getElementById('linksControlsBox');
-        const current = dbRaw.downloadLinks || {};
-        const ids = ["01", "02", "03", "04", "05"]; // الملفات الخمسة
-        
-        box.innerHTML = ids.map(id => `
-            <div class="link-row">
-                <label>ملف ${id}:</label>
-                <input type="text" id="link_${id}" value="${current[id] || ''}" placeholder="ضع رابط Dropbox الخاص بالملف ${id} هنا...">
-                <button class="btn-v active" style="padding:12px 25px; font-size:14px;" onclick="window.saveL('${id}')">💾 حفظ</button>
-            </div>
-        `).join('');
-    };
+if (!t) return "";
 
-    window.saveL = async (id) => {
-        let url = document.getElementById(`link_${id}`).value.trim();
-        if(url.includes("dropbox.com")) {
-            url = url.replace("dl=0", "dl=1"); // تحويل الرابط لتحميل مباشر
-        }
-        await update(ref(db, `downloadLinks`), { [id]: url });
-        alert(`تم تحديث رابط الملف ${id} بنجاح! سيتم التحميل المباشر الآن في صفحة الهبوط. ✅`);
-    };
+return t.toString()
 
-    // --- تنظيف المكرر التام ---
-    window.autoCleanDups = async () => {
-        const seen = {}; const toDel = [];
-        allItems.forEach(i => { const k = i.qKey + i.aKey; if(seen[k]) toDel.push(i.path); else seen[k] = true; });
-        if(toDel.length > 0 && confirm(`تم العثور على ${toDel.length} تكرار متطابق تماماً. هل تريد حذفهم بضغطة واحدة؟`)) {
-            const upds = {}; toDel.forEach(p => upds[p] = null); await update(ref(db), upds);
-        } else if (toDel.length === 0) {
-            alert("لا يوجد مكرر متطابق حالياً ✅");
-        }
-    };
+.toLowerCase()
 
-    window.switchTab = (tab) => {
-        window.curTab = tab;
-        ['view_data', 'view_cfg', 'view_links'].forEach(v => document.getElementById(v).style.display = 'none');
-        ['btn_data', 'btn_cfg', 'btn_links'].forEach(b => document.getElementById(b).classList.remove('active'));
-        document.getElementById('view_'+tab).style.display = 'block';
-        document.getElementById('btn_'+tab).classList.add('active');
-        renderUI();
-    };
+.replace(/[u064B-u065F]/g, "")      // تشكيل
 
-    window.del = (p) => { if(confirm("تأكيد الحذف النهائي؟")) remove(ref(db, p)); };
-    window.toggleOk = async (p, s) => { await update(ref(db, p), { ok: !s }); };
-    
-    window.setFilter = (f, btn) => {
-        filter = f; document.querySelectorAll('.btn-v').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-        document.getElementById('qSearch').value = ""; // تفريغ البحث عند تغيير الفلتر
-        renderUI();
-    };
+.replace(/[إأآ]/g, "ا")
 
-    window.renderTree = () => {
-        const container = document.getElementById('treeContainer'); const data = dbRaw.data || {};
-        container.innerHTML = Object.keys(data).map(y => `
-            <div class="nav-btn" style="background:#f1f5f9; margin-top:5px" onclick="window.setF('${y}')">📅 ${y}</div>
-            <div class="tree-sub">${Object.keys(data[y]).map(s => `<a class="tree-item" onclick="window.setF('${y}', '${s}')">📝 ${s}</a>`).join('')}</div>
-        `).join('');
-    };
+.replace(/ة/g, "ه")
 
-    window.setF = (y, s=null) => { curY=y; curS=s; renderUI(); };
-    window.updSel = () => { const c = document.querySelectorAll('.q-cb:checked').length; document.getElementById('actionBar').style.display = c>0?'flex':'none'; document.getElementById('selCount').innerText = c; };
-    window.toggleAll = (m) => { document.querySelectorAll('.q-cb').forEach(c => c.checked = m.checked); window.updSel(); };
-    window.deselectAll = () => { document.querySelectorAll('.q-cb').forEach(c => c.checked = false); window.updSel(); };
+.replace(/ى/g, "ي")
 
-    function updateStats() {
-        document.getElementById('s_total').innerText = allItems.length;
-        document.getElementById('s_sys').innerText = allItems.filter(i => i.isSys).length;
-        const qMap = {}; allItems.forEach(i => { if(!qMap[i.qKey]) qMap[i.qKey] = new Set(); qMap[i.qKey].add(i.aKey); });
-        document.getElementById('s_conf').innerText = Object.values(qMap).filter(s => s.size > 1).length;
-    }
+.replace(/[[1]](\u0621-\u064A0-9a-z\s)/g, " ")
 
-    function renderCodes() {
-        const div = document.getElementById('codesContent');
-        const codes = dbRaw.codes || {};
-        div.innerHTML = `<table><thead><tr><th>ID</th><th>الكود</th><th>الرابط</th><th>حفظ</th></tr></thead><tbody>` + 
-        Object.keys(codes).map(id => `<tr>
-            <td>${id}</td>
-            <td><input type="text" id="c_k_${id}" value="${codes[id].k||''}" style="width:100px; padding:8px; border:1px solid #ddd; border-radius:5px;"></td>
-            <td><input type="text" id="c_l_${id}" value="${codes[id].l||''}" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px;"></td>
-            <td><button class="btn-v active" onclick="window.saveCode('${id}')">💾</button></td>
-        </tr>`).join('') + `</tbody></table>`;
-    }
+.replace(/s+/g, " ")
 
-    window.saveCode = async (id) => {
-        const k = document.getElementById(`c_k_${id}`).value;
-        const l = document.getElementById(`c_l_${id}`).value;
-        await update(ref(db, `codes/${id}`), { k, l }); alert("تم حفظ الكود ✅");
-    };
+.trim();
 
-    window.bulkDel = async () => {
-        const paths = Array.from(document.querySelectorAll('.q-cb:checked')).map(c => c.value);
-        if(confirm(`سيتم حذف ${paths.length} سؤال نهائياً. هل أنت متأكد؟`)) { 
-            const upds = {}; paths.forEach(p => upds[p] = null); 
-            await update(ref(db), upds); window.deselectAll(); 
-        }
-    };
+};
+
+// ------------ Safe renderer (NO innerHTML injection for q/a) ------------
+
+function buildSafeContent(containerEl, text) {
+
+containerEl.innerHTML = ""; // نتحكم في ما نضعه فقط
+
+if (!text) {
+
+const span = document.createElement("span");
+
+span.className = "safe-text";
+
+span.textContent = "---";
+
+containerEl.appendChild(span);
+
+return;
+
+}
+
+const raw = text.toString();
+
+const imgRegex = /(https?://[[2]](\s)+?.(png|jpg|jpeg|gif|webp))/gi;
+
+let lastIndex = 0;
+
+let match;
+
+while ((match = imgRegex.exec(raw)) !== null) {
+
+const url = match[0];
+
+const start = match.index;
+
+// نص قبل الصورة
+
+const before = raw.slice(lastIndex, start);
+
+if (before) {
+
+const span = document.createElement("span");
+
+span.className = "safe-text";
+
+span.textContent = before.replace(/:[(?:Q_IMG|A_IMG|IMAGE_URL)]/g, "");
+
+containerEl.appendChild(span);
+
+}
+
+// صورة آمنة
+
+const img = document.createElement("img");
+
+img.src = url;
+
+img.className = "img-view";
+
+img.loading = "lazy";
+
+img.alt = "img";
+
+containerEl.appendChild(img);
+
+lastIndex = start + url.length;
+
+}
+
+// النص المتبقي بعد آخر صورة
+
+const after = raw.slice(lastIndex);
+
+if (after) {
+
+const span = document.createElement("span");
+
+span.className = "safe-text";
+
+span.textContent = after.replace(/:[(?:Q_IMG|A_IMG|IMAGE_URL)]/g, "");
+
+containerEl.appendChild(span);
+
+}
+
+}
+
+// ------------ Load only needed paths (better than ref('/')) ------------
+
+function attachRealtime() {
+
+onValue(ref(db, "data"), (snap) => {
+
+[dbRaw.data](http://dbRaw.data) = snap.val() || {};
+
+processData();
+
+renderTree();
+
+renderUI();
+
+document.getElementById("loader").style.display = "none";
+
+});
+
+onValue(ref(db, "downloadLinks"), (snap) => {
+
+dbRaw.downloadLinks = snap.val() || {};
+
+renderLinkControls();
+
+});
+
+onValue(ref(db, "codes"), (snap) => {
+
+[dbRaw.codes](http://dbRaw.codes) = snap.val() || {};
+
+if (window.curTab === "cfg") renderCodes();
+
+});
+
+}
+
+attachRealtime();
+
+function processData() {
+
+allItems = [];
+
+const data = [dbRaw.data](http://dbRaw.data) || {};
+
+Object.keys(data).forEach(y => {
+
+Object.keys(data[y] || {}).forEach(s => {
+
+const qs = data[y]?.[s]?.questions || {};
+
+Object.keys(qs).forEach(id => {
+
+const q = qs[id]?.q || "";
+
+const a = qs[id]?.a || "";
+
+allItems.push({
+
+id,
+
+year: y,
+
+sub: s,
+
+q,
+
+a,
+
+ok: !!qs[id]?.ok,
+
+path: `data/${y}/${s}/questions/${id}`,
+
+isSys: (q.includes("إيقاف الفرض") || a.includes("إيقاف الفرض") || a.includes("تحقق")),
+
+qKey: clean(q),
+
+aKey: clean(a),
+
+searchKey: clean(q + " " + a + " " + y + " " + s)
+
+});
+
+});
+
+});
+
+});
+
+}
+
+window.renderUI = () => {
+
+if (window.curTab === "cfg") { renderCodes(); return; }
+
+if (window.curTab === "links") return;
+
+const tBody = document.getElementById("tableBody");
+
+const conflictBox = document.getElementById("conflictContainer");
+
+const mainTable = document.getElementById("mainTable");
+
+let display = allItems;
+
+if (curY) display = display.filter(i => i.year === curY);
+
+if (curS) display = display.filter(i => i.sub === curS);
+
+if (filter === "sys") display = display.filter(i => i.isSys);
+
+// conflicts view
+
+if (filter === "conflict") {
+
+[mainTable.style](http://mainTable.style).display = "none";
+
+[conflictBox.style](http://conflictBox.style).display = "block";
+
+conflictBox.innerHTML = "";
+
+const groups = {};
+
+display.forEach(i => {
+
+if (!groups[i.qKey]) groups[i.qKey] = [];
+
+groups[i.qKey].push(i);
+
+});
+
+const conflictGroups = Object.values(groups).filter(g => new Set([g.map](http://g.map)(x => x.aKey)).size > 1);
+
+if (!conflictGroups.length) {
+
+const ok = document.createElement("h3");
+
+[ok.style](http://ok.style).cssText = "text-align:center; color:var(--s); margin-top:30px;";
+
+ok.textContent = "لا يوجد تعارض حالياً ✅ كل الأمور ممتازة!";
+
+conflictBox.appendChild(ok);
+
+updateStats();
+
+return;
+
+}
+
+conflictGroups.forEach(g => {
+
+const box = document.createElement("div");
+
+box.className = "conflict-box";
+
+const qRow = document.createElement("div");
+
+qRow.className = "conflict-q";
+
+qRow.appendChild(document.createTextNode("❓ السؤال: "));
+
+const qCont = document.createElement("div");
+
+qCont.className = "safe-text";
+
+qRow.appendChild(qCont);
+
+buildSafeContent(qCont, g[0].q);
+
+box.appendChild(qRow);
+
+g.forEach(item => {
+
+const row = document.createElement("div");
+
+row.className = "answer-choice" + (item.ok ? " verified" : "");
+
+const left = document.createElement("div");
+
+left.className = "flex-col";
+
+const aLine = document.createElement("div");
+
+aLine.appendChild(document.createTextNode("💡 "));
+
+const aCont = document.createElement("span");
+
+aLine.appendChild(aCont);
+
+buildSafeContent(aCont, item.a);
+
+left.appendChild(aLine);
+
+const meta = document.createElement("div");
+
+meta.className = "small-muted";
+
+meta.textContent = `المسار: ${item.year} > ${item.sub}`;
+
+left.appendChild(meta);
+
+const right = document.createElement("div");
+
+[right.style](http://right.style).cssText = "display:flex; gap:10px;";
+
+const btnOk = document.createElement("button");
+
+btnOk.className = "btn-v" + (item.ok ? " active" : "");
+
+btnOk.textContent = item.ok ? "✅ معتمد" : "✔ اعتماد";
+
+btnOk.onclick = () => window.toggleOk(item.path, item.ok);
+
+const btnDel = document.createElement("button");
+
+btnDel.className = "btn-del";
+
+btnDel.textContent = "🗑️";
+
+btnDel.onclick = () => window.del(item.path);
+
+right.appendChild(btnOk);
+
+right.appendChild(btnDel);
+
+row.appendChild(left);
+
+row.appendChild(right);
+
+box.appendChild(row);
+
+});
+
+conflictBox.appendChild(box);
+
+});
+
+updateStats();
+
+return;
+
+}
+
+// normal view
+
+[mainTable.style](http://mainTable.style).display = "table";
+
+[conflictBox.style](http://conflictBox.style).display = "none";
+
+tBody.innerHTML = "";
+
+const slice = display.slice(0, 50);
+
+if (!slice.length) {
+
+const tr = document.createElement("tr");
+
+const td = document.createElement("td");
+
+td.colSpan = 5;
+
+[td.style](http://td.style).cssText = "text-align:center; padding:20px; color:var(--mut)";
+
+td.textContent = "لا توجد بيانات للعرض.";
+
+tr.appendChild(td);
+
+tBody.appendChild(tr);
+
+updateStats();
+
+return;
+
+}
+
+slice.forEach(i => {
+
+const tr = document.createElement("tr");
+
+// checkbox
+
+const td0 = document.createElement("td");
+
+const cb = document.createElement("input");
+
+cb.type = "checkbox";
+
+cb.className = "q-cb";
+
+cb.value = i.path;
+
+cb.onchange = window.updSel;
+
+td0.appendChild(cb);
+
+// question
+
+const td1 = document.createElement("td");
+
+buildSafeContent(td1, i.q);
+
+// answer + ok button
+
+const td2 = document.createElement("td");
+
+const aWrap = document.createElement("div");
+
+buildSafeContent(aWrap, i.a);
+
+td2.appendChild(aWrap);
+
+const okBtn = document.createElement("button");
+
+okBtn.className = "btn-v" + (i.ok ? " active" : "");
+
+[okBtn.style](http://okBtn.style).marginTop = "8px";
+
+okBtn.textContent = i.ok ? "✅ معتمد" : "✔ اعتماد";
+
+okBtn.onclick = () => window.toggleOk(i.path, i.ok);
+
+td2.appendChild(document.createElement("br"));
+
+td2.appendChild(okBtn);
+
+// path
+
+const td3 = document.createElement("td");
+
+[td3.style](http://td3.style).cssText = "font-size:11px; color:var(--mut)";
+
+td3.textContent = `${i.year}/${i.sub}`;
+
+// delete
+
+const td4 = document.createElement("td");
+
+const delBtn = document.createElement("button");
+
+delBtn.className = "btn-del";
+
+delBtn.textContent = "🗑️";
+
+delBtn.onclick = () => window.del(i.path);
+
+td4.appendChild(delBtn);
+
+tr.appendChild(td0); tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4);
+
+tBody.appendChild(tr);
+
+});
+
+updateStats();
+
+};
+
+// search
+
+window.doSearch = (v) => {
+
+const term = clean(v);
+
+if (!term) { window.renderUI(); return; }
+
+document.getElementById("mainTable").style.display = "table";
+
+document.getElementById("conflictContainer").style.display = "none";
+
+const matched = allItems.filter(i => i.searchKey.includes(term)).slice(0, 100);
+
+const tBody = document.getElementById("tableBody");
+
+tBody.innerHTML = "";
+
+if (!matched.length) {
+
+const tr = document.createElement("tr");
+
+const td = document.createElement("td");
+
+td.colSpan = 5;
+
+[td.style](http://td.style).cssText = "text-align:center; padding:20px;";
+
+td.textContent = "لا توجد نتائج تطابق بحثك ❌";
+
+tr.appendChild(td);
+
+tBody.appendChild(tr);
+
+return;
+
+}
+
+matched.forEach(i => {
+
+const tr = document.createElement("tr");
+
+const td0 = document.createElement("td");
+
+const cb = document.createElement("input");
+
+cb.type = "checkbox";
+
+cb.className = "q-cb";
+
+cb.value = i.path;
+
+cb.onchange = window.updSel;
+
+td0.appendChild(cb);
+
+const td1 = document.createElement("td");
+
+buildSafeContent(td1, i.q);
+
+const td2 = document.createElement("td");
+
+buildSafeContent(td2, i.a);
+
+const td3 = document.createElement("td");
+
+[td3.style](http://td3.style).cssText = "font-size:11px; color:var(--mut)";
+
+td3.textContent = `${i.year}/${i.sub}`;
+
+const td4 = document.createElement("td");
+
+const delBtn = document.createElement("button");
+
+delBtn.className = "btn-del";
+
+delBtn.textContent = "🗑️";
+
+delBtn.onclick = () => window.del(i.path);
+
+td4.appendChild(delBtn);
+
+tr.appendChild(td0); tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4);
+
+tBody.appendChild(tr);
+
+});
+
+};
+
+// links UI
+
+window.renderLinkControls = () => {
+
+const box = document.getElementById("linksControlsBox");
+
+if (!box) return;
+
+const current = dbRaw.downloadLinks || {};
+
+const ids = ["01","02","03","04","05"];
+
+box.innerHTML = "";
+
+ids.forEach(id => {
+
+const row = document.createElement("div");
+
+row.className = "link-row";
+
+const label = document.createElement("label");
+
+label.textContent = `ملف ${id}:`;
+
+const input = document.createElement("input");
+
+input.type = "text";
+
+[input.id](http://input.id) = `link_${id}`;
+
+input.value = current[id] || "";
+
+input.placeholder = `ضع رابط Dropbox الخاص بالملف ${id} هنا...`;
+
+const btn = document.createElement("button");
+
+btn.className = "btn-v active";
+
+[btn.style](http://btn.style).cssText = "padding:12px 25px; font-size:14px;";
+
+btn.textContent = "💾 حفظ";
+
+btn.onclick = () => window.saveL(id);
+
+row.appendChild(label);
+
+row.appendChild(input);
+
+row.appendChild(btn);
+
+box.appendChild(row);
+
+});
+
+};
+
+function normalizeDropbox(url) {
+
+let u = (url || "").trim();
+
+if (!u) return u;
+
+if (u.includes("[dropbox.com](http://dropbox.com)")) {
+
+// اجعل dl=1 دائماً
+
+if (u.includes("?")) {
+
+// إذا dl موجود غيّره
+
+if (/[?&]dl=0/.test(u)) u = u.replace(/([?&])dl=0/, "$1dl=1");
+
+else if (/[?&]dl=1/.test(u)) u = u;
+
+else u = u + "&dl=1";
+
+} else {
+
+u = u + "?dl=1";
+
+}
+
+// أحياناً روابط dropbox تكون [www.dropbox.com/s/](http://www.dropbox.com/s/)... الأفضل تظل كما هي مع dl=1
+
+}
+
+return u;
+
+}
+
+window.saveL = async (id) => {
+
+let url = document.getElementById(`link_${id}`).value;
+
+url = normalizeDropbox(url);
+
+await update(ref(db, "downloadLinks"), { [id]: url });
+
+alert(`تم تحديث رابط الملف ${id} ✅`);
+
+};
+
+// delete + toggle ok
+
+window.del = (p) => { if (confirm("تأكيد الحذف النهائي؟")) remove(ref(db, p)); };
+
+window.toggleOk = async (p, s) => { await update(ref(db, p), { ok: !s }); };
+
+// filter & tabs
+
+window.setFilter = (f, btn) => {
+
+filter = f;
+
+document.querySelectorAll(".btn-v").forEach(b => b.classList.remove("active"));
+
+if (btn) btn.classList.add("active");
+
+document.getElementById("qSearch").value = "";
+
+window.renderUI();
+
+};
+
+window.switchTab = (tab) => {
+
+window.curTab = tab;
+
+["view_data","view_cfg","view_links"].forEach(v => document.getElementById(v).style.display = "none");
+
+["btn_data","btn_cfg","btn_links"].forEach(b => document.getElementById(b).classList.remove("active"));
+
+document.getElementById("view_"+tab).style.display = "block";
+
+document.getElementById("btn_"+tab).classList.add("active");
+
+window.renderUI();
+
+if (tab === "links") window.renderLinkControls();
+
+if (tab === "cfg") renderCodes();
+
+};
+
+// tree
+
+window.renderTree = () => {
+
+const container = document.getElementById("treeContainer");
+
+const data = [dbRaw.data](http://dbRaw.data) || {};
+
+container.innerHTML = "";
+
+Object.keys(data).forEach(y => {
+
+const yBtn = document.createElement("div");
+
+yBtn.className = "nav-btn";
+
+[yBtn.style](http://yBtn.style).cssText = "background:#f1f5f9; margin-top:5px";
+
+yBtn.textContent = `📅 ${y}`;
+
+yBtn.onclick = () => window.setF(y, null);
+
+container.appendChild(yBtn);
+
+const sub = document.createElement("div");
+
+sub.className = "tree-sub";
+
+Object.keys(data[y] || {}).forEach(s => {
+
+const a = document.createElement("a");
+
+a.className = "tree-item";
+
+a.textContent = `📝 ${s}`;
+
+a.onclick = () => window.setF(y, s);
+
+sub.appendChild(a);
+
+});
+
+container.appendChild(sub);
+
+});
+
+};
+
+window.setF = (y, s=null) => { curY = y; curS = s; window.renderUI(); };
+
+// selection bar
+
+window.updSel = () => {
+
+const c = document.querySelectorAll(".q-cb:checked").length;
+
+document.getElementById("actionBar").style.display = c > 0 ? "flex" : "none";
+
+document.getElementById("selCount").innerText = c;
+
+};
+
+window.toggleAll = (m) => { document.querySelectorAll(".q-cb").forEach(c => c.checked = m.checked); window.updSel(); };
+
+window.deselectAll = () => { document.querySelectorAll(".q-cb").forEach(c => c.checked = false); window.updSel(); };
+
+window.bulkDel = async () => {
+
+const paths = Array.from(document.querySelectorAll(".q-cb:checked")).map(c => c.value);
+
+if (!paths.length) return;
+
+if (confirm(`سيتم حذف ${paths.length} سؤال نهائياً. هل أنت متأكد؟`)) {
+
+const upds = {};
+
+paths.forEach(p => upds[p] = null);
+
+await update(ref(db), upds);
+
+window.deselectAll();
+
+}
+
+};
+
+// clean duplicates (exact qKey+aKey)
+
+window.autoCleanDups = async () => {
+
+const seen = {};
+
+const toDel = [];
+
+allItems.forEach(i => {
+
+const k = i.qKey + "||" + i.aKey;
+
+if (seen[k]) toDel.push(i.path);
+
+else seen[k] = true;
+
+});
+
+if (!toDel.length) { alert("لا يوجد مكرر متطابق حالياً ✅"); return; }
+
+if (confirm(`تم العثور على ${toDel.length} تكرار متطابق تماماً. حذفهم؟`)) {
+
+const upds = {};
+
+toDel.forEach(p => upds[p] = null);
+
+await update(ref(db), upds);
+
+}
+
+};
+
+function updateStats() {
+
+document.getElementById("s_total").innerText = allItems.length;
+
+document.getElementById("s_sys").innerText = allItems.filter(i => i.isSys).length;
+
+const qMap = {};
+
+allItems.forEach(i => {
+
+if (!qMap[i.qKey]) qMap[i.qKey] = new Set();
+
+qMap[i.qKey].add(i.aKey);
+
+});
+
+document.getElementById("s_conf").innerText = Object.values(qMap).filter(s => s.size > 1).length;
+
+}
+
+// codes
+
+function renderCodes() {
+
+const div = document.getElementById("codesContent");
+
+const codes = [dbRaw.codes](http://dbRaw.codes) || {};
+
+const table = document.createElement("table");
+
+const thead = document.createElement("thead");
+
+const trh = document.createElement("tr");
+
+["ID","الكود","الرابط","حفظ"].forEach(t => {
+
+const th = document.createElement("th");
+
+th.textContent = t;
+
+trh.appendChild(th);
+
+});
+
+thead.appendChild(trh);
+
+table.appendChild(thead);
+
+const tbody = document.createElement("tbody");
+
+Object.keys(codes).forEach(id => {
+
+const tr = document.createElement("tr");
+
+const td0 = document.createElement("td");
+
+td0.textContent = id;
+
+const td1 = document.createElement("td");
+
+const inK = document.createElement("input");
+
+inK.type = "text";
+
+[inK.id](http://inK.id) = `c_k_${id}`;
+
+inK.value = codes[id]?.k || "";
+
+[inK.style](http://inK.style).cssText = "width:100px; padding:8px; border:1px solid #ddd; border-radius:5px;";
+
+td1.appendChild(inK);
+
+const td2 = document.createElement("td");
+
+const inL = document.createElement("input");
+
+inL.type = "text";
+
+[inL.id](http://inL.id) = `c_l_${id}`;
+
+inL.value = codes[id]?.l || "";
+
+[inL.style](http://inL.style).cssText = "width:100%; padding:8px; border:1px solid #ddd; border-radius:5px;";
+
+td2.appendChild(inL);
+
+const td3 = document.createElement("td");
+
+const btn = document.createElement("button");
+
+btn.className = "btn-v active";
+
+btn.textContent = "💾";
+
+btn.onclick = () => window.saveCode(id);
+
+td3.appendChild(btn);
+
+tr.appendChild(td0); tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+
+tbody.appendChild(tr);
+
+});
+
+table.appendChild(tbody);
+
+div.innerHTML = "";
+
+div.appendChild(table);
+
+}
+
+window.saveCode = async (id) => {
+
+const k = document.getElementById(`c_k_${id}`).value;
+
+const l = document.getElementById(`c_l_${id}`).value;
+
+await update(ref(db, `codes/${id}`), { k, l });
+
+alert("تم حفظ الكود ✅");
+
+};
+
+// small spinner keyframes
+
+const style = document.createElement("style");
+
+style.textContent = "@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}";
+
+document.head.appendChild(style);
+
 </script>
+
 </body>
+
 </html>
