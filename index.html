@@ -8,7 +8,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>Super Media V42 | Smart Review Admin (Auto Fix)</title>
+<title>Super Media V42 | Smart Review Admin (No-Module)</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 
@@ -54,21 +54,15 @@ body{ font-family:'Cairo',sans-serif; background:var(--bg); margin:0; color:var(
 
 .btn{ padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:#fff; cursor:pointer; font-weight:800; font-size:12px; }
 
-.btn.primary{ background:var(--p); color:#fff; border-color:var(--p); }
-
 .btn.danger{ background:var(--d); color:#fff; border-color:var(--d); }
 
 .btn.good{ background:var(--s); color:#fff; border-color:var(--s); }
-
-.btn.warn{ background:var(--w); color:#111; border-color:var(--w); }
 
 .btn.ghost{ background:#f8fafc; }
 
 .btn.active{ outline:3px solid rgba(37,99,235,.18); border-color:#93c5fd; }
 
 .input{ padding:10px 12px; border-radius:12px; border:1px solid var(--border); outline:none; font-family:inherit; width:280px; max-width:100%; }
-
-.input:focus{ border-color:#93c5fd; }
 
 .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:12px; }
 
@@ -86,7 +80,7 @@ body{ font-family:'Cairo',sans-serif; background:var(--bg); margin:0; color:var(
 
 .groupHead .meta{ color:var(--mut); font-size:11px; font-weight:800; }
 
-.groupHead .title{ font-weight:900; font-size:13px; line-height:1.7; }
+.groupHead .title{ font-weight:900; font-size:13px; line-height:1.7; white-space:pre-wrap; word-break:break-word; }
 
 .groupHead .actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
 
@@ -103,8 +97,6 @@ body{ font-family:'Cairo',sans-serif; background:var(--bg); margin:0; color:var(
 .answerCount{ font-size:11px; font-weight:900; color:var(--mut); margin-top:6px; }
 
 .answer{ font-weight:900; font-size:13px; line-height:1.7; white-space:pre-wrap; word-break:break-word; }
-
-.qText{ white-space:pre-wrap; word-break:break-word; }
 
 .pager{ display:flex; justify-content:space-between; align-items:center; padding:12px; border-top:1px solid var(--border); background:#fff; }
 
@@ -123,10 +115,6 @@ font:12px/1.6 ui-monospace, Menlo, Consolas; direction:ltr; white-space:pre-wrap
 }
 
 .log b{ color:#93c5fd; }
-
-.img-view{ max-width:90px; max-height:70px; border-radius:8px; border:1px solid var(--border); background:#fff; padding:2px; cursor:pointer; }
-
-.img-view:hover{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(4.2); z-index:10000; box-shadow:0 0 50px rgba(0,0,0,.55); }
 
 </style>
 
@@ -168,7 +156,7 @@ font:12px/1.6 ui-monospace, Menlo, Consolas; direction:ltr; white-space:pre-wrap
 
 <div class="badge">وضع الحذف: <b style="color:var(--d)">نهائي</b></div>
 
-<div class="badge">إذا ظهر Permission denied: معناها Firebase Rules تمنع القراءة/الكتابة</div>
+<div class="badge">قاعدة البيانات: <b>Firebase RTDB</b></div>
 
 </div>
 
@@ -176,7 +164,7 @@ font:12px/1.6 ui-monospace, Menlo, Consolas; direction:ltr; white-space:pre-wrap
 
 <div class="stat" onclick="setSmartMode('needs_review')">
 
-<div class="t">غير معتمد (Needs review)</div>
+<div class="t">غير معتمد</div>
 
 <div class="v" id="st_need">0</div>
 
@@ -198,14 +186,6 @@ font:12px/1.6 ui-monospace, Menlo, Consolas; direction:ltr; white-space:pre-wrap
 
 </div>
 
-<div class="stat" onclick="setSmartMode('similar')">
-
-<div class="t">تشابه أسئلة</div>
-
-<div class="v" id="st_sim">0</div>
-
-</div>
-
 </div>
 
 <div id="view_smart" class="content-card">
@@ -218,25 +198,7 @@ font:12px/1.6 ui-monospace, Menlo, Consolas; direction:ltr; white-space:pre-wrap
 
 <button class="btn ghost" id="m_duplicates" onclick="setSmartMode('duplicates')">تكرار</button>
 
-<button class="btn ghost" id="m_similar" onclick="setSmartMode('similar')">تشابه</button>
-
 <input id="searchBox" class="input" type="text" placeholder="بحث داخل النتائج..." oninput="applySmart()" />
-
-حد التشابه:
-
-<select id="simThreshold" class="input" style="width:110px" onchange="applySmart()">
-
-<option value="0.92">92%</option>
-
-<option value="0.90" selected>90%</option>
-
-<option value="0.88">88%</option>
-
-<option value="0.85">85%</option>
-
-</select>
-
-</span>
 
 مجموعات/الصفحة:
 
@@ -288,103 +250,37 @@ font:12px/1.6 ui-monospace, Menlo, Consolas; direction:ltr; white-space:pre-wrap
 
 </div>
 
-<script type="module">
+<!-- Firebase (no-module compat) -->
 
-/* =======================
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 
-0) LOG + timeout (auto)
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
-======================= */
+<script>
+
+/ *LOG* /
 
 const logEl = document.getElementById("log");
 
-function log(...a){ logEl.textContent += a.join(" ") + "n"; }
+function log(){ logEl.textContent += Array.from(arguments).join(" ") + "n"; }
 
-window.addEventListener("error", (e)=>log("[window.error]", e.message));
+function stopLoader(){ const l=document.getElementById("loader"); if(l) [l.style](http://l.style).display="none"; }
 
-window.addEventListener("unhandledrejection", (e)=>log("[unhandledrejection]", e.reason?.message || String(e.reason||"")));
-
-function stopLoader(){
-
-const loader = document.getElementById("loader");
-
-if (loader) [loader.style](http://loader.style).display = "none";
-
-}
-
-setTimeout(()=>{
-
-const loader = document.getElementById("loader");
-
-if (loader && [loader.style](http://loader.style).display !== "none"){
-
-stopLoader();
-
-log("[TIMEOUT] لم يصل رد من Firebase خلال 10 ثواني.");
-
-log("السبب غالباً: Permission denied أو حظر تحميل Firebase modules.");
-
-alert("توقف التحميل. انظر LOG أسفل يمين الصفحة وصوّره لي.");
-
-}
-
-}, 10000);
+window.onerror = (msg)=>log("[window.error]", msg);
 
 log("Page:", location.href);
 
-log("UserAgent:", navigator.userAgent);
+log("Firebase compat:", (window.firebase ? "OK" : "NOT LOADED"));
 
-/* =======================
-
-1) Import Firebase with clear error
-
-======================= */
-
-let initializeApp, getDatabase, ref, onValue, update, remove;
-
-try{
-
-log("[IMPORT] Loading firebase modules...");
-
-({ initializeApp } = await import("https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"));
-
-({ getDatabase, ref, onValue, update, remove } = await import("https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js"));
-
-log("[IMPORT] OK");
-
-}catch(e){
-
-stopLoader();
-
-log("[IMPORT] FAILED:", e?.message || String(e));
-
-alert("فشل تحميل مكتبات Firebase. صوّر LOG وأرسله لي.");
-
-throw e;
-
-}
-
-/* =======================
-
-2) Firebase init
-
-======================= */
+/ *Firebase init* /
 
 const firebaseConfig = { databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/" };
 
-log("[FIREBASE] init...");
+firebase.initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
+const db = firebase.database();
 
-const db = getDatabase(app);
-
-log("[FIREBASE] ready");
-
-/* =======================
-
-3) Helpers
-
-======================= */
+/ *Helpers* /
 
 const clean = (t) => {
 
@@ -410,89 +306,19 @@ return t.toString()
 
 };
 
-function tokenize(text){ return clean(text).split(" ").filter(w=>w.length>=3); }
-
-function jaccard(a,b){
-
-const A = new Set(a), B = new Set(b);
-
-if (!A.size && !B.size) return 1;
-
-let inter=0;
-
-for (const x of A) if (B.has(x)) inter++;
-
-const union = A.size + B.size - inter;
-
-return union ? inter/union : 0;
-
-}
-
-function renderSafe(container, text){
-
-container.innerHTML = "";
-
-if (!text){ container.textContent = "---"; return; }
-
-const raw = text.toString();
-
-const imgRegex = /(https?://+?.(?:png|jpg|jpeg|gif|webp))/gi;
-
-let last = 0;
-
-for (const m of raw.matchAll(imgRegex)){
-
-const url = m[0];
-
-const idx = m.index ?? 0;
-
-const before = raw.slice(last, idx);
-
-if (before){
-
-const sp = document.createElement("span");
-
-sp.textContent = before.replace(/:[(?:Q_IMG|A_IMG|IMAGE_URL)]/g, "");
-
-container.appendChild(sp);
-
-}
-
-const img = document.createElement("img");
-
-img.src = url; img.className="img-view"; img.loading="lazy";
-
-container.appendChild(img);
-
-last = idx + url.length;
-
-}
-
-const after = raw.slice(last);
-
-if (after){
-
-const sp = document.createElement("span");
-
-sp.textContent = after.replace(/:[(?:Q_IMG|A_IMG|IMAGE_URL)]/g, "");
-
-container.appendChild(sp);
-
-}
-
-}
-
-/* =======================
-
-4) State
-
-======================= */
+/ *State* /
 
 let DATA = {};
 
 let allItems = [];
 
-let curYear = null, curSub = null;
+let curYear=null, curSub=null;
+
+let smartMode="needs_review";
+
+let smartGroups=[];
+
+let page=0;
 
 function flatten(){
 
@@ -500,41 +326,37 @@ allItems = [];
 
 const data = DATA || {};
 
-for (const y of Object.keys(data)){
+Object.keys(data).forEach(y=>{
 
-for (const s of Object.keys(data[y]||{})){
+Object.keys(data[y]||{}).forEach(s=>{
 
-const qs = data[y]?.[s]?.questions || {};
+const qs = (data[y][s] && data[y][s].questions) ? data[y][s].questions : {};
 
-for (const id of Object.keys(qs)){
+Object.keys(qs||{}).forEach(id=>{
 
-const q = qs[id]?.q || "";
+const q = (qs[id] && qs[id].q) ? qs[id].q : "";
 
-const a = qs[id]?.a || "";
+const a = (qs[id] && qs[id].a) ? qs[id].a : "";
 
-const ok = !!qs[id]?.ok;
+const ok = !!(qs[id] && qs[id].ok);
 
 allItems.push({
 
-id, year:y, sub:s,
-
-q, a, ok,
+id, year:y, sub:s, q, a, ok,
 
 qKey: clean(q),
 
 aKey: clean(a),
 
-qTokens: tokenize(q),
-
-path: `data/${y}/${s}/questions/${id}`
+path: "data/"+y+"/"+s+"/questions/"+id
 
 });
 
-}
+});
 
-}
+});
 
-}
+});
 
 }
 
@@ -550,113 +372,47 @@ return arr;
 
 }
 
-/* =======================
-
-5) Tree UI
-
-======================= */
-
 function renderTree(){
 
 const tree = document.getElementById("treeContainer");
 
 tree.innerHTML = "";
 
-const data = DATA || {};
-
-for (const y of Object.keys(data)){
+Object.keys(DATA||{}).forEach(y=>{
 
 const yBtn = document.createElement("div");
 
-yBtn.className = "nav-btn";
+yBtn.className="nav-btn";
 
-[yBtn.style](http://yBtn.style).background = "#f1f5f9";
+[yBtn.style](http://yBtn.style).background="#f1f5f9";
 
-yBtn.textContent = "📅 " + y;
+yBtn.textContent="📅 "+y;
 
-yBtn.onclick = ()=>setPathFilter(y,null);
+yBtn.onclick=()=>setPathFilter(y,null);
 
 tree.appendChild(yBtn);
 
 const sub = document.createElement("div");
 
-sub.className = "tree-sub";
+sub.className="tree-sub";
 
-for (const s of Object.keys(data[y]||{})){
+Object.keys((DATA[y]||{})).forEach(s=>{
 
 const a = document.createElement("a");
 
-a.className = "tree-item";
+a.className="tree-item";
 
-a.textContent = "📝 " + s;
+a.textContent="📝 "+s;
 
-a.onclick = ()=>setPathFilter(y,s);
+a.onclick=()=>setPathFilter(y,s);
 
 sub.appendChild(a);
 
-}
+});
 
 tree.appendChild(sub);
 
-}
-
-}
-
-window.setPathFilter = (y,s)=>{ curYear=y; curSub=s; resetPaging(); };
-
-/* =======================
-
-6) Smart Review
-
-======================= */
-
-let smartMode = "needs_review";
-
-let smartGroups = [];
-
-let page = 0;
-
-window.setSmartMode = (m)=>{
-
-smartMode = m;
-
-["needs_review","conflicts","duplicates","similar"].forEach(k=>{
-
-const el = document.getElementById("m_"+k);
-
-if (el) el.classList.toggle("active", k===m);
-
 });
-
-resetPaging();
-
-};
-
-window.resetPaging = ()=>{ page=0; applySmart(); };
-
-function countAnswers(rows){
-
-const counts = {};
-
-for (const r of rows) counts[r.aKey] = (counts[r.aKey]||0)+1;
-
-return counts;
-
-}
-
-function majorityAnswerKey(rows){
-
-const counts = countAnswers(rows);
-
-let bestKey=null, bestCount=-1;
-
-for (const k of Object.keys(counts)){
-
-if (counts[k] > bestCount){ bestCount=counts[k]; bestKey=k; }
-
-}
-
-return { bestKey, bestCount, counts };
 
 }
 
@@ -666,147 +422,121 @@ const items = scopedItems();
 
 if (smartMode==="needs_review"){
 
-const map = {};
+const map={};
 
-for (const it of items){
+items.forEach(it=>{
 
-if (it.ok) continue;
+if (it.ok) return;
 
 (map[it.qKey] ||= []).push(it);
 
-}
+});
 
-return Object.values(map).map(rows=>({ type:"needs_review", qText: rows[0].q, rows }));
+return Object.values(map).map(rows=>({type:"needs_review", qText: rows[0].q, rows}));
 
 }
 
 if (smartMode==="conflicts"){
 
-const map = {};
+const map={};
 
-for (const it of items) (map[it.qKey] ||= []).push(it);
+items.forEach(it=>(map[it.qKey] ||= []).push(it));
 
-const out = [];
+const out=[];
 
-for (const k of Object.keys(map)){
+Object.keys(map).forEach(k=>{
 
-const rows = map[k];
+const rows=map[k];
 
-const ans = new Set([rows.map](http://rows.map)(r=>r.aKey));
+const ans=new Set([rows.map](http://rows.map)(r=>r.aKey));
 
-if (ans.size>1) out.push({ type:"conflict", qText: rows[0].q, rows });
+if(ans.size>1) out.push({type:"conflict", qText: rows[0].q, rows});
 
-}
-
-return out;
-
-}
-
-if (smartMode==="duplicates"){
-
-const map = {};
-
-for (const it of items){
-
-const key = it.qKey+"||"+it.aKey;
-
-(map[key] ||= []).push(it);
-
-}
-
-const out = [];
-
-for (const k of Object.keys(map)){
-
-if (map[k].length>=2){
-
-out.push({ type:"duplicate", qText: map[k][0].q, aText: map[k][0].a, rows: map[k] });
-
-}
-
-}
+});
 
 return out;
 
 }
 
-const threshold = parseFloat(document.getElementById("simThreshold").value || "0.90");
+// duplicates
 
-const buckets = {};
+const map={};
 
-for (const it of items){
+items.forEach(it=>{
 
-const sig = it.qTokens.slice(0,8).join(" ");
+const k=it.qKey+"||"+it.aKey;
 
-(buckets[sig] ||= []).push(it);
+(map[k] ||= []).push(it);
 
-}
+});
 
-const out = [];
+const out=[];
 
-for (const sig of Object.keys(buckets)){
+Object.keys(map).forEach(k=>{
 
-const bucket = buckets[sig];
+if(map[k].length>=2) out.push({type:"duplicate", qText: map[k][0].q, aText: map[k][0].a, rows: map[k]});
 
-if (bucket.length<2) continue;
-
-const used = new Set();
-
-for (let i=0;i<bucket.length;i++){
-
-if (used.has(bucket[i].path)) continue;
-
-const group=[bucket[i]];
-
-used.add(bucket[i].path);
-
-for (let j=i+1;j<bucket.length;j++){
-
-if (used.has(bucket[j].path)) continue;
-
-const sim = jaccard(bucket[i].qTokens, bucket[j].qTokens);
-
-if (sim>=threshold){
-
-group.push({ ...bucket[j], _sim: sim });
-
-used.add(bucket[j].path);
-
-}
-
-}
-
-if (group.length>=2){
-
-out.push({ type:"similar", qText: group[0].q, rows: group, bestSim: Math.max(...[group.map](http://group.map)(x=>x._sim||1)) });
-
-}
-
-}
-
-}
-
-out.sort((a,b)=>(b.bestSim||0)-(a.bestSim||0));
+});
 
 return out;
 
 }
 
-window.applySmart = ()=>{
+function countAnswers(rows){
+
+const c={}; rows.forEach(r=>c[r.aKey]=(c[r.aKey]||0)+1); return c;
+
+}
+
+function majority(rows){
+
+const c=countAnswers(rows);
+
+let bestKey=null,best=-1;
+
+Object.keys(c).forEach(k=>{ if(c[k]>best){best=c[k];bestKey=k;} });
+
+return {bestKey, bestCount:best, counts:c};
+
+}
+
+function pageSize(){ return parseInt(document.getElementById("pageSize").value||"20",10); }
+
+function renderStats(){
+
+const items=scopedItems();
+
+document.getElementById("st_need").textContent = items.filter(x=>!x.ok).length;
+
+const qMap={};
+
+items.forEach(it=>(qMap[it.qKey] ||= new Set()).add(it.aKey));
+
+document.getElementById("st_conf").textContent = Object.values(qMap).filter(s=>s.size>1).length;
+
+const dupMap={};
+
+items.forEach(it=>{ const k=it.qKey+"||"+it.aKey; dupMap[k]=(dupMap[k]||0)+1; });
+
+document.getElementById("st_dup").textContent = Object.values(dupMap).filter(n=>n>=2).length;
+
+}
+
+function applySmart(){
 
 const term = clean(document.getElementById("searchBox").value||"");
 
 smartGroups = buildGroups();
 
-if (term){
+if(term){
 
 smartGroups = smartGroups.filter(g=>{
 
-if (clean(g.qText||"").includes(term)) return true;
+if(clean(g.qText||"").includes(term)) return true;
 
-if (g.type==="duplicate" && clean(g.aText||"").includes(term)) return true;
+if(g.type==="duplicate" && clean(g.aText||"").includes(term)) return true;
 
-return (g.rows||[]).some(r => clean(r.a||"").includes(term));
+return (g.rows||[]).some(r=>clean(r.a||"").includes(term));
 
 });
 
@@ -816,255 +546,91 @@ renderStats();
 
 renderSmartPage();
 
-};
-
-function renderStats(){
-
-const items = scopedItems();
-
-document.getElementById("st_need").textContent = items.filter(x=>!x.ok).length;
-
-const qMap = {};
-
-for (const it of items) (qMap[it.qKey] ||= new Set()).add(it.aKey);
-
-document.getElementById("st_conf").textContent = Object.values(qMap).filter(s=>s.size>1).length;
-
-const dupMap = {};
-
-for (const it of items){
-
-const k = it.qKey+"||"+it.aKey;
-
-dupMap[k] = (dupMap[k]||0)+1;
-
-}
-
-document.getElementById("st_dup").textContent = Object.values(dupMap).filter(n=>n>=2).length;
-
-if (smartMode==="similar") document.getElementById("st_sim").textContent = smartGroups.length;
-
-}
-
-function pageSize(){ return parseInt(document.getElementById("pageSize").value||"20",10); }
-
-window.nextPage=()=>{ const ps=pageSize(); if ((page+1)*ps >= smartGroups.length) return; page++; renderSmartPage(); };
-
-window.prevPage=()=>{ if (page<=0) return; page--; renderSmartPage(); };
-
-function buildRow(r, counts=null){
-
-const row = document.createElement("div");
-
-row.className = "row"+(r.ok?" verified":"");
-
-const left = document.createElement("div");
-
-left.className="left";
-
-const ans = document.createElement("div");
-
-ans.className="answer";
-
-renderSafe(ans, r.a||"---");
-
-const meta = document.createElement("div");
-
-meta.className="small";
-
-meta.textContent = `المسار: ${r.year}/${r.sub} • ok: ${r.ok?"true":"false"}`;
-
-left.appendChild(ans);
-
-if (counts){
-
-const c = counts[r.aKey]||1;
-
-const cc = document.createElement("div");
-
-cc.className="answerCount";
-
-cc.textContent = `تكرار هذه الإجابة: ${c}`;
-
-left.appendChild(cc);
-
-}
-
-left.appendChild(meta);
-
-const actions = document.createElement("div");
-
-[actions.style](http://actions.style).display="flex";
-
-[actions.style](http://actions.style).flexDirection="column";
-
-[actions.style.gap](http://actions.style.gap)="8px";
-
-const bOk = document.createElement("button");
-
-bOk.className="btn good";
-
-bOk.textContent="اعتماد";
-
-bOk.onclick=()=>approveRows([r]);
-
-const bDel = document.createElement("button");
-
-bDel.className="btn danger";
-
-bDel.textContent="حذف";
-
-bDel.onclick=()=>deleteRows([r]);
-
-actions.appendChild(bOk);
-
-actions.appendChild(bDel);
-
-row.appendChild(left);
-
-row.appendChild(actions);
-
-return row;
-
 }
 
 function renderSmartPage(){
 
-const list = document.getElementById("smartList");
+const list=document.getElementById("smartList");
 
-list.innerHTML = "";
+list.innerHTML="";
 
-const ps = pageSize();
+const ps=pageSize();
 
-const start = page*ps;
+const start=page*ps;
 
-const end = Math.min(start+ps, smartGroups.length);
+const end=Math.min(start+ps, smartGroups.length);
 
-document.getElementById("pageInfo").textContent = smartGroups.length ? `عرض ${start+1}-${end} من ${smartGroups.length}` : "لا توجد نتائج";
+document.getElementById("pageInfo").textContent = smartGroups.length ? ("عرض "+(start+1)+"-"+end+" من "+smartGroups.length) : "لا توجد نتائج";
 
-const slice = smartGroups.slice(start,end);
+smartGroups.slice(start,end).forEach(g=>{
 
-for (const g of slice){
+const box=document.createElement("div"); box.className="group";
 
-const box = document.createElement("div");
+const head=document.createElement("div"); head.className="groupHead";
 
-box.className="group";
+const left=document.createElement("div"); [left.style](http://left.style).flex="1";
 
-const head = document.createElement("div");
+const title=document.createElement("div"); title.className="title"; title.textContent=g.qText||"---";
 
-head.className="groupHead";
+const meta=document.createElement("div"); meta.className="meta"; meta.textContent="نوع: "+g.type+" • سجلات: "+(g.rows||[]).length;
 
-const left = document.createElement("div");
+left.appendChild(title); left.appendChild(meta);
 
-[left.style](http://left.style).flex="1";
+const actions=document.createElement("div"); actions.className="actions";
 
-const title = document.createElement("div");
+if(g.type==="conflict"){
 
-title.className="title qText";
+const b=document.createElement("button");
 
-renderSafe(title, g.qText||"---");
+b.className="btn good";
 
-const meta = document.createElement("div");
+b.textContent="اعتماد الأكثر + حذف الباقي";
 
-meta.className="meta";
+b.onclick=()=>applyMajorityAndDelete(g);
 
-meta.textContent = `نوع: ${g.type} • سجلات: ${g.rows?.length||0}`;
+actions.appendChild(b);
 
-left.appendChild(title);
+}else if(g.type==="duplicate"){
 
-left.appendChild(meta);
+const b=document.createElement("button");
 
-const actions = document.createElement("div");
+b.className="btn danger";
 
-actions.className="actions";
+b.textContent="حذف "+(g.rows.length-1)+" مكرر";
 
-if (g.type==="conflict"){
+b.onclick=()=>deleteDuplicatesKeepOne(g);
 
-const btnApply = document.createElement("button");
+actions.appendChild(b);
 
-btnApply.className="btn good";
+}else{
 
-btnApply.textContent="اعتماد الأكثر + حذف الباقي";
+const b1=document.createElement("button"); b1.className="btn good"; b1.textContent="اعتماد الكل"; b1.onclick=()=>approveRows(g.rows);
 
-btnApply.onclick=()=>applyMajorityAndDelete(g);
+const b2=document.createElement("button"); b2.className="btn danger"; b2.textContent="حذف الكل"; b2.onclick=()=>deleteRows(g.rows);
 
-actions.appendChild(btnApply);
-
-}
-
-if (g.type==="duplicate"){
-
-const btnDup = document.createElement("button");
-
-btnDup.className="btn danger";
-
-btnDup.textContent=`حذف ${g.rows.length-1} مكرر`;
-
-btnDup.onclick=()=>deleteDuplicatesKeepOne(g);
-
-actions.appendChild(btnDup);
+actions.appendChild(b1); actions.appendChild(b2);
 
 }
 
-if (g.type==="needs_review" || g.type==="similar"){
-
-const btnOkAll = document.createElement("button");
-
-btnOkAll.className="btn good";
-
-btnOkAll.textContent="اعتماد الكل";
-
-btnOkAll.onclick=()=>approveRows(g.rows);
-
-const btnDelAll = document.createElement("button");
-
-btnDelAll.className="btn danger";
-
-btnDelAll.textContent="حذف الكل";
-
-btnDelAll.onclick=()=>deleteRows(g.rows);
-
-actions.appendChild(btnOkAll);
-
-actions.appendChild(btnDelAll);
-
-}
-
-head.appendChild(left);
-
-head.appendChild(actions);
+head.appendChild(left); head.appendChild(actions);
 
 box.appendChild(head);
 
-const rowsWrap = document.createElement("div");
+const rowsWrap=document.createElement("div"); rowsWrap.className="rows";
 
-rowsWrap.className="rows";
+if(g.type==="conflict"){
 
-if (g.type==="conflict"){
+const counts=countAnswers(g.rows);
 
-const counts = countAnswers(g.rows);
+g.rows.forEach(r=>rowsWrap.appendChild(buildRow(r, counts)));
 
-for (const r of g.rows) rowsWrap.appendChild(buildRow(r, counts));
+}else if(g.type==="duplicate"){
 
-} else if (g.type==="duplicate"){
+rowsWrap.appendChild(buildRow(g.rows[0], {[g.rows[0].aKey]: g.rows.length}));
 
-rowsWrap.appendChild(buildRow(g.rows[0], { [g.rows[0].aKey]: g.rows.length }));
+}else{
 
-} else {
-
-for (const r of (g.rows||[]).slice(0,12)) rowsWrap.appendChild(buildRow(r));
-
-if ((g.rows||[]).length>12){
-
-const more=document.createElement("div");
-
-more.className="small";
-
-more.textContent=`... يوجد ${(g.rows||[]).length-12} سجل إضافي`;
-
-rowsWrap.appendChild(more);
-
-}
+g.rows.slice(0,12).forEach(r=>rowsWrap.appendChild(buildRow(r)));
 
 }
 
@@ -1072,151 +638,203 @@ box.appendChild(rowsWrap);
 
 list.appendChild(box);
 
-}
+});
 
 }
 
-/* =======================
+function buildRow(r, counts){
 
-Bulk ops
+const row=document.createElement("div");
 
-======================= */
+row.className="row"+(r.ok?" verified":"");
 
-async function approveRows(rows){
+const left=document.createElement("div"); left.className="left";
 
-if (!rows?.length) return;
+const ans=document.createElement("div"); ans.className="answer"; ans.textContent=r.a||"---";
 
-if (!confirm(`اعتماد ${rows.length} سجل؟`)) return;
+left.appendChild(ans);
 
-const updates = {};
+if(counts){
 
-for (const r of rows) updates[r.path + "/ok"] = true;
+const cc=document.createElement("div"); cc.className="answerCount";
 
-try{
+cc.textContent="تكرار هذه الإجابة: "+(counts[r.aKey]||1);
 
-await update(ref(db), updates);
-
-log("[OK] Approved", rows.length);
-
-}catch(e){
-
-log("[ERR] Approve:", e?.message || String(e));
-
-alert("فشل الاعتماد. صوّر LOG وأرسله لي.");
+left.appendChild(cc);
 
 }
 
-}
+const meta=document.createElement("div"); meta.className="small";
 
-async function deleteRows(rows){
+meta.textContent="المسار: "+r.year+"/"+r.sub+" • ok: "+(r.ok?"true":"false");
 
-if (!rows?.length) return;
+left.appendChild(meta);
 
-if (!confirm(`حذف نهائي لـ ${rows.length} سجل؟`)) return;
+const actions=document.createElement("div");
 
-const updates = {};
+[actions.style](http://actions.style).display="flex"; [actions.style](http://actions.style).flexDirection="column"; [actions.style.gap](http://actions.style.gap)="8px";
 
-for (const r of rows) updates[r.path] = null;
+const b1=document.createElement("button"); b1.className="btn good"; b1.textContent="اعتماد"; b1.onclick=()=>approveRows([r]);
 
-try{
+const b2=document.createElement("button"); b2.className="btn danger"; b2.textContent="حذف"; b2.onclick=()=>deleteRows([r]);
 
-await update(ref(db), updates);
+actions.appendChild(b1); actions.appendChild(b2);
 
-log("[OK] Deleted", rows.length);
+row.appendChild(left); row.appendChild(actions);
 
-}catch(e){
-
-log("[ERR] Delete:", e?.message || String(e));
-
-alert("فشل الحذف. صوّر LOG وأرسله لي.");
+return row;
 
 }
 
+/ *bulk ops* /
+
+function approveRows(rows){
+
+if(!rows||!rows.length) return;
+
+if(!confirm("اعتماد "+rows.length+" سجل؟")) return;
+
+const updates={};
+
+rows.forEach(r=>updates[r.path+"/ok"]=true);
+
+db.ref().update(updates, (err)=>{
+
+if(err){ log("[ERR] approve:", err.message||err); alert("فشل الاعتماد. راجع LOG."); }
+
+else log("[OK] approved", rows.length);
+
+});
+
 }
 
-async function applyMajorityAndDelete(group){
+function deleteRows(rows){
 
-const rows = group.rows||[];
+if(!rows||!rows.length) return;
 
-if (rows.length<2) return;
+if(!confirm("حذف نهائي لـ "+rows.length+" سجل؟")) return;
 
-const { bestKey, bestCount } = majorityAnswerKey(rows);
+const updates={};
 
-if (!bestKey) return;
+rows.forEach(r=>updates[r.path]=null);
 
-if (!confirm(`سيتم اعتماد الأكثر تكراراً (${bestCount}) وحذف الباقي نهائياً. متابعة؟`)) return;
+db.ref().update(updates, (err)=>{
 
-const updates = {};
+if(err){ log("[ERR] delete:", err.message||err); alert("فشل الحذف. راجع LOG."); }
 
-for (const r of rows){
+else log("[OK] deleted", rows.length);
 
-if (r.aKey===bestKey) updates[r.path+"/ok"]=true;
+});
+
+}
+
+function applyMajorityAndDelete(g){
+
+const rows=g.rows||[];
+
+const m=majority(rows);
+
+if(!m.bestKey) return;
+
+if(!confirm("اعتماد الأكثر ("+m.bestCount+") وحذف الباقي نهائياً؟")) return;
+
+const updates={};
+
+rows.forEach(r=>{
+
+if(r.aKey===m.bestKey) updates[r.path+"/ok"]=true;
 
 else updates[r.path]=null;
 
-}
+});
 
-try{
+db.ref().update(updates, (err)=>{
 
-await update(ref(db), updates);
+if(err){ log("[ERR] majority:", err.message||err); alert("فشل العملية. راجع LOG."); }
 
-log("[OK] Conflict majority applied");
+else log("[OK] majority applied");
 
-}catch(e){
-
-log("[ERR] Majority:", e?.message || String(e));
-
-alert("فشل العملية. صوّر LOG وأرسله لي.");
+});
 
 }
 
-}
+function deleteDuplicatesKeepOne(g){
 
-async function deleteDuplicatesKeepOne(group){
+const rows=g.rows||[];
 
-const rows = group.rows||[];
+if(rows.length<2) return;
 
-if (rows.length<2) return;
+if(!confirm("حذف "+(rows.length-1)+" مكرر نهائياً؟")) return;
 
-if (!confirm(`حذف ${rows.length-1} مكرر نهائياً والإبقاء على واحد؟`)) return;
+const updates={};
 
-const updates = {};
+for(let i=1;i<rows.length;i++) updates[rows[i].path]=null;
 
-for (let i=1;i<rows.length;i++) updates[rows[i].path]=null;
+db.ref().update(updates, (err)=>{
 
-try{
+if(err){ log("[ERR] dup delete:", err.message||err); alert("فشل حذف المكرر. راجع LOG."); }
 
-await update(ref(db), updates);
+else log("[OK] dup deleted", rows.length-1);
 
-log("[OK] Duplicates deleted", rows.length-1);
-
-}catch(e){
-
-log("[ERR] Dup delete:", e?.message || String(e));
-
-alert("فشل حذف المكرر. صوّر LOG وأرسله لي.");
+});
 
 }
 
-}
+/ *tabs + paging* /
 
-/* =======================
+window.switchTab=(tab)=>{
 
-Raw view
+document.getElementById("view_smart").style.display = tab==="smart" ? "block":"none";
 
-======================= */
+document.getElementById("view_raw").style.display = tab==="raw" ? "block":"none";
 
-window.renderRaw = ()=>{
+document.getElementById("btn_smart").classList.toggle("active", tab==="smart");
 
-const list = document.getElementById("rawList");
+document.getElementById("btn_raw").classList.toggle("active", tab==="raw");
+
+if(tab==="raw") renderRaw();
+
+if(tab==="smart"){ page=0; applySmart(); }
+
+};
+
+window.setSmartMode=(m)=>{
+
+smartMode=m;
+
+["needs_review","conflicts","duplicates"].forEach(k=>{
+
+const el=document.getElementById("m_"+k);
+
+if(el) el.classList.toggle("active", k===m);
+
+});
+
+page=0; applySmart();
+
+};
+
+window.resetPaging=()=>{ page=0; applySmart(); };
+
+window.nextPage=()=>{ const ps=pageSize(); if((page+1)*ps>=smartGroups.length) return; page++; renderSmartPage(); };
+
+window.prevPage=()=>{ if(page<=0) return; page--; renderSmartPage(); };
+
+window.setPathFilter=(y,s)=>{ curYear=y; curSub=s; page=0; applySmart(); };
+
+/ *raw* /
+
+window.renderRaw=()=>{
+
+const list=document.getElementById("rawList");
 
 list.innerHTML="";
 
-const term = clean(document.getElementById("rawSearch").value||"");
+const term=clean(document.getElementById("rawSearch").value||"");
 
-let items = scopedItems();
+let items=scopedItems();
 
-if (term) items = items.filter(x=> clean(x.q).includes(term) || clean(x.a).includes(term));
+if(term) items=items.filter(x=>clean(x.q).includes(term)||clean(x.a).includes(term));
 
 items.slice(0,100).forEach(r=>{
 
@@ -1226,9 +844,9 @@ const head=document.createElement("div"); head.className="groupHead";
 
 const left=document.createElement("div"); [left.style](http://left.style).flex="1";
 
-const t=document.createElement("div"); t.className="title"; renderSafe(t, r.q);
+const t=document.createElement("div"); t.className="title"; t.textContent=r.q||"---";
 
-const m=document.createElement("div"); m.className="meta"; m.textContent=`${r.year}/${r.sub} • ok:${r.ok}`;
+const m=document.createElement("div"); m.className="meta"; m.textContent=r.year+"/"+r.sub+" • ok:"+r.ok;
 
 left.appendChild(t); left.appendChild(m);
 
@@ -1246,7 +864,7 @@ box.appendChild(head);
 
 const rowsWrap=document.createElement("div"); rowsWrap.className="rows";
 
-const ans=document.createElement("div"); ans.className="answer"; renderSafe(ans, r.a);
+const ans=document.createElement("div"); ans.className="answer"; ans.textContent=r.a||"---";
 
 rowsWrap.appendChild(ans);
 
@@ -1260,41 +878,11 @@ list.appendChild(box);
 
 window.clearRawSearch=()=>{ document.getElementById("rawSearch").value=""; renderRaw(); };
 
-/* =======================
+/ *Attach Firebase* /
 
-Tabs
+log("[FIREBASE] listening to path: data");
 
-======================= */
-
-window.switchTab=(tab)=>{
-
-document.getElementById("view_smart").style.display = tab==="smart" ? "block" : "none";
-
-document.getElementById("view_raw").style.display   = tab==="raw"   ? "block" : "none";
-
-document.getElementById("btn_smart").classList.toggle("active", tab==="smart");
-
-document.getElementById("btn_raw").classList.toggle("active", tab==="raw");
-
-if (tab==="raw") renderRaw();
-
-if (tab==="smart") resetPaging();
-
-};
-
-/* =======================
-
-Attach Firebase (key)
-
-======================= */
-
-log("[FIREBASE] Attaching onValue to path: data");
-
-onValue(
-
-ref(db, "data"),
-
-(snap)=>{
+db.ref("data").on("value", (snap)=>{
 
 try{
 
@@ -1306,7 +894,7 @@ renderTree();
 
 stopLoader();
 
-log("[OK] Loaded data. Items:", String(allItems.length));
+log("[OK] loaded items:", String(allItems.length));
 
 applySmart();
 
@@ -1314,25 +902,21 @@ applySmart();
 
 stopLoader();
 
-log("[ERR] Render crash:", e?.message || String(e));
+log("[ERR] render:", e.message||e);
 
-alert("حدث خطأ داخل الصفحة. صوّر LOG وأرسله لي.");
+alert("خطأ داخل الصفحة. راجع LOG.");
 
 }
 
-},
-
-(err)=>{
+}, (err)=>{
 
 stopLoader();
 
-log("[FIREBASE ERROR]", err?.message || String(err));
+log("[FIREBASE ERROR]", err && (err.message||err));
 
-alert("Firebase رفض القراءة/أو يوجد خطأ. صوّر LOG أسفل يمين الصفحة وأرسله لي.");
+alert("Firebase رفض القراءة أو يوجد خطأ. راجع LOG.");
 
-}
-
-);
+});
 
 </script>
 
