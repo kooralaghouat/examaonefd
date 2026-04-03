@@ -1,925 +1,366 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Media V42 | Final Pro Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --p: #2563eb; --bg: #f0f2f5; --c: #ffffff; --d: #e11d48; --s: #059669; --w: #f59e0b; --txt: #1e293b; --mut: #64748b; --border: #e2e8f0; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; color: var(--txt); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* القائمة الجانبية */
+        .sidebar { width: 280px; background: var(--c); display: flex; flex-direction: column; border-left: 1px solid var(--border); padding: 15px; z-index: 100; }
+        .logo { font-size: 20px; font-weight: 900; color: var(--p); text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--bg); }
+        .admin-nav { margin-bottom: 15px; }
+        .nav-btn { display: block; width: 100%; padding: 12px; border-radius: 10px; cursor: pointer; color: var(--txt); margin-bottom: 5px; font-size: 14px; font-weight: 700; border: 1px solid transparent; background: transparent; text-align: right; transition: 0.2s; }
+        .nav-btn:hover, .nav-btn.active { background: #eff6ff; color: var(--p); border-color: #dbeafe; }
+        .btn-special { background: #f8fafc; border: 1px solid var(--border); margin-bottom: 8px; }
+        
+        .tree-container { flex-grow: 1; overflow-y: auto; padding-top: 10px; border-top: 2px solid var(--bg); }
+        .tree-sub { margin-right: 15px; border-right: 2px solid var(--border); padding-right: 10px; margin-bottom: 10px; }
+        .tree-item { padding: 6px; font-size: 13px; color: var(--mut); cursor: pointer; display: block; text-decoration: none; border-radius: 5px; }
+        .tree-item:hover { background: #f1f5f9; color: var(--p); }
 
-<meta charset="UTF-8" />
+        /* المحتوى الرئيسي */
+        .main { flex-grow: 1; padding: 20px; overflow-y: auto; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--c); padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); text-align: center; border-bottom: 4px solid var(--p); cursor: pointer; }
+        .stat-card h3 { font-size: 12px; color: var(--mut); margin: 0; }
+        .stat-card p { margin: 8px 0 0; font-size: 24px; font-weight: 900; }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        /* 🔥 تصميم نظام حل التعارض الاحترافي 🔥 */
+        .conflict-box { background: #fff1f2; border: 2px solid #fecaca; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(225, 29, 72, 0.05); }
+        .conflict-q { background: white; padding: 15px; border-radius: 10px; font-weight: 900; font-size: 16px; color: var(--txt); border-bottom: 4px solid #fecaca; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .answer-choice { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); transition: 0.2s; }
+        .answer-choice:hover { border-color: #cbd5e1; }
+        .answer-choice.verified { background: #f0fdf4; border-color: var(--s); box-shadow: 0 0 10px rgba(5, 150, 105, 0.1); }
 
-<title>Super Media V42 | Smart Review Admin (No-Module)</title>
+        /* إدارة الروابط الخمسة */
+        .link-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid var(--border); }
+        .link-row label { font-weight: 900; color: var(--p); width: 80px; font-size: 16px; }
+        .link-row input { flex-grow: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; }
+        .link-row input:focus { border-color: var(--p); }
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+        /* عناصر عامة */
+        .content-card { background: var(--c); border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8fafc; padding: 15px; text-align: right; font-size: 12px; color: var(--mut); border-bottom: 2px solid var(--border); }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        
+        .img-view { max-width: 90px; max-height: 60px; border-radius: 6px; cursor: pointer; transition: 0.2s; border: 1px solid var(--border); padding: 2px; }
+        .img-view:hover { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(4.5); z-index: 10000; box-shadow: 0 0 50px rgba(0,0,0,0.6); background: white; }
 
-<style>
-
-:root{ --p:#2563eb; --bg:#f0f2f5; --c:#ffffff; --d:#e11d48; --s:#059669; --w:#f59e0b; --txt:#1e293b; --mut:#64748b; --border:#e2e8f0; --dark:#0b1220; }
-
-*{ box-sizing:border-box; }
-
-body{ font-family:'Cairo',sans-serif; background:var(--bg); margin:0; color:var(--txt); display:flex; height:100vh; overflow:hidden; }
-
-.sidebar{ width:300px; background:var(--c); display:flex; flex-direction:column; border-left:1px solid var(--border); padding:15px; z-index:100; }
-
-.logo{ font-size:18px; font-weight:900; color:var(--p); text-align:center; margin-bottom:12px; padding-bottom:12px; border-bottom:2px solid var(--bg); }
-
-.nav-btn{ display:block; width:100%; padding:12px; border-radius:10px; cursor:pointer; color:var(--txt); margin-bottom:6px; font-size:14px; font-weight:800; border:1px solid transparent; background:transparent; text-align:right; transition:.2s; }
-
-.nav-btn:hover,.nav-btn.active{ background:#eff6ff; color:var(--p); border-color:#dbeafe; }
-
-.btn-special{ background:#f8fafc; border:1px solid var(--border); }
-
-.tree-container{ flex-grow:1; overflow-y:auto; padding-top:10px; border-top:2px solid var(--bg); }
-
-.tree-sub{ margin-right:15px; border-right:2px solid var(--border); padding-right:10px; margin-bottom:10px; }
-
-.tree-item{ padding:7px; font-size:13px; color:var(--mut); cursor:pointer; display:block; text-decoration:none; border-radius:7px; }
-
-.tree-item:hover{ background:#f1f5f9; color:var(--p); }
-
-.main{ flex-grow:1; padding:18px; overflow-y:auto; }
-
-.topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
-
-.badge{ font-size:12px; color:var(--mut); }
-
-.content-card{ background:var(--c); border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.05); overflow:hidden; border:1px solid var(--border); }
-
-.loader{ position:fixed; inset:0; background:#fff; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-
-@keyframes spin{ to{ transform:rotate(360deg); } }
-
-.toolbar{ display:flex; gap:8px; flex-wrap:wrap; padding:12px; border-bottom:1px solid var(--border); align-items:center; }
-
-.btn{ padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:#fff; cursor:pointer; font-weight:800; font-size:12px; }
-
-.btn.danger{ background:var(--d); color:#fff; border-color:var(--d); }
-
-.btn.good{ background:var(--s); color:#fff; border-color:var(--s); }
-
-.btn.ghost{ background:#f8fafc; }
-
-.btn.active{ outline:3px solid rgba(37,99,235,.18); border-color:#93c5fd; }
-
-.input{ padding:10px 12px; border-radius:12px; border:1px solid var(--border); outline:none; font-family:inherit; width:280px; max-width:100%; }
-
-.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:12px; }
-
-.stat{ background:var(--c); border-radius:16px; padding:12px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,.03); cursor:pointer; }
-
-.stat .t{ color:var(--mut); font-size:12px; font-weight:800; }
-
-.stat .v{ font-size:22px; font-weight:900; margin-top:6px; }
-
-.list{ padding:12px; display:flex; flex-direction:column; gap:10px; }
-
-.group{ border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#fff; }
-
-.groupHead{ padding:12px; background:#f8fafc; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-
-.groupHead .meta{ color:var(--mut); font-size:11px; font-weight:800; }
-
-.groupHead .title{ font-weight:900; font-size:13px; line-height:1.7; white-space:pre-wrap; word-break:break-word; }
-
-.groupHead .actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-
-.rows{ padding:12px; display:flex; flex-direction:column; gap:10px; }
-
-.row{ border:1px solid var(--border); border-radius:14px; padding:10px; display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
-
-.row.verified{ background:#f0fdf4; border-color:rgba(5,150,105,.35); }
-
-.row .left{ flex:1; min-width:0; }
-
-.small{ color:var(--mut); font-size:11px; margin-top:6px; }
-
-.answerCount{ font-size:11px; font-weight:900; color:var(--mut); margin-top:6px; }
-
-.answer{ font-weight:900; font-size:13px; line-height:1.7; white-space:pre-wrap; word-break:break-word; }
-
-.pager{ display:flex; justify-content:space-between; align-items:center; padding:12px; border-top:1px solid var(--border); background:#fff; }
-
-.pager .info{ color:var(--mut); font-size:12px; font-weight:800; }
-
-.log{
-
-position:fixed; bottom:12px; right:12px; z-index:999999;
-
-width:560px; max-width:94vw; max-height:45vh; overflow:auto;
-
-background:var(--dark); color:#e5e7eb; border:1px solid #334155; border-radius:12px; padding:10px;
-
-font:12px/1.6 ui-monospace, Menlo, Consolas; direction:ltr; white-space:pre-wrap;
-
-}
-
-.log b{ color:#93c5fd; }
-
-</style>
-
+        .btn-v { padding: 8px 15px; border-radius: 8px; border: 1px solid var(--border); background: white; cursor: pointer; font-weight: 700; font-size: 12px; transition: 0.2s; }
+        .btn-v.active { background: var(--s); color: white; border-color: var(--s); }
+        .btn-del { background: var(--d); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+        .btn-del:hover { opacity: 0.8; }
+        
+        #qSearch { width: 100%; padding: 18px; border: none; border-bottom: 2px solid var(--bg); outline: none; font-size: 16px; font-family: inherit; }
+        .action-bar { position: fixed; bottom: 20px; left: 55%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 25px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; }
+    </style>
 </head>
-
 <body>
 
-<div id="loader" class="loader">
-
-<div style="width:44px;height:44px;border:4px solid #f1f5f9;border-top-color:#2563eb;border-radius:50%;animation:spin 1s linear infinite;"></div>
-
-<p style="color:#2563eb; margin-top:15px; font-weight:900;">جاري جلب البيانات من السحابة...</p>
-
-<p style="color:#64748b; margin-top:4px; font-weight:800; font-size:12px;">إذا توقف، راجع LOG أسفل يمين الصفحة.</p>
-
-</div>
-
-<div id="log" class="log">LOG:
-
-</div>
-
-<div class="sidebar">
-
-<div class="logo">SUPER MEDIA V42 — Smart Review</div>
-
-<button class="nav-btn active btn-special" id="btn_smart" onclick="switchTab('smart')">⚡ مراجعة ذكية</button>
-
-<button class="nav-btn btn-special" id="btn_raw" onclick="switchTab('raw')">📋 عرض عادي</button>
-
-<button class="nav-btn" onclick="setPathFilter(null,null)">🏠 كل المواد</button>
-
-<div class="tree-container" id="treeContainer"></div>
-
-</div>
-
-<div class="main">
-
-<div class="topbar">
-
-<div class="badge">وضع الحذف: <b style="color:var(--d)">نهائي</b></div>
-
-<div class="badge">قاعدة البيانات: <b>Firebase RTDB</b></div>
-
-</div>
-
-<div class="grid">
-
-<div class="stat" onclick="setSmartMode('needs_review')">
-
-<div class="t">غير معتمد</div>
-
-<div class="v" id="st_need">0</div>
-
-</div>
-
-<div class="stat" onclick="setSmartMode('conflicts')">
-
-<div class="t">تعارض إجابات</div>
-
-<div class="v" id="st_conf">0</div>
-
-</div>
-
-<div class="stat" onclick="setSmartMode('duplicates')">
-
-<div class="t">تكرار تام</div>
-
-<div class="v" id="st_dup">0</div>
-
-</div>
-
-</div>
-
-<div id="view_smart" class="content-card">
-
-<div class="toolbar">
-
-<button class="btn ghost active" id="m_needs_review" onclick="setSmartMode('needs_review')">غير معتمد</button>
-
-<button class="btn ghost" id="m_conflicts" onclick="setSmartMode('conflicts')">تعارض</button>
-
-<button class="btn ghost" id="m_duplicates" onclick="setSmartMode('duplicates')">تكرار</button>
-
-<input id="searchBox" class="input" type="text" placeholder="بحث داخل النتائج..." oninput="applySmart()" />
-
-مجموعات/الصفحة:
-
-<select id="pageSize" class="input" style="width:110px" onchange="resetPaging()">
-
-<option>10</option>
-
-<option selected>20</option>
-
-<option>30</option>
-
-<option>50</option>
-
-</select>
-
-</span>
-
-</div>
-
-<div class="list" id="smartList"></div>
-
-<div class="pager">
-
-<button class="btn" onclick="prevPage()">السابق</button>
-
-<div class="info" id="pageInfo">—</div>
-
-<button class="btn" onclick="nextPage()">التالي</button>
-
-</div>
-
-</div>
-
-<div id="view_raw" class="content-card" style="display:none">
-
-<div class="toolbar">
-
-<input class="input" id="rawSearch" type="text" placeholder="بحث..." oninput="renderRaw()" />
-
-<button class="btn ghost" onclick="clearRawSearch()">مسح</button>
-
-يعرض أول 100 فقط
-
-</div>
-
-<div class="list" id="rawList"></div>
-
-</div>
-
-</div>
-
-<!-- Firebase (no-module compat) -->
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
-<script>
-
-/ *LOG* /
-
-const logEl = document.getElementById("log");
-
-function log(){ logEl.textContent += Array.from(arguments).join(" ") + "n"; }
-
-function stopLoader(){ const l=document.getElementById("loader"); if(l) [l.style](http://l.style).display="none"; }
-
-window.onerror = (msg)=>log("[window.error]", msg);
-
-log("Page:", location.href);
-
-log("Firebase compat:", (window.firebase ? "OK" : "NOT LOADED"));
-
-/ *Firebase init* /
-
-const firebaseConfig = { databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/" };
-
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.database();
-
-/ *Helpers* /
-
-const clean = (t) => {
-
-if (!t) return "";
-
-return t.toString()
-
-.toLowerCase()
-
-.replace(/[u064B-u065F]/g, "")
-
-.replace(/[إأآ]/g, "ا")
-
-.replace(/ة/g, "ه")
-
-.replace(/ى/g, "ي")
-
-.replace(//g, " ")
-
-.replace(/s+/g, " ")
-
-.trim();
-
-};
-
-/ *State* /
-
-let DATA = {};
-
-let allItems = [];
-
-let curYear=null, curSub=null;
-
-let smartMode="needs_review";
-
-let smartGroups=[];
-
-let page=0;
-
-function flatten(){
-
-allItems = [];
-
-const data = DATA || {};
-
-Object.keys(data).forEach(y=>{
-
-Object.keys(data[y]||{}).forEach(s=>{
-
-const qs = (data[y][s] && data[y][s].questions) ? data[y][s].questions : {};
-
-Object.keys(qs||{}).forEach(id=>{
-
-const q = (qs[id] && qs[id].q) ? qs[id].q : "";
-
-const a = (qs[id] && qs[id].a) ? qs[id].a : "";
-
-const ok = !!(qs[id] && qs[id].ok);
-
-allItems.push({
-
-id, year:y, sub:s, q, a, ok,
-
-qKey: clean(q),
-
-aKey: clean(a),
-
-path: "data/"+y+"/"+s+"/questions/"+id
-
-});
-
-});
-
-});
-
-});
-
-}
-
-function scopedItems(){
-
-let arr = allItems;
-
-if (curYear) arr = arr.filter(x=>x.year===curYear);
-
-if (curSub) arr = arr.filter(x=>x.sub===curSub);
-
-return arr;
-
-}
-
-function renderTree(){
-
-const tree = document.getElementById("treeContainer");
-
-tree.innerHTML = "";
-
-Object.keys(DATA||{}).forEach(y=>{
-
-const yBtn = document.createElement("div");
-
-yBtn.className="nav-btn";
-
-[yBtn.style](http://yBtn.style).background="#f1f5f9";
-
-yBtn.textContent="📅 "+y;
-
-yBtn.onclick=()=>setPathFilter(y,null);
-
-tree.appendChild(yBtn);
-
-const sub = document.createElement("div");
-
-sub.className="tree-sub";
-
-Object.keys((DATA[y]||{})).forEach(s=>{
-
-const a = document.createElement("a");
-
-a.className="tree-item";
-
-a.textContent="📝 "+s;
-
-a.onclick=()=>setPathFilter(y,s);
-
-sub.appendChild(a);
-
-});
-
-tree.appendChild(sub);
-
-});
-
-}
-
-function buildGroups(){
-
-const items = scopedItems();
-
-if (smartMode==="needs_review"){
-
-const map={};
-
-items.forEach(it=>{
-
-if (it.ok) return;
-
-(map[it.qKey] ||= []).push(it);
-
-});
-
-return Object.values(map).map(rows=>({type:"needs_review", qText: rows[0].q, rows}));
-
-}
-
-if (smartMode==="conflicts"){
-
-const map={};
-
-items.forEach(it=>(map[it.qKey] ||= []).push(it));
-
-const out=[];
-
-Object.keys(map).forEach(k=>{
-
-const rows=map[k];
-
-const ans=new Set([rows.map](http://rows.map)(r=>r.aKey));
-
-if(ans.size>1) out.push({type:"conflict", qText: rows[0].q, rows});
-
-});
-
-return out;
-
-}
-
-// duplicates
-
-const map={};
-
-items.forEach(it=>{
-
-const k=it.qKey+"||"+it.aKey;
-
-(map[k] ||= []).push(it);
-
-});
-
-const out=[];
-
-Object.keys(map).forEach(k=>{
-
-if(map[k].length>=2) out.push({type:"duplicate", qText: map[k][0].q, aText: map[k][0].a, rows: map[k]});
-
-});
-
-return out;
-
-}
-
-function countAnswers(rows){
-
-const c={}; rows.forEach(r=>c[r.aKey]=(c[r.aKey]||0)+1); return c;
-
-}
-
-function majority(rows){
-
-const c=countAnswers(rows);
-
-let bestKey=null,best=-1;
-
-Object.keys(c).forEach(k=>{ if(c[k]>best){best=c[k];bestKey=k;} });
-
-return {bestKey, bestCount:best, counts:c};
-
-}
-
-function pageSize(){ return parseInt(document.getElementById("pageSize").value||"20",10); }
-
-function renderStats(){
-
-const items=scopedItems();
-
-document.getElementById("st_need").textContent = items.filter(x=>!x.ok).length;
-
-const qMap={};
-
-items.forEach(it=>(qMap[it.qKey] ||= new Set()).add(it.aKey));
-
-document.getElementById("st_conf").textContent = Object.values(qMap).filter(s=>s.size>1).length;
-
-const dupMap={};
-
-items.forEach(it=>{ const k=it.qKey+"||"+it.aKey; dupMap[k]=(dupMap[k]||0)+1; });
-
-document.getElementById("st_dup").textContent = Object.values(dupMap).filter(n=>n>=2).length;
-
-}
-
-function applySmart(){
-
-const term = clean(document.getElementById("searchBox").value||"");
-
-smartGroups = buildGroups();
-
-if(term){
-
-smartGroups = smartGroups.filter(g=>{
-
-if(clean(g.qText||"").includes(term)) return true;
-
-if(g.type==="duplicate" && clean(g.aText||"").includes(term)) return true;
-
-return (g.rows||[]).some(r=>clean(r.a||"").includes(term));
-
-});
-
-}
-
-renderStats();
-
-renderSmartPage();
-
-}
-
-function renderSmartPage(){
-
-const list=document.getElementById("smartList");
-
-list.innerHTML="";
-
-const ps=pageSize();
-
-const start=page*ps;
-
-const end=Math.min(start+ps, smartGroups.length);
-
-document.getElementById("pageInfo").textContent = smartGroups.length ? ("عرض "+(start+1)+"-"+end+" من "+smartGroups.length) : "لا توجد نتائج";
-
-smartGroups.slice(start,end).forEach(g=>{
-
-const box=document.createElement("div"); box.className="group";
-
-const head=document.createElement("div"); head.className="groupHead";
-
-const left=document.createElement("div"); [left.style](http://left.style).flex="1";
-
-const title=document.createElement("div"); title.className="title"; title.textContent=g.qText||"---";
-
-const meta=document.createElement("div"); meta.className="meta"; meta.textContent="نوع: "+g.type+" • سجلات: "+(g.rows||[]).length;
-
-left.appendChild(title); left.appendChild(meta);
-
-const actions=document.createElement("div"); actions.className="actions";
-
-if(g.type==="conflict"){
-
-const b=document.createElement("button");
-
-b.className="btn good";
-
-b.textContent="اعتماد الأكثر + حذف الباقي";
-
-b.onclick=()=>applyMajorityAndDelete(g);
-
-actions.appendChild(b);
-
-}else if(g.type==="duplicate"){
-
-const b=document.createElement("button");
-
-b.className="btn danger";
-
-b.textContent="حذف "+(g.rows.length-1)+" مكرر";
-
-b.onclick=()=>deleteDuplicatesKeepOne(g);
-
-actions.appendChild(b);
-
-}else{
-
-const b1=document.createElement("button"); b1.className="btn good"; b1.textContent="اعتماد الكل"; b1.onclick=()=>approveRows(g.rows);
-
-const b2=document.createElement("button"); b2.className="btn danger"; b2.textContent="حذف الكل"; b2.onclick=()=>deleteRows(g.rows);
-
-actions.appendChild(b1); actions.appendChild(b2);
-
-}
-
-head.appendChild(left); head.appendChild(actions);
-
-box.appendChild(head);
-
-const rowsWrap=document.createElement("div"); rowsWrap.className="rows";
-
-if(g.type==="conflict"){
-
-const counts=countAnswers(g.rows);
-
-g.rows.forEach(r=>rowsWrap.appendChild(buildRow(r, counts)));
-
-}else if(g.type==="duplicate"){
-
-rowsWrap.appendChild(buildRow(g.rows[0], {[g.rows[0].aKey]: g.rows.length}));
-
-}else{
-
-g.rows.slice(0,12).forEach(r=>rowsWrap.appendChild(buildRow(r)));
-
-}
-
-box.appendChild(rowsWrap);
-
-list.appendChild(box);
-
-});
-
-}
-
-function buildRow(r, counts){
-
-const row=document.createElement("div");
-
-row.className="row"+(r.ok?" verified":"");
-
-const left=document.createElement("div"); left.className="left";
-
-const ans=document.createElement("div"); ans.className="answer"; ans.textContent=r.a||"---";
-
-left.appendChild(ans);
-
-if(counts){
-
-const cc=document.createElement("div"); cc.className="answerCount";
-
-cc.textContent="تكرار هذه الإجابة: "+(counts[r.aKey]||1);
-
-left.appendChild(cc);
-
-}
-
-const meta=document.createElement("div"); meta.className="small";
-
-meta.textContent="المسار: "+r.year+"/"+r.sub+" • ok: "+(r.ok?"true":"false");
-
-left.appendChild(meta);
-
-const actions=document.createElement("div");
-
-[actions.style](http://actions.style).display="flex"; [actions.style](http://actions.style).flexDirection="column"; [actions.style.gap](http://actions.style.gap)="8px";
-
-const b1=document.createElement("button"); b1.className="btn good"; b1.textContent="اعتماد"; b1.onclick=()=>approveRows([r]);
-
-const b2=document.createElement("button"); b2.className="btn danger"; b2.textContent="حذف"; b2.onclick=()=>deleteRows([r]);
-
-actions.appendChild(b1); actions.appendChild(b2);
-
-row.appendChild(left); row.appendChild(actions);
-
-return row;
-
-}
-
-/ *bulk ops* /
-
-function approveRows(rows){
-
-if(!rows||!rows.length) return;
-
-if(!confirm("اعتماد "+rows.length+" سجل؟")) return;
-
-const updates={};
-
-rows.forEach(r=>updates[r.path+"/ok"]=true);
-
-db.ref().update(updates, (err)=>{
-
-if(err){ log("[ERR] approve:", err.message||err); alert("فشل الاعتماد. راجع LOG."); }
-
-else log("[OK] approved", rows.length);
-
-});
-
-}
-
-function deleteRows(rows){
-
-if(!rows||!rows.length) return;
-
-if(!confirm("حذف نهائي لـ "+rows.length+" سجل؟")) return;
-
-const updates={};
-
-rows.forEach(r=>updates[r.path]=null);
-
-db.ref().update(updates, (err)=>{
-
-if(err){ log("[ERR] delete:", err.message||err); alert("فشل الحذف. راجع LOG."); }
-
-else log("[OK] deleted", rows.length);
-
-});
-
-}
-
-function applyMajorityAndDelete(g){
-
-const rows=g.rows||[];
-
-const m=majority(rows);
-
-if(!m.bestKey) return;
-
-if(!confirm("اعتماد الأكثر ("+m.bestCount+") وحذف الباقي نهائياً؟")) return;
-
-const updates={};
-
-rows.forEach(r=>{
-
-if(r.aKey===m.bestKey) updates[r.path+"/ok"]=true;
-
-else updates[r.path]=null;
-
-});
-
-db.ref().update(updates, (err)=>{
-
-if(err){ log("[ERR] majority:", err.message||err); alert("فشل العملية. راجع LOG."); }
-
-else log("[OK] majority applied");
-
-});
-
-}
-
-function deleteDuplicatesKeepOne(g){
-
-const rows=g.rows||[];
-
-if(rows.length<2) return;
-
-if(!confirm("حذف "+(rows.length-1)+" مكرر نهائياً؟")) return;
-
-const updates={};
-
-for(let i=1;i<rows.length;i++) updates[rows[i].path]=null;
-
-db.ref().update(updates, (err)=>{
-
-if(err){ log("[ERR] dup delete:", err.message||err); alert("فشل حذف المكرر. راجع LOG."); }
-
-else log("[OK] dup deleted", rows.length-1);
-
-});
-
-}
-
-/ *tabs + paging* /
-
-window.switchTab=(tab)=>{
-
-document.getElementById("view_smart").style.display = tab==="smart" ? "block":"none";
-
-document.getElementById("view_raw").style.display = tab==="raw" ? "block":"none";
-
-document.getElementById("btn_smart").classList.toggle("active", tab==="smart");
-
-document.getElementById("btn_raw").classList.toggle("active", tab==="raw");
-
-if(tab==="raw") renderRaw();
-
-if(tab==="smart"){ page=0; applySmart(); }
-
-};
-
-window.setSmartMode=(m)=>{
-
-smartMode=m;
-
-["needs_review","conflicts","duplicates"].forEach(k=>{
-
-const el=document.getElementById("m_"+k);
-
-if(el) el.classList.toggle("active", k===m);
-
-});
-
-page=0; applySmart();
-
-};
-
-window.resetPaging=()=>{ page=0; applySmart(); };
-
-window.nextPage=()=>{ const ps=pageSize(); if((page+1)*ps>=smartGroups.length) return; page++; renderSmartPage(); };
-
-window.prevPage=()=>{ if(page<=0) return; page--; renderSmartPage(); };
-
-window.setPathFilter=(y,s)=>{ curYear=y; curSub=s; page=0; applySmart(); };
-
-/ *raw* /
-
-window.renderRaw=()=>{
-
-const list=document.getElementById("rawList");
-
-list.innerHTML="";
-
-const term=clean(document.getElementById("rawSearch").value||"");
-
-let items=scopedItems();
-
-if(term) items=items.filter(x=>clean(x.q).includes(term)||clean(x.a).includes(term));
-
-items.slice(0,100).forEach(r=>{
-
-const box=document.createElement("div"); box.className="group";
-
-const head=document.createElement("div"); head.className="groupHead";
-
-const left=document.createElement("div"); [left.style](http://left.style).flex="1";
-
-const t=document.createElement("div"); t.className="title"; t.textContent=r.q||"---";
-
-const m=document.createElement("div"); m.className="meta"; m.textContent=r.year+"/"+r.sub+" • ok:"+r.ok;
-
-left.appendChild(t); left.appendChild(m);
-
-const actions=document.createElement("div"); actions.className="actions";
-
-const b1=document.createElement("button"); b1.className="btn good"; b1.textContent="اعتماد"; b1.onclick=()=>approveRows([r]);
-
-const b2=document.createElement("button"); b2.className="btn danger"; b2.textContent="حذف"; b2.onclick=()=>deleteRows([r]);
-
-actions.appendChild(b1); actions.appendChild(b2);
-
-head.appendChild(left); head.appendChild(actions);
-
-box.appendChild(head);
-
-const rowsWrap=document.createElement("div"); rowsWrap.className="rows";
-
-const ans=document.createElement("div"); ans.className="answer"; ans.textContent=r.a||"---";
-
-rowsWrap.appendChild(ans);
-
-box.appendChild(rowsWrap);
-
-list.appendChild(box);
-
-});
-
-};
-
-window.clearRawSearch=()=>{ document.getElementById("rawSearch").value=""; renderRaw(); };
-
-/ *Attach Firebase* /
-
-log("[FIREBASE] listening to path: data");
-
-db.ref("data").on("value", (snap)=>{
-
-try{
-
-DATA = snap.val() || {};
-
-flatten();
-
-renderTree();
-
-stopLoader();
-
-log("[OK] loaded items:", String(allItems.length));
-
-applySmart();
-
-}catch(e){
-
-stopLoader();
-
-log("[ERR] render:", e.message||e);
-
-alert("خطأ داخل الصفحة. راجع LOG.");
-
-}
-
-}, (err)=>{
-
-stopLoader();
-
-log("[FIREBASE ERROR]", err && (err.message||err));
-
-alert("Firebase رفض القراءة أو يوجد خطأ. راجع LOG.");
-
-});
-
+    <div id="loader" style="position:fixed; inset:0; background:white; z-index:10000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <div style="width:40px; height:40px; border:4px solid #f1f5f9; border-top-color:#2563eb; border-radius:50%; animation:spin 1s linear infinite;"></div>
+        <p style="color:#2563eb; margin-top:15px; font-weight:bold;">V42: جاري تهيئة النظام الذكي...</p>
+    </div>
+
+    <div class="sidebar">
+        <div class="logo">SUPER MEDIA V42</div>
+        <div class="admin-nav">
+            <button class="nav-btn active btn-special" id="btn_data" onclick="window.switchTab('data')">📚 بنك الأسئلة</button>
+            <button class="nav-btn btn-special" id="btn_links" onclick="window.switchTab('links')" style="color:#c2410c">🔗 إدارة الروابط (01 - 05)</button>
+            <button class="nav-btn btn-special" id="btn_cfg" onclick="window.switchTab('cfg')">🔑 إدارة الأكواد</button>
+            <button class="nav-btn" onclick="window.setF(null)">🏠 عرض كل المواد</button>
+        </div>
+        <div class="tree-container" id="treeContainer"></div>
+    </div>
+
+    <div class="main">
+        <!-- واجهة بنك الأسئلة -->
+        <div id="view_data">
+            <div class="stat-grid">
+                <div class="stat-card" onclick="window.setFilter('all', document.getElementById('f_all'))"><h3>الإجمالي</h3><p id="s_total">0</p></div>
+                <div class="stat-card" style="border-color:var(--d)" onclick="window.setFilter('conflict', document.getElementById('f_conflict'))"><h3>تعارض إجابات ⚠️</h3><p id="s_conf">0</p></div>
+                <div class="stat-card" style="border-color:var(--w)" onclick="window.setFilter('sys', document.getElementById('f_sys'))"><h3>رسائل النظام</h3><p id="s_sys">0</p></div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                <button class="btn-v active" id="f_all" onclick="window.setFilter('all', this)">الكل (أول 50 للسرعة)</button>
+                <button class="btn-v" id="f_conflict" style="color:var(--d); border-color:var(--d)" onclick="window.setFilter('conflict', this)">⚠️ شاشة حل التعارض</button>
+                <button class="btn-v" id="f_sys" style="color:var(--w); border-color:var(--w)" onclick="window.setFilter('sys', this)">تحقق / إيقاف الفرض</button>
+                <button class="btn-v" style="background:var(--s); color:white; border:none; margin-right:auto;" onclick="window.autoCleanDups()">🧹 تنظيف المكرر التام</button>
+            </div>
+
+            <div class="content-card">
+                <input type="text" id="qSearch" placeholder="🔍 ابحث في كامل قاعدة البيانات (سؤال، جواب، مسار)..." oninput="window.doSearch(this.value)">
+                
+                <!-- حاوية الجدول العادي -->
+                <table id="mainTable">
+                    <thead id="tHead">
+                        <tr><th width="40"><input type="checkbox" onclick="window.toggleAll(this)"></th><th>السؤال</th><th>الإجابة والاعتماد</th><th>المسار</th><th>حذف</th></tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+                
+                <!-- حاوية التعارض (تظهر فقط عند فلترة التعارض) -->
+                <div id="conflictContainer" style="display:none; padding: 20px;"></div>
+            </div>
+        </div>
+
+        <!-- واجهة إدارة الروابط الخمسة (01 إلى 05) -->
+        <div id="view_links" style="display:none">
+            <h2 style="margin-bottom:10px">🔗 التحكم المركزي في روابط التحميل</h2>
+            <p style="color:var(--mut); margin-bottom:25px; font-size:14px;">ضع روابط Dropbox هنا. سيقوم النظام تلقائياً بتحويلها إلى روابط تحميل مباشر (dl=1).</p>
+            <div class="content-card" style="padding:25px;" id="linksControlsBox">
+                <!-- سيتم توليد الحقول هنا -->
+            </div>
+        </div>
+
+        <!-- واجهة الأكواد -->
+        <div id="view_cfg" style="display:none">
+            <h2 style="margin-bottom:20px">🔑 إدارة الأكواد</h2>
+            <div class="content-card" id="codesContent" style="padding:10px;"></div>
+        </div>
+    </div>
+
+    <div id="actionBar" class="action-bar">
+        <span>المحدد: <b id="selCount">0</b></span>
+        <button class="btn-v" style="background:var(--d); color:white; border:none" onclick="window.bulkDel()">🗑️ حذف</button>
+        <button class="btn-v" style="background:#475569; color:white; border:none" onclick="window.deselectAll()">إلغاء</button>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+    const config = { databaseURL: "https://exameonefd-default-rtdb.europe-west1.firebasedatabase.app/" };
+    const app = initializeApp(config);
+    const db = getDatabase(app);
+
+    let dbRaw = {}; let allItems = []; let filter = 'all'; let curY = null, curS = null;
+
+    const clean = (t) => t ? t.toString().toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[\u064B-\u065F]/g, "").trim() : "";
+
+    window.renderContent = (text) => {
+        if (!text) return "---";
+        const regex = /(https?:\/\/[^\s]+?\.(png|jpg|jpeg|gif|webp))/gi;
+        return text.replace(regex, (url) => `<img src="${url}" class="img-view" loading="lazy">`).replace(/:\[(?:Q_IMG|A_IMG|IMAGE_URL)\]/g, "");
+    };
+
+    onValue(ref(db, '/'), (snap) => {
+        dbRaw = snap.val() || {};
+        processData(); renderTree(); renderUI(); renderLinkControls();
+        document.getElementById('loader').style.display = 'none';
+    });
+
+    function processData() {
+        allItems = []; const data = dbRaw.data || {};
+        Object.keys(data).forEach(y => {
+            Object.keys(data[y]).forEach(s => {
+                const qs = data[y][s].questions || {};
+                Object.keys(qs).forEach(id => {
+                    const q = qs[id].q || ""; const a = qs[id].a || "";
+                    allItems.push({
+                        id, year: y, sub: s, q, a, ok: qs[id].ok||false,
+                        path: `data/${y}/${s}/questions/${id}`,
+                        isSys: q.includes("إيقاف الفرض") || a.includes("إيقاف الفرض") || a.includes("تحقق"),
+                        qKey: clean(q), aKey: clean(a), searchKey: clean(q + a + y + s)
+                    });
+                });
+            });
+        });
+    }
+
+    window.renderUI = () => {
+        if(window.curTab === 'cfg') { renderCodes(); return; }
+        if(window.curTab === 'links') return;
+
+        const tHead = document.getElementById('tHead');
+        const tBody = document.getElementById('tableBody');
+        const conflictBox = document.getElementById('conflictContainer');
+        const mainTable = document.getElementById('mainTable');
+        
+        let display = allItems;
+        if(curY) display = display.filter(i => i.year === curY);
+        if(curS) display = display.filter(i => i.sub === curS);
+        if(filter === 'sys') display = display.filter(i => i.isSys);
+
+        // --- نظام حل التعارض المطور ---
+        if(filter === 'conflict') {
+            mainTable.style.display = 'none';
+            conflictBox.style.display = 'block';
+            
+            const groups = {};
+            display.forEach(i => { if(!groups[i.qKey]) groups[i.qKey] = []; groups[i.qKey].push(i); });
+            
+            let html = "";
+            Object.values(groups).filter(g => new Set(g.map(x=>x.aKey)).size > 1).forEach(g => {
+                html += `<div class="conflict-box">
+                    <div class="conflict-q">❓ السؤال: &nbsp; ${window.renderContent(g[0].q)}</div>
+                    ${g.map(i => `
+                        <div class="answer-choice ${i.ok?'verified':''}">
+                            <div style="flex:1">
+                                💡 ${window.renderContent(i.a)} 
+                                <div style="color:var(--mut); font-size:11px; margin-top:5px;">المسار: ${i.year} > ${i.sub}</div>
+                            </div>
+                            <div style="display:flex; gap:10px;">
+                                <button class="btn-v ${i.ok?'active':''}" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅ معتمد':'✔ اعتماد'}</button>
+                                <button class="btn-del" onclick="window.del('${i.path}')">🗑️</button>
+                            </div>
+                        </div>`).join('')}
+                </div>`;
+            });
+            conflictBox.innerHTML = html || `<h3 style="text-align:center; color:var(--s); margin-top:30px;">لا يوجد تعارض حالياً ✅ كل الأمور ممتازة!</h3>`;
+            updateStats();
+            return;
+        }
+
+        // --- العرض العادي (أول 50 سئال للسرعة) ---
+        mainTable.style.display = 'table';
+        conflictBox.style.display = 'none';
+
+        tBody.innerHTML = display.slice(0, 50).map(i => `
+            <tr class="${i.ok?'verified':''}">
+                <td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td>
+                <td>${window.renderContent(i.q)}</td>
+                <td>
+                    ${window.renderContent(i.a)}
+                    <br><button class="btn-v ${i.ok?'active':''}" style="margin-top:8px" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅ معتمد':'✔ اعتماد'}</button>
+                </td>
+                <td style="font-size:11px; color:var(--mut)">${i.year}/${i.sub}</td>
+                <td><button class="btn-del" onclick="window.del('${i.path}')">🗑️</button></td>
+            </tr>
+        `).join('');
+        updateStats();
+    };
+
+    // --- محرك البحث السريع على كامل الداتا ---
+    window.doSearch = (v) => {
+        const term = clean(v);
+        if(!term) { renderUI(); return; } // إعادة الواجهة لطبيعتها إذا كان البحث فارغاً
+
+        // إجبار الواجهة على عرض الجدول وإخفاء التعارض أثناء البحث
+        document.getElementById('mainTable').style.display = 'table';
+        document.getElementById('conflictContainer').style.display = 'none';
+        
+        // البحث في كل البيانات وعرض النتائج
+        const matched = allItems.filter(i => i.searchKey.includes(term));
+        const tBody = document.getElementById('tableBody');
+        
+        tBody.innerHTML = matched.slice(0, 100).map(i => `
+            <tr class="${i.ok?'verified':''}">
+                <td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td>
+                <td>${window.renderContent(i.q)}</td>
+                <td>${window.renderContent(i.a)}</td>
+                <td style="font-size:11px; color:var(--mut)">${i.year}/${i.sub}</td>
+                <td><button class="btn-del" onclick="window.del('${i.path}')">🗑️</button></td>
+            </tr>
+        `).join('') || `<tr><td colspan="5" style="text-align:center; padding:20px;">لا توجد نتائج تطابق بحثك ❌</td></tr>`;
+    };
+
+    // --- توليد حقول إدارة الروابط (01 إلى 05) ---
+    window.renderLinkControls = () => {
+        const box = document.getElementById('linksControlsBox');
+        const current = dbRaw.downloadLinks || {};
+        const ids = ["01", "02", "03", "04", "05"]; // الملفات الخمسة
+        
+        box.innerHTML = ids.map(id => `
+            <div class="link-row">
+                <label>ملف ${id}:</label>
+                <input type="text" id="link_${id}" value="${current[id] || ''}" placeholder="ضع رابط Dropbox الخاص بالملف ${id} هنا...">
+                <button class="btn-v active" style="padding:12px 25px; font-size:14px;" onclick="window.saveL('${id}')">💾 حفظ</button>
+            </div>
+        `).join('');
+    };
+
+    window.saveL = async (id) => {
+        let url = document.getElementById(`link_${id}`).value.trim();
+        if(url.includes("dropbox.com")) {
+            url = url.replace("dl=0", "dl=1"); // تحويل الرابط لتحميل مباشر
+        }
+        await update(ref(db, `downloadLinks`), { [id]: url });
+        alert(`تم تحديث رابط الملف ${id} بنجاح! سيتم التحميل المباشر الآن في صفحة الهبوط. ✅`);
+    };
+
+    // --- تنظيف المكرر التام ---
+    window.autoCleanDups = async () => {
+        const seen = {}; const toDel = [];
+        allItems.forEach(i => { const k = i.qKey + i.aKey; if(seen[k]) toDel.push(i.path); else seen[k] = true; });
+        if(toDel.length > 0 && confirm(`تم العثور على ${toDel.length} تكرار متطابق تماماً. هل تريد حذفهم بضغطة واحدة؟`)) {
+            const upds = {}; toDel.forEach(p => upds[p] = null); await update(ref(db), upds);
+        } else if (toDel.length === 0) {
+            alert("لا يوجد مكرر متطابق حالياً ✅");
+        }
+    };
+
+    window.switchTab = (tab) => {
+        window.curTab = tab;
+        ['view_data', 'view_cfg', 'view_links'].forEach(v => document.getElementById(v).style.display = 'none');
+        ['btn_data', 'btn_cfg', 'btn_links'].forEach(b => document.getElementById(b).classList.remove('active'));
+        document.getElementById('view_'+tab).style.display = 'block';
+        document.getElementById('btn_'+tab).classList.add('active');
+        renderUI();
+    };
+
+    window.del = (p) => { if(confirm("تأكيد الحذف النهائي؟")) remove(ref(db, p)); };
+    window.toggleOk = async (p, s) => { await update(ref(db, p), { ok: !s }); };
+    
+    window.setFilter = (f, btn) => {
+        filter = f; document.querySelectorAll('.btn-v').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        document.getElementById('qSearch').value = ""; // تفريغ البحث عند تغيير الفلتر
+        renderUI();
+    };
+
+    window.renderTree = () => {
+        const container = document.getElementById('treeContainer'); const data = dbRaw.data || {};
+        container.innerHTML = Object.keys(data).map(y => `
+            <div class="nav-btn" style="background:#f1f5f9; margin-top:5px" onclick="window.setF('${y}')">📅 ${y}</div>
+            <div class="tree-sub">${Object.keys(data[y]).map(s => `<a class="tree-item" onclick="window.setF('${y}', '${s}')">📝 ${s}</a>`).join('')}</div>
+        `).join('');
+    };
+
+    window.setF = (y, s=null) => { curY=y; curS=s; renderUI(); };
+    window.updSel = () => { const c = document.querySelectorAll('.q-cb:checked').length; document.getElementById('actionBar').style.display = c>0?'flex':'none'; document.getElementById('selCount').innerText = c; };
+    window.toggleAll = (m) => { document.querySelectorAll('.q-cb').forEach(c => c.checked = m.checked); window.updSel(); };
+    window.deselectAll = () => { document.querySelectorAll('.q-cb').forEach(c => c.checked = false); window.updSel(); };
+
+    function updateStats() {
+        document.getElementById('s_total').innerText = allItems.length;
+        document.getElementById('s_sys').innerText = allItems.filter(i => i.isSys).length;
+        const qMap = {}; allItems.forEach(i => { if(!qMap[i.qKey]) qMap[i.qKey] = new Set(); qMap[i.qKey].add(i.aKey); });
+        document.getElementById('s_conf').innerText = Object.values(qMap).filter(s => s.size > 1).length;
+    }
+
+    function renderCodes() {
+        const div = document.getElementById('codesContent');
+        const codes = dbRaw.codes || {};
+        div.innerHTML = `<table><thead><tr><th>ID</th><th>الكود</th><th>الرابط</th><th>حفظ</th></tr></thead><tbody>` + 
+        Object.keys(codes).map(id => `<tr>
+            <td>${id}</td>
+            <td><input type="text" id="c_k_${id}" value="${codes[id].k||''}" style="width:100px; padding:8px; border:1px solid #ddd; border-radius:5px;"></td>
+            <td><input type="text" id="c_l_${id}" value="${codes[id].l||''}" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px;"></td>
+            <td><button class="btn-v active" onclick="window.saveCode('${id}')">💾</button></td>
+        </tr>`).join('') + `</tbody></table>`;
+    }
+
+    window.saveCode = async (id) => {
+        const k = document.getElementById(`c_k_${id}`).value;
+        const l = document.getElementById(`c_l_${id}`).value;
+        await update(ref(db, `codes/${id}`), { k, l }); alert("تم حفظ الكود ✅");
+    };
+
+    window.bulkDel = async () => {
+        const paths = Array.from(document.querySelectorAll('.q-cb:checked')).map(c => c.value);
+        if(confirm(`سيتم حذف ${paths.length} سؤال نهائياً. هل أنت متأكد؟`)) { 
+            const upds = {}; paths.forEach(p => upds[p] = null); 
+            await update(ref(db), upds); window.deselectAll(); 
+        }
+    };
 </script>
-
 </body>
-
 </html>
