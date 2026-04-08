@@ -3,69 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Media V42 | النسخة المستقرة</title>
+    <title>Super Media V42 | Final Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #2563eb; --bg: #f0f2f5; --c: #ffffff; --d: #e11d48; --s: #059669; --w: #f59e0b; --txt: #1e293b; --mut: #64748b; --border: #e2e8f0; --trash: #ea580c; }
+        :root { --p: #2563eb; --bg: #f0f2f5; --c: #ffffff; --d: #e11d48; --s: #059669; --w: #f59e0b; --txt: #1e293b; --mut: #64748b; --border: #e2e8f0; --trash: #ea580c; --review: #8b5cf6; }
         * { box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; color: var(--txt); display: flex; height: 100vh; overflow: hidden; }
         
         /* Sidebar */
         .sidebar { width: 280px; background: var(--c); display: flex; flex-direction: column; border-left: 1px solid var(--border); padding: 15px; z-index: 100; }
         .logo { font-size: 20px; font-weight: 900; color: var(--p); text-align: center; margin-bottom: 20px; border-bottom: 2px solid var(--bg); padding-bottom: 15px; }
-        .nav-btn { display: block; width: 100%; padding: 12px; border-radius: 10px; cursor: pointer; color: var(--txt); margin-bottom: 5px; font-size: 14px; font-weight: 700; border: 1px solid transparent; background: transparent; text-align: right; transition: 0.2s; }
-        .nav-btn:hover, .nav-btn.active { background: #eff6ff; color: var(--p); border-color: #dbeafe; }
-        .tree-container { flex-grow: 1; overflow-y: auto; padding-top: 10px; }
+        .nav-btn { display: block; width: 100%; padding: 12px; border-radius: 10px; cursor: pointer; color: var(--txt); margin-bottom: 5px; font-size: 14px; font-weight: 700; border: none; background: transparent; text-align: right; transition: 0.2s; }
+        .nav-btn:hover, .nav-btn.active { background: #eff6ff; color: var(--p); border: 1px solid #dbeafe; }
+        .tree-container { flex-grow: 1; overflow-y: auto; }
         .tree-sub { margin-right: 15px; border-right: 2px solid var(--border); padding-right: 10px; margin-bottom: 10px; }
         .tree-item { padding: 6px; font-size: 13px; color: var(--mut); cursor: pointer; display: block; text-decoration: none; border-radius: 5px; }
         .tree-item:hover { background: #f1f5f9; color: var(--p); }
 
         /* Main Content */
         .main { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: var(--c); padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); text-align: center; border-bottom: 4px solid var(--p); cursor: pointer; }
-        .stat-card p { margin: 8px 0 0; font-size: 22px; font-weight: 900; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: var(--c); padding: 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); text-align: center; border-bottom: 4px solid var(--p); cursor: pointer; }
+        .stat-card h3 { font-size: 11px; margin: 0; color: var(--mut); }
+        .stat-card p { margin: 5px 0 0; font-size: 20px; font-weight: 900; }
 
         .content-card { background: var(--c); border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; flex-grow: 1; display: flex; flex-direction: column; }
-        #qSearch { width: 100%; padding: 18px; border: none; border-bottom: 2px solid var(--bg); outline: none; font-size: 16px; font-family: inherit; }
+        #qSearch { width: 100%; padding: 15px; border: none; border-bottom: 2px solid var(--bg); outline: none; font-size: 15px; font-family: inherit; }
         
         .scroll-area { overflow-y: auto; flex-grow: 1; padding: 20px; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8fafc; padding: 15px; text-align: right; font-size: 12px; border-bottom: 2px solid var(--border); position: sticky; top: 0; }
-        td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background: #f8fafc; padding: 12px; text-align: right; font-size: 12px; border-bottom: 2px solid var(--border); position: sticky; top: 0; }
+        td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
 
-        /* Conflict Styles */
-        .conflict-box { background: #fff1f2; border: 2px solid #fecaca; border-radius: 15px; padding: 20px; margin-bottom: 25px; }
-        .conflict-q { background: white; padding: 15px; border-radius: 10px; font-weight: 900; font-size: 16px; margin-bottom: 15px; border-bottom: 4px solid #fecaca; }
-        .choice-row { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #e2e8f0; }
-        .choice-row.verified { background: #f0fdf4; border-color: var(--s); }
+        /* Review Boxes */
+        .review-box { background: #f5f3ff; border: 2px solid #ddd6fe; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        .review-q { font-weight: 900; font-size: 15px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #ddd6fe; }
+        .choice-item { background: white; padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #e2e8f0; }
 
-        /* Badges & Pagination */
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-bottom: 5px; color: white; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-bottom: 5px; color: white; }
         .badge-trash { background: var(--trash); }
         .badge-ok { background: var(--s); }
-        .pagination { display: flex; justify-content: center; padding: 15px; gap: 5px; background: #f8fafc; border-top: 1px solid var(--border); flex-wrap: wrap; }
-        .page-btn { padding: 5px 12px; border: 1px solid var(--border); background: white; cursor: pointer; border-radius: 5px; }
-        .page-btn.active { background: var(--p); color: white; }
+        .badge-review { background: var(--review); }
 
-        .btn-v { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 12px; font-weight: bold; }
-        .btn-v.active { background: var(--s); color: white; }
+        .pagination { display: flex; justify-content: center; padding: 10px; gap: 5px; background: #f8fafc; border-top: 1px solid var(--border); flex-wrap: wrap; }
+        .page-btn { padding: 4px 10px; border: 1px solid var(--border); background: white; cursor: pointer; border-radius: 4px; font-size: 12px; }
+        .page-btn.active { background: var(--p); color: white; border-color: var(--p); }
+
+        .btn-v { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 11px; font-weight: bold; }
+        .btn-v.active { background: var(--s); color: white; border-color: var(--s); }
+        .btn-del { color: var(--d); background: none; border: none; cursor: pointer; font-size: 14px; }
         
-        .img-view { max-width: 80px; border-radius: 4px; border: 1px solid #ddd; }
-        .action-bar { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 25px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; }
+        /* Code Box styling */
+        .admin-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid var(--border); }
+        .admin-row label { font-weight: 900; color: var(--p); width: 80px; font-size: 14px; }
+        .admin-row input { flex-grow: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
+
+        .img-view { max-width: 60px; border-radius: 4px; border: 1px solid #ddd; }
         #loader { position:fixed; inset:0; background:white; z-index:10000; display:flex; align-items:center; justify-content:center; }
+        .action-bar { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 10px 20px; border-radius: 50px; display: none; align-items: center; gap: 15px; z-index: 2000; }
     </style>
 </head>
 <body>
 
-    <div id="loader"><b>جاري تحميل قاعدة البيانات...</b></div>
+    <div id="loader"><b>جاري تحميل المنظومة...</b></div>
 
     <div class="sidebar">
         <div class="logo">SUPER MEDIA V42</div>
         <div class="admin-nav">
             <button class="nav-btn active" id="btn_data" onclick="window.switchTab('data')">📚 بنك الأسئلة</button>
-            <button class="nav-btn" id="btn_links" onclick="window.switchTab('links')">🔗 روابط التحميل</button>
-            <button class="nav-btn" id="btn_cfg" onclick="window.switchTab('cfg')">🔑 الأكواد</button>
+            <button class="nav-btn" id="btn_cfg" onclick="window.switchTab('cfg')" style="color:#8b5cf6">🔑 إدارة الأكواد</button>
             <hr>
             <button class="nav-btn" onclick="window.setF(null, null)">🏠 كل المواد</button>
         </div>
@@ -73,25 +79,26 @@
     </div>
 
     <div class="main">
+        <!-- 1. قسم بنك الأسئلة -->
         <div id="view_data">
             <div class="stat-grid">
                 <div class="stat-card" onclick="window.setFilter('all')"><h3>الإجمالي</h3><p id="s_total">0</p></div>
-                <div class="stat-card" style="border-color:var(--d)" onclick="window.setFilter('conflict')"><h3>التعارض ⚠️</h3><p id="s_conf">0</p></div>
-                <div class="stat-card" style="border-color:var(--trash)" onclick="window.setFilter('trash')"><h3>إجابات خاطئة 🗑️</h3><p id="s_trash">0</p></div>
-                <div class="stat-card" style="border-color:var(--w)" onclick="window.setFilter('sys')"><h3>رسائل النظام</h3><p id="s_sys">0</p></div>
+                <div class="stat-card" style="border-color:var(--s)" onclick="window.setFilter('verified')"><h3>المعتمدة ✅</h3><p id="s_ok">0</p></div>
+                <div class="stat-card" style="border-color:var(--review)" onclick="window.setFilter('review')"><h3>للمراجعة 🔍</h3><p id="s_rev">0</p></div>
+                <div class="stat-card" style="border-color:var(--trash)" onclick="window.setFilter('trash')"><h3>الخاطئة 🗑️</h3><p id="s_trash">0</p></div>
+                <div class="stat-card" style="border-color:var(--w)" onclick="window.setFilter('sys')"><h3>النظام</h3><p id="s_sys">0</p></div>
             </div>
 
-            <div style="display:flex; gap:10px; margin-bottom:15px; align-items:center;">
+            <div style="display:flex; gap:8px; margin-bottom:15px; align-items:center; flex-wrap:wrap;">
                 <button class="btn-v active" id="f_all" onclick="window.setFilter('all')">الكل</button>
-                <button class="btn-v" id="f_conflict" style="color:var(--d); border-color:var(--d)" onclick="window.setFilter('conflict')">⚠️ حل التعارض</button>
-                <button class="btn-v" id="f_trash" style="color:var(--trash); border-color:var(--trash)" onclick="window.setFilter('trash')">الخاطئة</button>
-                <button class="btn-v" id="f_sys" style="color:var(--w); border-color:var(--w)" onclick="window.setFilter('sys')">النظام</button>
+                <button class="btn-v" id="f_verified" onclick="window.setFilter('verified')">✅ المعتمدة</button>
+                <button class="btn-v" id="f_review" onclick="window.setFilter('review')">🔍 للمراجعة</button>
+                <button class="btn-v" id="f_trash" onclick="window.setFilter('trash')">🗑️ الخاطئة</button>
                 <button class="btn-v" style="background:var(--trash); color:white; border:none; margin-right:auto" onclick="window.bulkDelTrash()">🧹 حذف كل الخاطئة</button>
             </div>
 
             <div class="content-card">
                 <input type="text" id="qSearch" placeholder="🔍 ابحث عن سؤال أو إجابة..." oninput="window.handleSearch(this.value)">
-                
                 <div class="scroll-area" id="scrollArea">
                     <table id="dataTable">
                         <thead>
@@ -99,28 +106,24 @@
                         </thead>
                         <tbody id="tableBody"></tbody>
                     </table>
-                    <div id="conflictArea" style="display:none"></div>
+                    <div id="specialViewArea" style="display:none"></div>
                 </div>
-                
                 <div class="pagination" id="pagination"></div>
             </div>
         </div>
 
-        <div id="view_links" style="display:none; padding:20px;">
-            <h2>🔗 إدارة روابط التحميل</h2>
-            <div id="linksBox" class="content-card" style="padding:20px;"></div>
-        </div>
-        
+        <!-- 2. قسم إدارة الأكواد -->
         <div id="view_cfg" style="display:none; padding:20px;">
-            <h2>🔑 إدارة الأكواد</h2>
-            <div id="codesBox" class="content-card" style="padding:20px;"></div>
+            <h2 style="margin-bottom:20px">🔑 إدارة الأكواد والروابط التابعة</h2>
+            <div id="codesBox" class="content-card" style="padding:20px;">
+                <!-- JavaScript renders codes here -->
+            </div>
         </div>
     </div>
 
     <div id="actionBar" class="action-bar">
         <span>المحدد: <b id="selCount">0</b></span>
-        <button class="btn-v" style="background:var(--d); color:white; border:none" onclick="window.bulkDel()">🗑️ حذف المحدد</button>
-        <button class="btn-v" style="background:#475569; color:white; border:none" onclick="window.deselectAll()">إلغاء</button>
+        <button class="btn-v" style="background:var(--d); color:white; border:none" onclick="window.bulkDel()">🗑️ حذف</button>
     </div>
 
 <script type="module">
@@ -139,37 +142,44 @@
 
     onValue(ref(db, '/'), (snap) => {
         dbRaw = snap.val() || {};
-        processData();
-        renderTree();
-        applyFiltersAndRender();
+        processData(); renderTree(); applyFiltersAndRender();
+        if(document.getElementById('view_cfg').style.display === 'block') window.renderCodes();
         document.getElementById('loader').style.display = 'none';
-    }, (error) => {
-        alert("خطأ في الاتصال بقاعدة البيانات!");
     });
 
     function processData() {
         const temp = []; const data = dbRaw.data || {};
+        const qGroups = {};
         Object.keys(data).forEach(y => {
             Object.keys(data[y]).forEach(s => {
                 const qs = data[y][s].questions || {};
                 Object.keys(qs).forEach(id => {
-                    temp.push({
+                    const item = {
                         id, year: y, sub: s, q: qs[id].q || "", a: qs[id].a || "", ok: qs[id].ok || false,
                         path: `data/${y}/${s}/questions/${id}`, qKey: clean(qs[id].q), aKey: clean(qs[id].a)
-                    });
+                    };
+                    temp.push(item);
+                    if(!qGroups[item.qKey]) qGroups[item.qKey] = [];
+                    qGroups[item.qKey].push(item);
                 });
             });
         });
 
-        const verifiedMap = {};
-        temp.forEach(i => { if(i.ok) verifiedMap[i.qKey] = i.aKey; });
+        const okMap = {};
+        temp.forEach(i => { if(i.ok) okMap[i.qKey] = i.aKey; });
 
-        allItems = temp.map(i => ({
-            ...i,
-            isTrash: (verifiedMap[i.qKey] && !i.ok && i.aKey !== verifiedMap[i.qKey]),
-            isSys: i.q.includes("إيقاف الفرض") || i.a.includes("تحقق") || i.a.includes("إيقاف"),
-            searchKey: clean(i.q + i.a + i.year + i.sub)
-        }));
+        allItems = temp.map(i => {
+            const hasOk = okMap[i.qKey];
+            const group = qGroups[i.qKey];
+            return {
+                ...i,
+                isVerified: i.ok,
+                isTrash: (hasOk && !i.ok && i.aKey !== hasOk),
+                isReview: (!hasOk && group.length > 1),
+                isSys: i.q.includes("إيقاف الفرض") || i.a.includes("تحقق"),
+                searchKey: clean(i.q + i.a + i.year + i.sub)
+            };
+        });
         updateStats();
     }
 
@@ -177,90 +187,116 @@
         filteredItems = allItems;
         if(curY) filteredItems = filteredItems.filter(i => i.year === curY);
         if(curS) filteredItems = filteredItems.filter(i => i.sub === curS);
-        
-        if(filterType === 'trash') filteredItems = filteredItems.filter(i => i.isTrash);
+        if(filterType === 'verified') filteredItems = filteredItems.filter(i => i.isVerified);
+        else if(filterType === 'review') filteredItems = filteredItems.filter(i => i.isReview);
+        else if(filterType === 'trash') filteredItems = filteredItems.filter(i => i.isTrash);
         else if(filterType === 'sys') filteredItems = filteredItems.filter(i => i.isSys);
-        
         if(searchTerm) filteredItems = filteredItems.filter(i => i.searchKey.includes(searchTerm));
-        
         renderUI();
     }
 
     window.renderUI = () => {
         const table = document.getElementById('dataTable');
         const tBody = document.getElementById('tableBody');
-        const conflictArea = document.getElementById('conflictArea');
+        const specialView = document.getElementById('specialViewArea');
         const pagination = document.getElementById('pagination');
         
-        if(filterType === 'conflict') {
-            table.style.display = 'none'; pagination.style.display = 'none'; conflictArea.style.display = 'block';
+        if(filterType === 'review') {
+            table.style.display = 'none'; pagination.style.display = 'none'; specialView.style.display = 'block';
             const groups = {};
             filteredItems.forEach(i => { if(!groups[i.qKey]) groups[i.qKey] = []; groups[i.qKey].push(i); });
             let html = "";
-            Object.values(groups).filter(g => new Set(g.map(x=>x.aKey)).size > 1).forEach(g => {
-                html += `<div class="conflict-box">
-                    <div class="conflict-q">❓ السؤال: ${window.renderContent(g[0].q)}</div>
+            Object.values(groups).forEach(g => {
+                html += `<div class="review-box">
+                    <div class="review-q">🔍 ${window.renderContent(g[0].q)}</div>
                     ${g.map(i => `
-                        <div class="choice-row ${i.ok?'verified':''}">
+                        <div class="choice-item">
                             <div style="flex:1"><b>💡 ${window.renderContent(i.a)}</b> <br><small>${i.year} / ${i.sub}</small></div>
-                            <div style="display:flex; gap:10px;">
-                                <button class="btn-v ${i.ok?'active':''}" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅ معتمد':'✔ اعتماد'}</button>
+                            <div style="display:flex; gap:8px;">
+                                <button class="btn-v" onclick="window.toggleOk('${i.path}', false)">✅ اعتماد</button>
                                 <button class="btn-del" onclick="window.del('${i.path}')">🗑️</button>
                             </div>
                         </div>`).join('')}
                 </div>`;
             });
-            conflictArea.innerHTML = html || `<h3 style="text-align:center;">لا يوجد تعارض ✅</h3>`;
+            specialView.innerHTML = html || `<h3 style="text-align:center;">لا توجد أسئلة للمراجعة ✅</h3>`;
             return;
         }
 
-        table.style.display = 'table'; pagination.style.display = 'flex'; conflictArea.style.display = 'none';
+        table.style.display = 'table'; pagination.style.display = 'flex'; specialView.style.display = 'none';
         const totalPages = Math.ceil(filteredItems.length / pageSize);
         if(currentPage > totalPages) currentPage = 1;
         const start = (currentPage - 1) * pageSize;
         const pageData = filteredItems.slice(start, start + pageSize);
 
         tBody.innerHTML = pageData.map(i => `
-            <tr class="${i.isTrash ? 'trash-row' : ''}">
+            <tr class="${i.isTrash ? 'trash-row' : ''} ${i.ok ? 'verified-row' : ''}">
                 <td><input type="checkbox" class="q-cb" value="${i.path}" onchange="window.updSel()"></td>
                 <td style="max-width:350px">${window.renderContent(i.q)}</td>
                 <td>
-                    ${i.isTrash ? '<span class="badge badge-trash">⚠️ إجابة خاطئة</span><br>' : ''}
-                    ${i.ok ? '<span class="badge badge-ok">✅ معتمد</span><br>' : ''}
+                    ${i.isTrash ? '<span class="badge badge-trash">🗑️ خاطئة</span><br>' : ''}
+                    ${i.ok ? '<span class="badge badge-ok">✅ معتمدة</span><br>' : ''}
                     <b>${window.renderContent(i.a)}</b>
-                    <br><button class="btn-v ${i.ok?'active':''}" style="margin-top:5px" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'✅ معتمد':'اعتماد'}</button>
+                    <br><button class="btn-v ${i.ok?'active':''}" style="margin-top:5px" onclick="window.toggleOk('${i.path}', ${i.ok})">${i.ok?'إلغاء':'✅ اعتماد'}</button>
                 </td>
                 <td style="font-size:11px; color:var(--mut)">${i.year}/${i.sub}</td>
                 <td><button class="btn-del" onclick="window.del('${i.path}')">🗑️</button></td>
             </tr>
-        `).join('') || `<tr><td colspan="5" style="text-align:center; padding:30px;">لا توجد نتائج ❌</td></tr>`;
+        `).join('');
 
         let phtml = "";
         for(let p=1; p<=totalPages; p++) {
             if(p === 1 || p === totalPages || (p >= currentPage-2 && p <= currentPage+2)) {
                 phtml += `<button class="page-btn ${p===currentPage?'active':''}" onclick="window.setPage(${p})">${p}</button>`;
-            } else if (p === currentPage-3 || p === currentPage+3) { phtml += `<span>...</span>`; }
+            }
         }
         pagination.innerHTML = phtml;
     };
 
-    window.handleSearch = (v) => { searchTerm = clean(v); currentPage = 1; applyFiltersAndRender(); };
-    window.setPage = (p) => { currentPage = p; renderUI(); document.getElementById('scrollArea').scrollTop = 0; };
-    window.setFilter = (t) => { 
-        filterType = t; currentPage = 1; 
-        document.querySelectorAll('.btn-v').forEach(b => b.classList.remove('active'));
-        const activeBtn = document.getElementById('f_'+t);
-        if(activeBtn) activeBtn.classList.add('active');
-        applyFiltersAndRender(); 
+    // --- نظام الأكواد ---
+    window.renderCodes = () => {
+        const box = document.getElementById('codesBox');
+        const codes = dbRaw.codes || {};
+        box.innerHTML = "<table><thead><tr><th>ID</th><th>الكود (k)</th><th>الرابط (l)</th><th>💾</th></tr></thead><tbody>" + 
+        Object.keys(codes).sort().map(id => `
+            <tr>
+                <td>${id}</td>
+                <td><input id="c_k_${id}" value="${codes[id].k||''}" style="width:100px; padding:5px; border:1px solid #ddd; border-radius:5px;"></td>
+                <td><input id="c_l_${id}" value="${codes[id].l||''}" style="width:100%; padding:5px; border:1px solid #ddd; border-radius:5px;"></td>
+                <td><button class="btn-v active" onclick="window.saveC('${id}')">💾 حفظ</button></td>
+            </tr>
+        `).join('') + "</tbody></table>";
     };
-    window.setF = (y, s) => { curY = y; curS = s; currentPage = 1; applyFiltersAndRender(); };
+    window.saveC = async (id) => {
+        const k = document.getElementById('c_k_'+id).value.trim();
+        const l = document.getElementById('c_l_'+id).value.trim();
+        await update(ref(db, 'codes/'+id), {k, l});
+        alert("تم تحديث الكود والبيانات بنجاح ✅");
+    };
 
+    window.switchTab = (tab) => {
+        document.getElementById('view_data').style.display = 'none';
+        document.getElementById('view_cfg').style.display = 'none';
+        document.getElementById('btn_data').classList.remove('active');
+        document.getElementById('btn_cfg').classList.remove('active');
+        
+        document.getElementById('view_' + tab).style.display = 'block';
+        document.getElementById('btn_' + tab).classList.add('active');
+        
+        if(tab === 'cfg') window.renderCodes();
+        else applyFiltersAndRender();
+    };
+
+    // --- الدوال المساعدة ---
+    window.handleSearch = (v) => { searchTerm = clean(v); currentPage = 1; applyFiltersAndRender(); };
+    window.setPage = (p) => { currentPage = p; renderUI(); };
+    window.setFilter = (t) => { filterType = t; currentPage = 1; applyFiltersAndRender(); };
+    window.setF = (y, s) => { curY = y; curS = s; currentPage = 1; applyFiltersAndRender(); };
     window.renderContent = (t) => {
         if(!t) return "---";
         const reg = /(https?:\/\/[^\s]+?\.(png|jpg|jpeg|gif|webp))/gi;
         return t.replace(reg, (u) => `<img src="${u}" class="img-view">`).replace(/:\[(?:Q_IMG|A_IMG|IMAGE_URL)\]/g, "");
     };
-
     window.renderTree = () => {
         const container = document.getElementById('treeContainer'); const data = dbRaw.data || {};
         container.innerHTML = Object.keys(data).sort().map(y => `
@@ -268,71 +304,25 @@
             <div class="tree-sub">${Object.keys(data[y]).sort().map(s => `<a class="tree-item" onclick="window.setF('${y}', '${s}')">📝 ${s}</a>`).join('')}</div>
         `).join('');
     };
-
     window.toggleOk = async (p, s) => { await update(ref(db, p), { ok: !s }); };
     window.del = (p) => { if(confirm("حذف؟")) remove(ref(db, p)); };
-    
     function updateStats() {
         document.getElementById('s_total').innerText = allItems.length;
+        document.getElementById('s_ok').innerText = allItems.filter(i => i.isVerified).length;
+        document.getElementById('s_rev').innerText = allItems.filter(i => i.isReview).length;
         document.getElementById('s_trash').innerText = allItems.filter(i => i.isTrash).length;
         document.getElementById('s_sys').innerText = allItems.filter(i => i.isSys).length;
-        const qMap = {}; allItems.forEach(i => { if(!qMap[i.qKey]) qMap[i.qKey] = new Set(); qMap[i.qKey].add(i.aKey); });
-        document.getElementById('s_conf').innerText = Object.values(qMap).filter(s => s.size > 1).length;
     }
-
-    window.switchTab = (tab) => {
-        ['view_data', 'view_links', 'view_cfg'].forEach(id => {
-            const el = document.getElementById(id); if(el) el.style.display = 'none';
-        });
-        ['btn_data', 'btn_links', 'btn_cfg'].forEach(id => {
-            const el = document.getElementById(id); if(el) el.classList.remove('active');
-        });
-        document.getElementById('view_' + tab).style.display = 'block';
-        document.getElementById('btn_' + tab).classList.add('active');
-        if(tab === 'links') renderLinks();
-        if(tab === 'cfg') renderCodes();
-    };
-
-    window.renderLinks = () => {
-        const box = document.getElementById('linksBox'); const current = dbRaw.downloadLinks || {};
-        box.innerHTML = ["01", "02", "03", "04", "05"].map(id => `
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-                <label>رابط ${id}:</label>
-                <input type="text" id="l_${id}" value="${current[id]||''}" style="flex:1; padding:10px; border:1px solid #ddd; border-radius:5px;">
-                <button class="btn-v active" onclick="window.saveL('${id}')">💾 حفظ</button>
-            </div>`).join('');
-    };
-    window.saveL = async (id) => {
-        let v = document.getElementById('l_'+id).value; if(v.includes('dropbox')) v = v.replace('dl=0', 'dl=1');
-        await update(ref(db, 'downloadLinks'), {[id]: v}); alert("تم الحفظ ✅");
-    };
-
-    window.renderCodes = () => {
-        const box = document.getElementById('codesBox'); const codes = dbRaw.codes || {};
-        box.innerHTML = "<table><thead><tr><th>ID</th><th>الكود</th><th>الرابط</th><th>💾</th></tr></thead>" + 
-        Object.keys(codes).map(id => `<tr>
-            <td>${id}</td>
-            <td><input id="c_k_${id}" value="${codes[id].k||''}" style="width:100px; padding:5px;"></td>
-            <td><input id="c_l_${id}" value="${codes[id].l||''}" style="width:100%; padding:5px;"></td>
-            <td><button class="btn-v active" onclick="window.saveC('${id}')">💾</button></td>
-        </tr>`).join('') + "</table>";
-    };
-    window.saveC = async (id) => {
-        const k = document.getElementById('c_k_'+id).value; const l = document.getElementById('c_l_'+id).value;
-        await update(ref(db, 'codes/'+id), {k, l}); alert("تم الحفظ ✅");
-    };
-
     window.bulkDelTrash = async () => {
         const trash = allItems.filter(i => i.isTrash).map(i => i.path);
-        if(!trash.length) return alert("لا توجد إجابات خاطئة ✅");
-        if(confirm(`حذف ${trash.length} إجابة؟`)) { const u = {}; trash.forEach(p => u[p] = null); await update(ref(db), u); }
+        if(!trash.length) return alert("لا يوجد خاطئ ✅");
+        if(confirm(`حذف ${trash.length}؟`)) { const u = {}; trash.forEach(p => u[p] = null); await update(ref(db), u); }
     };
     window.toggleAll = (m) => { document.querySelectorAll('.q-cb').forEach(c => c.checked = m.checked); window.updSel(); };
     window.updSel = () => { const c = document.querySelectorAll('.q-cb:checked').length; document.getElementById('actionBar').style.display = c>0?'flex':'none'; document.getElementById('selCount').innerText = c; };
-    window.deselectAll = () => { document.querySelectorAll('.q-cb').forEach(c => c.checked = false); window.updSel(); };
     window.bulkDel = async () => {
         const paths = Array.from(document.querySelectorAll('.q-cb:checked')).map(c => c.value);
-        if(confirm(`حذف ${paths.length} عنصر؟`)) { const u = {}; paths.forEach(p => u[p] = null); await update(ref(db), u); }
+        if(confirm(`حذف ${paths.length}؟`)) { const u = {}; paths.forEach(p => u[p] = null); await update(ref(db), u); }
     };
 </script>
 </body>
